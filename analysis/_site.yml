@@ -1,7 +1,7 @@
-name: "BCexh_IMC"
+name: BCexh_IMC
 output_dir: ../docs
 navbar:
-  title: "BCexh_IMC"
+  title: BCexh_IMC
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/SandraTietscher/BCexh_IMC
 output:
   workflowr::wflow_html:
     toc: yes
