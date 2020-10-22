@@ -1,0 +1,278 @@
+---
+title: "01_quality_control"
+author: "SandraTietscher"
+date: "2020-10-21"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script visualizes different features of the data and flags cells that need to be potentially removed before further analysing the data.
+
+
+# Load libraries and data
+
+First, we will load the needed libraries and the `SingleCellExperiment` object, that was created in the previous section.
+
+```{r read-libraries-and-data, message=FALSE, results="hide"}
+# Load libraries
+library(ggplot2)
+library(ggridges)
+library(SingleCellExperiment)
+library(scater)
+library(viridis)
+library(RColorBrewer)
+library(cowplot)
+library(dittoSeq)
+library(scales)
+library(tidyverse)
+library(ggpubr)
+
+# Read SingleCellExperiment object
+sce_RNA <- readRDS(paste0(getwd(), "/output/sce_RNApanel_initial.rds"))
+sce_protein <- readRDS(paste0(getwd(), "/output/sce_ProteinPanel_initial.rds"))
+
+# Give the cells unique names across panels
+colnames(sce_RNA) <- paste0("R_", colnames(sce_RNA))
+colnames(sce_protein) <- paste0("H_", colnames(sce_protein))
+
+
+## reorder patient levels
+sce_RNA$sample <- as.factor(sce_RNA$sample)
+old.levels <- levels(sce_RNA$sample)
+sce_RNA$sample <- factor(sce_RNA$sample, levels =  old.levels[c(4:8, 12, 1:3, 9:11)])
+sce_protein$sample <- factor(sce_protein$sample, levels = levels(sce_RNA$sample))
+```
+
+# Transform the data
+
+Different data transformations are stored in different assay slots:  
+arcsinh transformation -> `exprs` slot  
+scaled arcsinh transformation -> `scaled` slot  
+simple 0-1 normalization (using 99th percentile as 1) -> `normalized` slot  
+
+```{r data-transformation}
+# for RNA panel
+assay(sce_RNA, "exprs") <- asinh(counts(sce_RNA))
+assay(sce_RNA, "scaled") <- t(scale(t(assay(sce_RNA, "exprs"))))
+
+norm_counts <- t(apply(assay(sce_RNA, "counts"), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts <- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_RNA, "normalized", withDimnames = FALSE) <- norm_counts
+
+# for Protein panel
+assay(sce_protein, "exprs") <- asinh(counts(sce_protein))
+assay(sce_protein, "scaled") <- t(scale(t(assay(sce_protein, "exprs"))))
+
+norm_counts <- t(apply(assay(sce_protein, "counts"), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts <- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_protein, "normalized", withDimnames = FALSE) <- norm_counts
+```
+
+
+# Visualize image-level information
+
+
+## Number of cells
+
+First, we will visualize the number of cells across various cell-level metadata entries:
+
+1. Number of cells per sample
+
+```{r no-cells-sample, fig.width=10, fig.height=10}
+RNA_cellnumber <- table(sce_RNA$sample, sce_RNA$cellnumber) %>% rowSums()
+protein_cellnumber <- table(sce_protein$sample, sce_protein$cellnumber) %>% rowSums()
+df <- data.frame(sample = levels(sce_RNA$sample), RNA_panel = RNA_cellnumber, protein_panel = protein_cellnumber)
+df <- pivot_longer(df, 2:3, names_to = "panel", values_to = "cellnumber")
+
+ggplot(df, aes(panel, cellnumber))+
+  geom_line(aes(group=sample, color = sample))+
+    theme(axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        strip.background = element_blank(),
+        legend.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1))
+
+```
+
+2. Number of cells per image
+
+```{r no-cells-image, fig.width=6, fig.height=6}
+RNA_cellnumber <- table(sce_RNA$ImageNumber, sce_RNA$cellnumber) %>% rowSums()
+protein_cellnumber <- table(sce_protein$ImageNumber, sce_protein$cellnumber) %>% rowSums()
+df <- data.frame(ImageNumber = levels(sce_RNA$ImageNumber), RNA_panel = RNA_cellnumber, protein_panel = protein_cellnumber)
+df <- pivot_longer(df, 2:3, names_to = "panel", values_to = "cellnumber")
+
+ggplot(df, aes(panel, cellnumber))+
+  geom_line(aes(group=ImageNumber, color = ImageNumber))+
+    theme(axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        strip.background = element_blank(),
+        legend.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+## Visualize mean marker intensities 
+
+Next step: Visualization of the mean marker intensites per image, sample, ROI and TLS status.
+For this, we will use the `aggregateAcrossCells` function of the `scater` package, which returns a `SingleCellExperiment` object for further downstream processing. 
+We will arcsinh transform the mean intensity values prior to plotting.
+
+```{r mean-intensity-summary}
+mean_sce_RNA <- aggregateAcrossCells(sce_RNA, ids = DataFrame(sample2 = sce_RNA$sample, ROI = sce_RNA$ROI, TLS = sce_RNA$TLS), average = TRUE)
+colnames(mean_sce_RNA) <- mean_sce_RNA$ImageNumber
+assay(mean_sce_RNA, "arcsinh") <- asinh(assay(mean_sce_RNA, "counts")) 
+mean_sce_RNA$sample <- as.character(mean_sce_RNA$sample)
+
+mean_sce_protein <- aggregateAcrossCells(sce_protein, ids = DataFrame(sample2 = sce_protein$sample, ROI = sce_protein$ROI, TLS = sce_protein$TLS), average = TRUE)
+colnames(mean_sce_protein) <- mean_sce_protein$ImageNumber
+assay(mean_sce_protein, "arcsinh") <- asinh(assay(mean_sce_protein, "counts")) 
+```
+
+Now, we can use the `dittoHeatmap` from the `dittoSeq` package to visualize the arcsinh-transformed mean intensities and the scaled, arcsinh-transformed mean intensities per group.
+
+### RNA panel
+
+```{r plot-mean-intensity-RNApanel, fig.height=10, fig.width = 10}
+
+# Non-scaled
+dittoHeatmap(mean_sce_RNA, assay = "arcsinh",
+            annot.by = c("sample2", "TIG", "TLS"), 
+            scale = "none", heatmap.colors = viridis(100), 
+            cluster_cols = TRUE,
+            annotation_colors = list(sample2 = metadata(sce_RNA)$colour_vectors$sample,
+                                     TIG = metadata(sce_RNA)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_RNA)$colour_vectors$TLS))
+
+# Centered and scaled
+dittoHeatmap(mean_sce_protein, assay = "arcsinh",
+            annot.by = c("sample2", "TIG", "TLS"),
+            cluster_cols = TRUE, heatmap.colors = colorRampPalette(c("dark blue", "white", "dark red"))(100),
+            annotation_colors = list(sample2 = metadata(sce_RNA)$colour_vectors$sample,
+                                     TIG = metadata(sce_RNA)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_RNA)$colour_vectors$TLS),
+            breaks = seq(-3, 3, length.out = 101))
+```
+
+### Protein panel
+
+```{r plot-mean-intensity-ProteinPanel, fig.height=10, fig.width = 10}
+# Non-scaled
+dittoHeatmap(mean_sce_protein, assay = "arcsinh",
+            annot.by = c("sample2", "TIG", "TLS"), 
+            scale = "none", heatmap.colors = viridis(100), 
+            cluster_cols = TRUE,
+            annotation_colors = list(sample2 = metadata(sce_protein)$colour_vectors$sample,
+                                     TIG = metadata(sce_protein)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_protein)$colour_vectors$TLS))
+
+# Centered and scaled
+dittoHeatmap(mean_sce_protein, assay = "arcsinh",
+            annot.by = c("sample2", "TIG", "TLS"),
+            cluster_cols = TRUE, heatmap.colors = colorRampPalette(c("dark blue", "white", "dark red"))(100),
+            annotation_colors = list(sample2 = metadata(sce_protein)$colour_vectors$sample,
+                                     TIG = metadata(sce_protein)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_protein)$colour_vectors$TLS),
+            breaks = seq(-3, 3, length.out = 101))
+```
+
+## Low-dimensional representation of image-level information
+
+Next, we can use the summarized `SingleCellExperiment` object to compute low-dimensional representations of image-level median intensity counts. For this, we will use a PCA representation of the images.
+
+```{r PCA-RNApanel, message = FALSE}
+# Principal component analysis
+mean_sce_RNA <- runPCA(mean_sce_RNA, exprs_values = "arcsinh", ncomponents = 10, 
+                   subset_row = !(rownames(mean_sce_RNA) %in% c("DNA1", "DNA2", "HH3")))
+plotPCA(mean_sce_RNA, colour_by = "sample2", shape_by = "TIG", 
+        point_alpha = 1, point_size = 4) + 
+  scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)
+
+```
+
+```{r PCA-ProteinPanel, message = FALSE}
+# Principal component analysis
+mean_sce_protein <- runPCA(mean_sce_protein, exprs_values = "arcsinh", ncomponents = 10, 
+                   subset_row = !(rownames(mean_sce_protein) %in% c("DNA1", "DNA2", "HH3")))
+plotPCA(mean_sce_protein, colour_by = "sample2", shape_by = "TIG", 
+        point_alpha = 1, point_size = 4) + 
+  scale_colour_manual(values = metadata(sce_protein)$colour_vectors$sample)
+
+```
+
+# Visualize cell-level information
+
+Here, we will visualize the distributions of cell-level metadata and intensity values.
+First, we will display the distribution of cell size, check if small cells are still included and flag them for downstream analysis.
+
+```{r cell-size, fig.width=10}
+# Count and remove cells smaller than 7 pixels
+sum(sce_RNA$Area <= 7)
+sce_RNA$include <- sce_RNA$Area > 7
+sce_RNA <- sce_RNA[, which(sce_RNA$include == TRUE)]
+
+sum(sce_protein$Area <= 7)
+sce_protein$include <- sce_protein$Area > 7
+sce_protein <- sce_protein[, which(sce_protein$include == TRUE)]
+
+# Count and remove cells larger than 600 pixels
+sum(sce_RNA$Area > 600)
+sce_RNA$include <- sce_RNA$Area <= 600
+sce_RNA <- sce_RNA[, which(sce_RNA$include == TRUE)]
+
+sum(sce_protein$Area > 600)
+sce_protein$include <- sce_protein$Area <= 600
+sce_protein <- sce_protein[, which(sce_protein$include == TRUE)]
+```
+
+1. Average cell size per panel
+
+```{r cell-size-panel, fig.width=4, fig.height=6}
+colData_comb <- bind_rows(as.data.frame(colData(sce_RNA)), as.data.frame(colData(sce_protein)))
+
+ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area)) + 
+  geom_violin()+
+  geom_boxplot(outlier.size = 0.5, width = 0.2) + 
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+2. Average cell size per sample
+
+```{r cell-size-sample, fig.width=8, fig.height=6}
+ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area, fill = panel_type)) + 
+  geom_violin()+
+  geom_boxplot(outlier.size = 0.5, width = 0.2)+
+  scale_fill_manual(values = c("red", "skyblue"))+
+  facet_wrap(~sample, ncol = 6)+
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Next, we will display the distributions of cell-intensities to observe (i) outlying cells and (ii) batch effects.
+For this, we will display distributions in form of densities and boxplots: 
+
+```{r intensity-distribution-SampleId, message = FALSE, fig.width=30, fig.height=50}
+# sample
+multi_dittoPlot(sce_RNA, vars = rownames(sce_RNA), group.by = "sample", plots = c("ridgeplot"), assay = "exprs", ncol = 22) +
+  scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)
+```
+
+
+#  Save updated objects
+
+```{r}
+saveRDS(sce_RNA, paste0(getwd(), "/output/sce_RNApanel_afterQC.rds"))
+saveRDS(sce_protein, paste0(getwd(), "/output/sce_ProteinPanel_afterQC.rds"))
+```
+
+
+
