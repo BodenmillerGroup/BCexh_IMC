@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="SandraTietscher" />
+
+<meta name="date" content="2020-10-21" />
+
+<title>01_quality_control</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BCexh_IMC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/SandraTietscher/BCexh_IMC">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">01_quality_control</h1>
+<h4 class="author">SandraTietscher</h4>
+<h4 class="date">2020-10-21</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-22
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>BCexh_IMC/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20201019code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20201019)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20201019code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20201019)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreef63a7faf42b011d50c12b6430ce094686c72bd06targetblankf63a7faa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/f63a7faf42b011d50c12b6430ce094686c72bd06" target="_blank">f63a7fa</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreef63a7faf42b011d50c12b6430ce094686c72bd06targetblankf63a7faa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/f63a7faf42b011d50c12b6430ce094686c72bd06" target="_blank">f63a7fa</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  code/generateSCE_ProteinPanel.Rmd
+    Untracked:  code/generateSCE_RNApanel.Rmd
+    Untracked:  output/sce_ProteinPanel_afterQC.rds
+    Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_RNApanel_afterQC.rds
+    Untracked:  output/sce_RNApanel_initial.rds
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/01_quality_control.Rmd</code>) and HTML (<code>docs/01_quality_control.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f63a7faf42b011d50c12b6430ce094686c72bd06/analysis/01_quality_control.Rmd" target="_blank">f63a7fa</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-22
+</td>
+<td>
+Add QC file
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This script visualizes different features of the data and flags cells that need to be potentially removed before further analysing the data.</p>
+</div>
+<div id="load-libraries-and-data" class="section level1">
+<h1>Load libraries and data</h1>
+<p>First, we will load the needed libraries and the <code>SingleCellExperiment</code> object, that was created in the previous section.</p>
+<pre class="r"><code># Load libraries
+library(ggplot2)
+library(ggridges)
+library(SingleCellExperiment)
+library(scater)
+library(viridis)
+library(RColorBrewer)
+library(cowplot)
+library(dittoSeq)
+library(scales)
+library(tidyverse)
+library(ggpubr)
+
+# Read SingleCellExperiment object
+sce_RNA &lt;- readRDS(paste0(getwd(), &quot;/output/sce_RNApanel_initial.rds&quot;))
+sce_protein &lt;- readRDS(paste0(getwd(), &quot;/output/sce_ProteinPanel_initial.rds&quot;))
+
+# Give the cells unique names across panels
+colnames(sce_RNA) &lt;- paste0(&quot;R_&quot;, colnames(sce_RNA))
+colnames(sce_protein) &lt;- paste0(&quot;H_&quot;, colnames(sce_protein))
+
+
+## reorder patient levels
+sce_RNA$sample &lt;- as.factor(sce_RNA$sample)
+old.levels &lt;- levels(sce_RNA$sample)
+sce_RNA$sample &lt;- factor(sce_RNA$sample, levels =  old.levels[c(4:8, 12, 1:3, 9:11)])
+sce_protein$sample &lt;- factor(sce_protein$sample, levels = levels(sce_RNA$sample))</code></pre>
+</div>
+<div id="transform-the-data" class="section level1">
+<h1>Transform the data</h1>
+<p>Different data transformations are stored in different assay slots:<br />
+arcsinh transformation -&gt; <code>exprs</code> slot<br />
+scaled arcsinh transformation -&gt; <code>scaled</code> slot<br />
+simple 0-1 normalization (using 99th percentile as 1) -&gt; <code>normalized</code> slot</p>
+<pre class="r"><code># for RNA panel
+assay(sce_RNA, &quot;exprs&quot;) &lt;- asinh(counts(sce_RNA))
+assay(sce_RNA, &quot;scaled&quot;) &lt;- t(scale(t(assay(sce_RNA, &quot;exprs&quot;))))
+
+norm_counts &lt;- t(apply(assay(sce_RNA, &quot;counts&quot;), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts &lt;- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_RNA, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
+# for Protein panel
+assay(sce_protein, &quot;exprs&quot;) &lt;- asinh(counts(sce_protein))
+assay(sce_protein, &quot;scaled&quot;) &lt;- t(scale(t(assay(sce_protein, &quot;exprs&quot;))))
+
+norm_counts &lt;- t(apply(assay(sce_protein, &quot;counts&quot;), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts &lt;- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_protein, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts</code></pre>
+</div>
+<div id="visualize-image-level-information" class="section level1">
+<h1>Visualize image-level information</h1>
+<div id="number-of-cells" class="section level2">
+<h2>Number of cells</h2>
+<p>First, we will visualize the number of cells across various cell-level metadata entries:</p>
+<ol style="list-style-type: decimal">
+<li>Number of cells per sample</li>
+</ol>
+<pre class="r"><code>RNA_cellnumber &lt;- table(sce_RNA$sample, sce_RNA$cellnumber) %&gt;% rowSums()
+protein_cellnumber &lt;- table(sce_protein$sample, sce_protein$cellnumber) %&gt;% rowSums()
+df &lt;- data.frame(sample = levels(sce_RNA$sample), RNA_panel = RNA_cellnumber, protein_panel = protein_cellnumber)
+df &lt;- pivot_longer(df, 2:3, names_to = &quot;panel&quot;, values_to = &quot;cellnumber&quot;)
+
+ggplot(df, aes(panel, cellnumber))+
+  geom_line(aes(group=sample, color = sample))+
+    theme(axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        strip.background = element_blank(),
+        legend.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/no-cells-sample-1.png" width="960" style="display: block; margin: auto;" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Number of cells per image</li>
+</ol>
+<pre class="r"><code>RNA_cellnumber &lt;- table(sce_RNA$ImageNumber, sce_RNA$cellnumber) %&gt;% rowSums()
+protein_cellnumber &lt;- table(sce_protein$ImageNumber, sce_protein$cellnumber) %&gt;% rowSums()
+df &lt;- data.frame(ImageNumber = levels(sce_RNA$ImageNumber), RNA_panel = RNA_cellnumber, protein_panel = protein_cellnumber)
+df &lt;- pivot_longer(df, 2:3, names_to = &quot;panel&quot;, values_to = &quot;cellnumber&quot;)
+
+ggplot(df, aes(panel, cellnumber))+
+  geom_line(aes(group=ImageNumber, color = ImageNumber))+
+    theme(axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        strip.background = element_blank(),
+        legend.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/no-cells-image-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="visualize-mean-marker-intensities" class="section level2">
+<h2>Visualize mean marker intensities</h2>
+<p>Next step: Visualization of the mean marker intensites per image, sample, ROI and TLS status. For this, we will use the <code>aggregateAcrossCells</code> function of the <code>scater</code> package, which returns a <code>SingleCellExperiment</code> object for further downstream processing. We will arcsinh transform the mean intensity values prior to plotting.</p>
+<pre class="r"><code>mean_sce_RNA &lt;- aggregateAcrossCells(sce_RNA, ids = DataFrame(sample2 = sce_RNA$sample, ROI = sce_RNA$ROI, TLS = sce_RNA$TLS), average = TRUE)
+colnames(mean_sce_RNA) &lt;- mean_sce_RNA$ImageNumber
+assay(mean_sce_RNA, &quot;arcsinh&quot;) &lt;- asinh(assay(mean_sce_RNA, &quot;counts&quot;)) 
+mean_sce_RNA$sample &lt;- as.character(mean_sce_RNA$sample)
+
+mean_sce_protein &lt;- aggregateAcrossCells(sce_protein, ids = DataFrame(sample2 = sce_protein$sample, ROI = sce_protein$ROI, TLS = sce_protein$TLS), average = TRUE)
+colnames(mean_sce_protein) &lt;- mean_sce_protein$ImageNumber
+assay(mean_sce_protein, &quot;arcsinh&quot;) &lt;- asinh(assay(mean_sce_protein, &quot;counts&quot;)) </code></pre>
+<p>Now, we can use the <code>dittoHeatmap</code> from the <code>dittoSeq</code> package to visualize the arcsinh-transformed mean intensities and the scaled, arcsinh-transformed mean intensities per group.</p>
+<div id="rna-panel" class="section level3">
+<h3>RNA panel</h3>
+<pre class="r"><code># Non-scaled
+dittoHeatmap(mean_sce_RNA, assay = &quot;arcsinh&quot;,
+            annot.by = c(&quot;sample2&quot;, &quot;TIG&quot;, &quot;TLS&quot;), 
+            scale = &quot;none&quot;, heatmap.colors = viridis(100), 
+            cluster_cols = TRUE,
+            annotation_colors = list(sample2 = metadata(sce_RNA)$colour_vectors$sample,
+                                     TIG = metadata(sce_RNA)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_RNA)$colour_vectors$TLS))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/plot-mean-intensity-RNApanel-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Centered and scaled
+dittoHeatmap(mean_sce_protein, assay = &quot;arcsinh&quot;,
+            annot.by = c(&quot;sample2&quot;, &quot;TIG&quot;, &quot;TLS&quot;),
+            cluster_cols = TRUE, heatmap.colors = colorRampPalette(c(&quot;dark blue&quot;, &quot;white&quot;, &quot;dark red&quot;))(100),
+            annotation_colors = list(sample2 = metadata(sce_RNA)$colour_vectors$sample,
+                                     TIG = metadata(sce_RNA)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_RNA)$colour_vectors$TLS),
+            breaks = seq(-3, 3, length.out = 101))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/plot-mean-intensity-RNApanel-2.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="protein-panel" class="section level3">
+<h3>Protein panel</h3>
+<pre class="r"><code># Non-scaled
+dittoHeatmap(mean_sce_protein, assay = &quot;arcsinh&quot;,
+            annot.by = c(&quot;sample2&quot;, &quot;TIG&quot;, &quot;TLS&quot;), 
+            scale = &quot;none&quot;, heatmap.colors = viridis(100), 
+            cluster_cols = TRUE,
+            annotation_colors = list(sample2 = metadata(sce_protein)$colour_vectors$sample,
+                                     TIG = metadata(sce_protein)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_protein)$colour_vectors$TLS))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/plot-mean-intensity-ProteinPanel-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Centered and scaled
+dittoHeatmap(mean_sce_protein, assay = &quot;arcsinh&quot;,
+            annot.by = c(&quot;sample2&quot;, &quot;TIG&quot;, &quot;TLS&quot;),
+            cluster_cols = TRUE, heatmap.colors = colorRampPalette(c(&quot;dark blue&quot;, &quot;white&quot;, &quot;dark red&quot;))(100),
+            annotation_colors = list(sample2 = metadata(sce_protein)$colour_vectors$sample,
+                                     TIG = metadata(sce_protein)$colour_vectors$TIG,
+                                     TLS =  metadata(sce_protein)$colour_vectors$TLS),
+            breaks = seq(-3, 3, length.out = 101))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/plot-mean-intensity-ProteinPanel-2.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="low-dimensional-representation-of-image-level-information" class="section level2">
+<h2>Low-dimensional representation of image-level information</h2>
+<p>Next, we can use the summarized <code>SingleCellExperiment</code> object to compute low-dimensional representations of image-level median intensity counts. For this, we will use a PCA representation of the images.</p>
+<pre class="r"><code># Principal component analysis
+mean_sce_RNA &lt;- runPCA(mean_sce_RNA, exprs_values = &quot;arcsinh&quot;, ncomponents = 10, 
+                   subset_row = !(rownames(mean_sce_RNA) %in% c(&quot;DNA1&quot;, &quot;DNA2&quot;, &quot;HH3&quot;)))
+plotPCA(mean_sce_RNA, colour_by = &quot;sample2&quot;, shape_by = &quot;TIG&quot;, 
+        point_alpha = 1, point_size = 4) + 
+  scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)</code></pre>
+<p><img src="figure/01_quality_control.Rmd/PCA-RNApanel-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Principal component analysis
+mean_sce_protein &lt;- runPCA(mean_sce_protein, exprs_values = &quot;arcsinh&quot;, ncomponents = 10, 
+                   subset_row = !(rownames(mean_sce_protein) %in% c(&quot;DNA1&quot;, &quot;DNA2&quot;, &quot;HH3&quot;)))
+plotPCA(mean_sce_protein, colour_by = &quot;sample2&quot;, shape_by = &quot;TIG&quot;, 
+        point_alpha = 1, point_size = 4) + 
+  scale_colour_manual(values = metadata(sce_protein)$colour_vectors$sample)</code></pre>
+<p><img src="figure/01_quality_control.Rmd/PCA-ProteinPanel-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="visualize-cell-level-information" class="section level1">
+<h1>Visualize cell-level information</h1>
+<p>Here, we will visualize the distributions of cell-level metadata and intensity values. First, we will display the distribution of cell size, check if small cells are still included and flag them for downstream analysis.</p>
+<pre class="r"><code># Count and remove cells smaller than 7 pixels
+sum(sce_RNA$Area &lt;= 7)</code></pre>
+<pre><code>[1] 4024</code></pre>
+<pre class="r"><code>sce_RNA$include &lt;- sce_RNA$Area &gt; 7
+sce_RNA &lt;- sce_RNA[, which(sce_RNA$include == TRUE)]
+
+sum(sce_protein$Area &lt;= 7)</code></pre>
+<pre><code>[1] 3634</code></pre>
+<pre class="r"><code>sce_protein$include &lt;- sce_protein$Area &gt; 7
+sce_protein &lt;- sce_protein[, which(sce_protein$include == TRUE)]
+
+# Count and remove cells larger than 600 pixels
+sum(sce_RNA$Area &gt; 600)</code></pre>
+<pre><code>[1] 31</code></pre>
+<pre class="r"><code>sce_RNA$include &lt;- sce_RNA$Area &lt;= 600
+sce_RNA &lt;- sce_RNA[, which(sce_RNA$include == TRUE)]
+
+sum(sce_protein$Area &gt; 600)</code></pre>
+<pre><code>[1] 12</code></pre>
+<pre class="r"><code>sce_protein$include &lt;- sce_protein$Area &lt;= 600
+sce_protein &lt;- sce_protein[, which(sce_protein$include == TRUE)]</code></pre>
+<ol style="list-style-type: decimal">
+<li>Average cell size per panel</li>
+</ol>
+<pre class="r"><code>colData_comb &lt;- bind_rows(as.data.frame(colData(sce_RNA)), as.data.frame(colData(sce_protein)))
+
+ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area)) + 
+  geom_violin()+
+  geom_boxplot(outlier.size = 0.5, width = 0.2) + 
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/cell-size-panel-1.png" width="384" style="display: block; margin: auto;" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Average cell size per sample</li>
+</ol>
+<pre class="r"><code>ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area, fill = panel_type)) + 
+  geom_violin()+
+  geom_boxplot(outlier.size = 0.5, width = 0.2)+
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;skyblue&quot;))+
+  facet_wrap(~sample, ncol = 6)+
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/01_quality_control.Rmd/cell-size-sample-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>Next, we will display the distributions of cell-intensities to observe (i) outlying cells and (ii) batch effects. For this, we will display distributions in form of densities and boxplots:</p>
+<pre class="r"><code># sample
+multi_dittoPlot(sce_RNA, vars = rownames(sce_RNA), group.by = &quot;sample&quot;, plots = c(&quot;ridgeplot&quot;), assay = &quot;exprs&quot;, ncol = 22) +
+  scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)</code></pre>
+<p><img src="figure/01_quality_control.Rmd/intensity-distribution-SampleId-1.png" width="2880" style="display: block; margin: auto;" /></p>
+<pre><code>NULL</code></pre>
+</div>
+<div id="save-updated-objects" class="section level1">
+<h1>Save updated objects</h1>
+<pre class="r"><code>saveRDS(sce_RNA, paste0(getwd(), &quot;/output/sce_RNApanel_afterQC.rds&quot;))
+saveRDS(sce_protein, paste0(getwd(), &quot;/output/sce_ProteinPanel_afterQC.rds&quot;))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04 LTS
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-openmp/libopenblasp-r0.3.8.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] ggpubr_0.4.0                forcats_0.5.0              
+ [3] stringr_1.4.0               dplyr_1.0.1                
+ [5] purrr_0.3.4                 readr_1.3.1                
+ [7] tidyr_1.1.1                 tibble_3.0.3               
+ [9] tidyverse_1.3.0             scales_1.1.1               
+[11] dittoSeq_1.0.2              cowplot_1.0.0              
+[13] RColorBrewer_1.1-2          viridis_0.5.1              
+[15] viridisLite_0.3.0           scater_1.16.2              
+[17] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
+[19] DelayedArray_0.14.1         matrixStats_0.56.0         
+[21] Biobase_2.48.0              GenomicRanges_1.40.0       
+[23] GenomeInfoDb_1.24.2         IRanges_2.22.2             
+[25] S4Vectors_0.26.1            BiocGenerics_0.34.0        
+[27] ggridges_0.5.2              ggplot2_3.3.2              
+[29] workflowr_1.6.2            
+
+loaded via a namespace (and not attached):
+ [1] ggbeeswarm_0.6.0          colorspace_1.4-1         
+ [3] ggsignif_0.6.0            ellipsis_0.3.1           
+ [5] rio_0.5.16                rprojroot_1.3-2          
+ [7] XVector_0.28.0            BiocNeighbors_1.6.0      
+ [9] fs_1.5.0                  rstudioapi_0.11          
+[11] farver_2.0.3              ggrepel_0.8.2            
+[13] fansi_0.4.1               lubridate_1.7.9          
+[15] xml2_1.3.2                knitr_1.29               
+[17] jsonlite_1.7.0            broom_0.7.0              
+[19] dbplyr_1.4.4              pheatmap_1.0.12          
+[21] compiler_4.0.2            httr_1.4.2               
+[23] backports_1.1.8           assertthat_0.2.1         
+[25] Matrix_1.2-18             limma_3.44.3             
+[27] cli_2.0.2                 later_1.1.0.1            
+[29] BiocSingular_1.4.0        htmltools_0.5.0          
+[31] tools_4.0.2               rsvd_1.0.3               
+[33] gtable_0.3.0              glue_1.4.1               
+[35] GenomeInfoDbData_1.2.3    Rcpp_1.0.5               
+[37] carData_3.0-4             cellranger_1.1.0         
+[39] vctrs_0.3.2               DelayedMatrixStats_1.10.1
+[41] xfun_0.16                 openxlsx_4.1.5           
+[43] rvest_0.3.6               lifecycle_0.2.0          
+[45] irlba_2.3.3               rstatix_0.6.0            
+[47] edgeR_3.30.3              zlibbioc_1.34.0          
+[49] hms_0.5.3                 promises_1.1.1           
+[51] yaml_2.2.1                curl_4.3                 
+[53] gridExtra_2.3             stringi_1.4.6            
+[55] zip_2.0.4                 BiocParallel_1.22.0      
+[57] rlang_0.4.7               pkgconfig_2.0.3          
+[59] bitops_1.0-6              evaluate_0.14            
+[61] lattice_0.20-41           labeling_0.3             
+[63] tidyselect_1.1.0          plyr_1.8.6               
+[65] magrittr_1.5              R6_2.4.1                 
+[67] generics_0.0.2            DBI_1.1.0                
+[69] foreign_0.8-80            pillar_1.4.6             
+[71] haven_2.3.1               whisker_0.4              
+[73] withr_2.2.0               abind_1.4-5              
+[75] RCurl_1.98-1.2            modelr_0.1.8             
+[77] crayon_1.3.4              car_3.0-8                
+[79] rmarkdown_2.3             locfit_1.5-9.4           
+[81] grid_4.0.2                readxl_1.3.1             
+[83] data.table_1.13.0         blob_1.2.1               
+[85] git2r_0.27.1              reprex_0.3.0             
+[87] digest_0.6.25             httpuv_1.5.4             
+[89] munsell_0.5.0             beeswarm_0.2.3           
+[91] vipor_0.4.5              </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
