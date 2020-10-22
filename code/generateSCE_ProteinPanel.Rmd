@@ -1,0 +1,246 @@
+---
+title: "IMC data import"
+author: "Sandra Tietscher"
+date: "9/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+library(plyr)
+library(stringr)
+library(purrr)
+library(SingleCellExperiment)
+library(S4Vectors)
+library(dittoSeq)
+library(RColorBrewer)
+```
+
+## Data import
+
+* __cells.csv__ (or similar): contains the cell-level information of a multitude of features. While the majority of these features should be regarded as cell-level metadata (e.g. shape and position), usually the _MeanIntensity_ and __MeanIntensityCorrected__ columns contain the raw and spill-over-corrected counts per cell and per channel.
+* __Image.csv__: contains image-level metadata. These include the image name, number of detected cells, and most importantly the scaling factor, with which the counts need to be multiplied to account for the image encoding (e.g. 16-bit images: scaling factor = 2^{16}-1 = 65535).
+* __Object Relationships.csv__: contains a table of relationships between neighbouring cells.
+* __Panel.csv__: to associate the channel names with the metal-labelled antibodies, the user needs to specify a file that conatins the link between (i) antibody, (ii) metal-tag and (iii) channel name. 
+
+
+```{r read-in-data}
+cells <- read.csv(file = "~/home/Segmentation/BCexh_HIER/cpout/cell.csv", stringsAsFactors = FALSE)
+
+image <- read.csv(file = "~/home/Segmentation/BCexh_HIER/cpout/Image.csv", stringsAsFactors = FALSE)
+
+panel <- read.csv(file = "~/home/Segmentation/BCexh_HIER/panel_for_R.csv", stringsAsFactors = FALSE)
+```
+
+
+## Align image numbering with the image numbers in the RNA panel
+
+```{r image-numbering}
+meta <- read.csv("~/home/Segmentation/BCexh_HIER/ROI_info_HIER.csv")
+meta$HIER_ImageNumber <- c(1:77)
+
+# Check if image order is the same in image file and meta file
+all.equal(image$Count_cell, meta$cellnumber)
+
+# Change ImageNumbers in image file
+image$ImageNumber <- meta$RNApanel_ImageNumber
+
+# Change ImageNumbers in cell file
+cell_imagenumber <- meta$RNApanel_ImageNumber[match(cells$ImageNumber, meta$HIER_ImageNumber)]
+cells$ImageNumber <- cell_imagenumber
+```
+
+### Selecting cell-specific intensities
+
+For our purposes, we will work on the spillover corrected counts averaged across each cell after removing 'hot pixels' (unusually bright pixels). To avoid negative values, we will select the non-negative least-squares corrected counts.
+
+```{r select-counts}
+cur_counts <- cells[,grepl("Intensity_MeanIntensityCorrected_FullStackFiltered", colnames(cells))]
+
+# Add rownames
+rownames(cur_counts) <- paste0(cells$ImageNumber, "_", cells$ObjectNumber)
+```
+
+By default, CellProfiler scales all pixel intensities between 0 and 1.
+This is done by dividing each count by the maximum possible intensity value.
+In the case of 16-bit encoding (where 0 is a valid intensity), this scaling value is `2^16-1 = 65535`.
+Therefore, to obtain raw cell-specific intensities, mean intensites are scaled by this value. 
+CellProfiler by defaults stores the scaling factor in the image metadata file:
+
+```{r scale-counts-1}
+image$Scaling_FullStack
+cur_counts <- cur_counts * image$Scaling_FullStack[1]
+```
+
+## Cell-specific metadata
+
+The `SingleCellExperiment` allows storing cell/image- and marker-specific metadata.
+On the per-cell-level, metadata include:
+
+* the cell's number (identifier)
+* the cell's location
+* the cell's shape features
+These information are stored in a [DataFrame](https://bioconductor.org/packages/release/bioc/manuals/S4Vectors/man/S4Vectors.pdf) object of the `S4Vectors` package and can be obtained from the __cell.csv__ file.
+```{r cell-metadata}
+cell_meta <- data.frame(CellNumber = cells$ObjectNumber,
+                       Center_X = cells$Location_Center_X,
+                       Center_Y = cells$Location_Center_Y,
+                       Area = cells$AreaShape_Area,
+                       MajorAxisLength = cells$AreaShape_MajorAxisLength,
+                       MinorAxisLength = cells$AreaShape_MinorAxisLength, 
+                       ImageNumber = factor(cells$ImageNumber),
+                       Neighbors_NumberOfNeighbors_8 = cells$Neighbors_NumberOfNeighbors_8,
+                       row.names = paste0(cells$ImageNumber, "_", cells$ObjectNumber))
+```
+
+
+### Image-level metadata
+
+Here, we will collect all relevant image-level metadata. These will be added to the cell-level metadata `DataFrame`.
+
+The `cells$ImageNumber` entry  refers to the individual entries of the `Image` metadata file.
+Therefore, we have to associate the entries of the central metadata file to the entries in the image metadata file.
+
+```{r select-meta}
+# Create image IDs from image metadata file
+imageIDs <- paste0(str_split(image$Metadata_acname, "_") %>% map_chr(5), "_",
+                  sub("pos", "", image$Metadata_Description))
+
+# Select and order the central metadata file
+rownames(meta) <- paste(meta$sample, meta$ROI, sep = "_")
+meta <- meta[imageIDs,]
+meta$ImageNumber <- image$ImageNumber
+
+# Add image metadata to cell-specific metadata
+cell_meta <- join(cell_meta, meta, by = "ImageNumber")
+
+# Assign unique rownames to the cell-specific metadata
+rownames(cell_meta) <- paste0(cell_meta$ImageNumber, "_", cell_meta$CellNumber)
+```
+
+Now, we want make sure that the current metadata is in the same order as the original cells dataset.
+
+```{r reorder}
+all.equal(rownames(cell_meta), rownames(cur_counts))
+cell_meta <- cell_meta[rownames(cur_counts),]
+```
+
+Lastly, we need to transform the cell metadata into a DataFrame in order to add it to the SingleCellExperiment as colData.
+
+```{r}
+cell_meta <- DataFrame(cell_meta)
+```
+
+## Feature-level metadata
+
+In the next step, we will make sure that the channel matches the panel information and the entries in the `cur_counts` object. 
+First, we will need to check if the `target` entry is present in the `panel` object.
+
+```{r clean-target}
+panel[,"target"]
+```
+
+This entry stores the short names of antibody targets. 
+We will now associate the entries in the `panel` object to the channels recorded by `CellProfiler`.
+This information can be found in the `_full.csv` files located in the `tiffs` output folder.
+Since all images have been processed at the same time, the ordering of channels is the same for all images.
+
+```{r reorder-panel}
+# Read in one example file to order channels
+tags <- read.csv("~/home/Segmentation/BCexh_HIER/tiffs/20200928_ST_BCexh_H_TBB338_s0_p4_r2_a2_ac_full.csv", header = FALSE)
+
+# Order panel by tag number
+panel <- panel[match(tags[,1], panel$Metal.Tag),]
+
+# Add channel number
+panel$channelNumber <- 1:nrow(tags)
+
+# Use clean target as rownames
+rownames(panel) <- panel$target
+```
+
+Furthermore, the channels are not correctly ordered in the `cells.csv` files.
+We therefore need to reorder the mean intensity entries by channel number.
+
+```{r reorder-channels}
+# Get channel number
+channelNumber <- as.numeric(sub("^.*_c", "", colnames(cur_counts)))
+
+# Order counts based on channel number
+cur_counts <- cur_counts[,order(channelNumber, decreasing = FALSE)] 
+
+# Make sure ordering works
+as.numeric(sub("^.*_c", "", colnames(cur_counts)))
+```
+
+
+These steps now produced an object that stores the cell- and marker-specific intensities, an object that stores the cell-specific metadata and an object that stores the marker-specific metadata.
+
+
+
+# Create the `SingleCellExperiment` object
+
+We now have collected all relevant metadata and object relationships.
+In the final step, we can assemble the `SingleCellExperiment` object.
+
+First, we will create the `SingleCellExperiment` object only based on the counts.
+As of Bioconductor convention, cells are stored in the columns and features are stored in the rows.
+We will store the cell-level metadata in the `colData()` slot, the panel information in the `rowData()` slot.
+
+```{r create-SCE}
+# Create SCE object
+sce <- SingleCellExperiment(assays = list(counts = t(cur_counts)))
+
+# Set marker name as rownames and cellID as colnames
+rownames(sce) <- rownames(panel)
+colnames(sce) <- rownames(cell_meta)
+
+# Store metadata
+colData(sce) <- cell_meta
+rowData(sce) <- panel
+```
+
+At this point, it is critical to assign unique cell IDs to the `SingleCellExperiment` object.
+This will be important when merging `SingleCellExperiment` objects.
+In our case, the SampleId and ROI uniquely define an image for the RNA-panel:
+
+```{r set-rownames}
+colnames(sce) <- paste(sce$sample, sce$ROI, sce$CellNumber, sep = "_")
+```
+
+
+# Generate colour vectors
+
+At this point we want to generate colour vectors that we can reproducibly and consistently use throughout the analysis.
+Primarily, we will define colours for 1. the samples, 2. the ROI, 3. the TIG, 4. the TLS status.
+
+```{r generate-colour-vectors}
+colour_vectors <- list()
+
+col_vec_sampleIds <- c("#00B6EB", "#FB61D7", "#A58AFF", "#00BFC4", "#99A800", "#06A4FF", "#DF70F8", "#C49A00", "#53B400", "#00BC56", "#E38900", "#00C094")
+names(col_vec_sampleIds) <- unique(sce$sample)
+
+col_vec_ROIs <- dittoColors(reps = 1)[seq_len(length(unique(sce$ROI)))]
+names(col_vec_ROIs) <- unique(sce$ROI)
+
+col_vec_TIG <- c("#F8766D", "#00BFC4")
+names(col_vec_TIG) <- c("TIG2", "TIG3")
+
+col_vec_TLS <- c("#EAC511", "#6D6C69", "#318C13")
+names(col_vec_TLS) <- c("no", "pre", "yes")
+
+colour_vectors$sample <- col_vec_sampleIds
+colour_vectors$TIG <- col_vec_TIG
+colour_vectors$ROIs <- col_vec_ROIs
+colour_vectors$TLS <- col_vec_TLS
+
+# Save in metadata slot
+metadata(sce)$colour_vectors <- colour_vectors
+```
+
+# Save SCE object
+The `SingleCellexperiment` can now be saved to disc and easily accessed using the `saveRDS` function.
+
+```{r save-RDS}
+saveRDS(sce,  "~/home/workflowr/BCexh_IMC/output/sce_ProteinPanel_initial.rds")
+```
