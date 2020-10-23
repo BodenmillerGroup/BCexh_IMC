@@ -83,9 +83,9 @@ assay(sce_protein, "normalized", withDimnames = FALSE) <- norm_counts
 
 First, we will visualize the number of cells across various cell-level metadata entries:
 
-1. Number of cells per sample
+### 1. Number of cells per sample
 
-```{r no-cells-sample, fig.width=10, fig.height=10}
+```{r no-cells-sample, fig.width=5, fig.height=6}
 RNA_cellnumber <- table(sce_RNA$sample, sce_RNA$cellnumber) %>% rowSums()
 protein_cellnumber <- table(sce_protein$sample, sce_protein$cellnumber) %>% rowSums()
 df <- data.frame(sample = levels(sce_RNA$sample), RNA_panel = RNA_cellnumber, protein_panel = protein_cellnumber)
@@ -101,7 +101,7 @@ ggplot(df, aes(panel, cellnumber))+
 
 ```
 
-2. Number of cells per image
+### 2. Number of cells per image
 
 ```{r no-cells-image, fig.width=6, fig.height=6}
 RNA_cellnumber <- table(sce_RNA$ImageNumber, sce_RNA$cellnumber) %>% rowSums()
@@ -118,7 +118,7 @@ ggplot(df, aes(panel, cellnumber))+
         panel.border = element_rect(color = "black", fill = NA, size = 1))
 ```
 
-## Visualize mean marker intensities 
+## Mean marker intensities 
 
 Next step: Visualization of the mean marker intensites per image, sample, ROI and TLS status.
 For this, we will use the `aggregateAcrossCells` function of the `scater` package, which returns a `SingleCellExperiment` object for further downstream processing. 
@@ -231,7 +231,7 @@ sce_protein$include <- sce_protein$Area <= 600
 sce_protein <- sce_protein[, which(sce_protein$include == TRUE)]
 ```
 
-1. Average cell size per panel
+## Average cell size per panel
 
 ```{r cell-size-panel, fig.width=4, fig.height=6}
 colData_comb <- bind_rows(as.data.frame(colData(sce_RNA)), as.data.frame(colData(sce_protein)))
@@ -244,7 +244,7 @@ ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area)) +
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-2. Average cell size per sample
+## Average cell size per sample
 
 ```{r cell-size-sample, fig.width=8, fig.height=6}
 ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area, fill = panel_type)) + 
@@ -257,8 +257,7 @@ ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area, fill = panel_type)
         axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Next, we will display the distributions of cell-intensities to observe (i) outlying cells and (ii) batch effects.
-For this, we will display distributions in form of densities and boxplots: 
+## Distribution of marker intensities
 
 ```{r intensity-distribution-SampleId, message = FALSE, fig.width=30, fig.height=50}
 # sample
