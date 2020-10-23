@@ -1,0 +1,248 @@
+---
+title: "04_proteinPanel_clustering"
+author: "SandraTietscher"
+date: "2020-10-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script provides UMAP visualization of single cells and performs a first clustering step to separate tumor and stromal cells.
+
+
+# Load libraries and data
+
+First, we will load the needed libraries and the `SingleCellExperiment` object, that was created in the previous section.
+
+```{r read-libraries-and-data, message=FALSE, results="hide"}
+# Load libraries
+library(ggplot2)
+library(SingleCellExperiment)
+library(scater)
+library(viridis)
+library(RColorBrewer)
+library(dittoSeq)
+library(scales)
+library(tidyverse)
+library(ggpubr)
+library(cowplot)
+library(scran)
+
+# Read SingleCellExperiment object
+sce_protein <- readRDS(paste0(getwd(), "/output/sce_ProteinPanel_afterQC.rds"))
+```
+
+# UMAP representation
+
+For UMAP calculation, the arcsinh-transformed counts are used. As the goal here is only to identify main cell types, only the main cell type markers are included.
+To speed up UMAP calculation and plotting, only a subset of cells is used.
+
+
+## Calculate tSNE and UMAP on a subset of the cells
+
+```{r compute-UMAP}
+# Subset 10000 cells per sample
+sce_protein$cellID <- rownames(colData(sce_protein))
+  
+colData(sce_protein) %>%
+  as.data.frame() %>%
+  group_by(sample) %>%
+  sample_n(10000) %>% 
+  pull(cellID) -> cell_idx
+
+sce_protein_sub <- sce_protein[,cell_idx]
+
+
+# Run Dimensional reduction
+markers_exclude_umap <- c("DNA1", "DNA2", "HH3", "LAG-3", "IDO1", "PD1", "Tim-3", "MMP9", "Granzyme_B", "CD274", "TCF7", "ICOS", "CAIX", "GITR", "Arginase", "CD40", "iNOS", "Cleaved_CP", "Ki-67")
+markers_include_umap <- rownames(assay(sce_protein_sub, "counts"))[! (rownames(assay(sce_protein_sub, "counts")) %in% markers_exclude_umap)]
+
+sce_protein_sub <- runUMAP(sce_protein_sub, exprs_values = "exprs", 
+                     subset_row = rownames(assay(sce_protein_sub, "exprs")) %in% markers_include_umap)
+
+# Save subset SCE object
+saveRDS(sce_protein_sub, paste0(getwd(), "/output/RNApanel/sce_proteinpanel_sub_UMAP.rds"))
+```
+
+## Visualize features on UMAP
+
+```{r visualize-features-umap, message = FALSE, fig.width=6, fig.height=5}
+
+# SlideID, SampleID, ROI, Indication, Tumour mask
+dittoDimPlot(sce_protein_sub, var = "sample", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_protein)$colour_vectors$sample)
+
+dittoDimPlot(sce_protein_sub, var = "sample", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_protein)$colour_vectors$sample, split.by = "sample") 
+
+dittoDimPlot(sce_protein_sub, var = "TIG", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_protein)$colour_vectors$TIG)
+
+dittoDimPlot(sce_protein_sub, var = "TLS", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_protein)$colour_vectors$TLS)
+
+```
+
+## Visualize expression on UMAP
+
+Visualize the expression of each marker.
+
+### 1. Arcsinh-transformed counts
+
+```{r arcsinh-expression-umap, fig.width=35, fig.height=25}
+p.list <- list()
+for(i in rownames(sce_protein_sub)){
+  p.list[[i]] <- plotUMAP(sce_protein_sub, colour_by = i, by_exprs_values = "exprs", 
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")
+}
+
+plot_grid(plotlist = p.list, ncol = 7)
+```
+
+### 2. Scaled arcsinh-transformed counts
+
+```{r scaled-expression-umap, message=FALSE, fig.width=35, fig.height=25}
+p.list <- list()
+for(i in rownames(sce_protein_sub)){
+  p.list[[i]] <- plotUMAP(sce_protein_sub, colour_by = i, by_exprs_values = "scaled", 
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+}
+
+plot_grid(plotlist = p.list, ncol = 7)
+```
+
+
+# Run graph-based clustering (Phenograph)
+
+Use normalized counts for clustering, because this provides a better separation of noise and actual signal compared to arcsinh-transformed counts.  
+Include only markers that are relevant for the general distinction between tumor and stromal cells
+
+```{r phenograph-clustering}
+markers_exclude_phenograph <- markers_exclude_umap
+markers_include_phenograph <- rownames(assay(sce_protein, "counts"))[! (rownames(assay(sce_protein, "counts")) %in% markers_exclude_phenograph)]
+
+cluster_counts_normalized <- subset(assay(sce_protein, "normalized"), rownames(assay(sce_protein, "normalized")) %in% markers_include_phenograph)
+
+g <- buildSNNGraph(cluster_counts_normalized, k=8)
+clust<- igraph::cluster_louvain(g)$membership
+table(clust)
+write.csv(table(clust), paste0(getwd(), "/output/RNApanel/cluster_cellnumbers.csv"), row.names = FALSE)
+
+#add cluster information to sce object
+sce_protein$phenograph_cluster <- as.factor(clust)
+```
+
+## Plot mean expression for each cluster
+
+```{r cluster-mean-expression-heatmap, message=FALSE, fig.width=6, fig.height=6}
+clustermean_sce_protein <- aggregateAcrossCells(sce_protein, ids = DataFrame(cluster = sce_protein$phenograph_cluster), average = TRUE)
+colnames(clustermean_sce_protein) <- clustermean_sce_protein$cluster
+
+# Center and scale raw counts
+assay(clustermean_sce_protein, "scaled") <- t(scale(t(assay(clustermean_sce_protein, "counts"))))
+
+# Normalize raw counts
+norm_counts <- t(apply(assay(clustermean_sce_protein, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean_sce_protein, "normalized", withDimnames = FALSE) <- norm_counts
+
+## Plot
+# Z-scaled
+dittoHeatmap(clustermean_sce_protein[markers_include_phenograph,], assay = "scaled", scale = "none",
+            heatmap.colors = magma(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))
+
+# Normalized (0-1)
+dittoHeatmap(clustermean_sce_protein[markers_include_phenograph,], assay = "normalized", scale = "none",
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)
+
+```
+
+## Display clusters on UMAP
+
+Use the subset SCE object for UMAP plotting.
+
+```{r cluster-umap, fig.width=8, fig.height=7}
+# Assign cluster numbers to the right cells
+sub_cellnames <- colnames(sce_protein_sub)
+cluster_sub <- sce_protein[,sub_cellnames]$phenograph_cluster
+sce_protein_sub$phenograph_cluster <- cluster_sub
+
+#plot on umap
+dittoDimPlot(sce_protein_sub, var = "phenograph_cluster", reduction.use = "UMAP", size = 0.5, do.label = TRUE, opacity = 0.5)
+dittoDimPlot(sce_protein_sub, var = "phenograph_cluster", reduction.use = "UMAP", size = 0.5, split.by = "phenograph_cluster", opacity = 0.2)
+```
+
+# Assign tumor/stroma labels
+
+Look at tumor/stroma proportion per sample.
+
+```{r assign-TS-labels, fig.width=5, fig.height=3}
+labels <- read.csv(paste0(getwd(), "/data/ProteinPanel_tumor_stroma_clusters.csv"))
+
+label_list <- labels$class[match(sce_protein$phenograph_cluster, labels$cluster)]
+sce_protein$cell_class <- label_list
+
+#plot on UMAP
+label_list_sub <- labels$class[match(sce_protein_sub$phenograph_cluster, labels$cluster)]
+sce_protein_sub$cell_class <- label_list_sub
+dittoDimPlot(sce_protein_sub, var = "cell_class", reduction.use = "UMAP", size = 0.5, do.label = TRUE)
+
+#Plot tumor/stroma ratio per sample
+tab <- as.data.frame(prop.table(table(sce_protein$sample, sce_protein$cell_class), margin = 1))
+colnames(tab) <- c("sample", "class", "proportion")
+
+ggplot(tab, aes(sample, y = proportion, fill=class)) +
+  geom_bar(stat="identity")+
+  scale_fill_manual(values = c("red", "skyblue"))+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+```
+
+# Subset tumor cell/stroma cell objects and save them
+
+```{r subset-save-objects}
+cellid <- colnames(sce_protein)
+tumor_x <- which(sce_protein$cell_class == "tumor")
+stroma_x <- which(sce_protein$cell_class == "stroma")
+cellid_tumor <- colnames(sce_protein)[tumor_x]
+cellid_stroma <- colnames(sce_protein)[stroma_x]
+
+sce_tumor <- sce_protein[,cellid_tumor]
+sce_stroma <- sce_protein[,cellid_stroma]
+
+# Save 
+saveRDS(sce_tumor, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_tumor.rds"))
+saveRDS(sce_stroma, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_stroma.rds"))
+
+# Save updated objects
+saveRDS(sce_protein, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_TS_assigned.rds"))
+saveRDS(sce_protein_sub, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_sub_UMAP.rds"))
+```
+
+# Compare tumor/stroma proportions for the two panels
+
+```{r compare-TS-proportions, fig.width=5, fig.height=3}
+#Read in RNApanel object and prepare data
+sce_RNA <- readRDS(paste0(getwd(), "/output/RNApanel/sce_RNApanel_TS_assigned.rds"))
+tab2 <-as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$cell_class), margin = 1))
+colnames(tab2) <- c("sample", "class", "proportion")
+tab2$panel <- "RNApanel"
+tab$panel <- "ProteinPanel"
+tabc <- rbind(tab, tab2)
+
+ggplot(tabc, aes(panel, y = proportion, fill=class)) +
+  geom_bar(stat="identity")+
+  facet_wrap(~sample, ncol = 6)+
+  scale_fill_manual(values = c("red", "skyblue"))+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+```
+
