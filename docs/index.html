@@ -364,16 +364,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9750eeefc701d2d2cb12bd275b0fc1ce06e46240targetblank9750eeea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9750eeefc701d2d2cb12bd275b0fc1ce06e46240" target="_blank">9750eee</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree65fe03f58630f8aea43a4f8a16ac4c7c605c77adtargetblank65fe03fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/65fe03f58630f8aea43a4f8a16ac4c7c605c77ad" target="_blank">65fe03f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9750eeefc701d2d2cb12bd275b0fc1ce06e46240targetblank9750eeea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree65fe03f58630f8aea43a4f8a16ac4c7c605c77adtargetblank65fe03fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9750eeefc701d2d2cb12bd275b0fc1ce06e46240" target="_blank">9750eee</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/65fe03f58630f8aea43a4f8a16ac4c7c605c77ad" target="_blank">65fe03f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -381,11 +381,15 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  analysis/03_RNApanel_StromalSubclustering.Rmd
+    Untracked:  analysis/05_proteinPanel_StromalSubclustering.Rmd
+    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNApanel_TNK_clusters.csv
+    Untracked:  data/RNApanel_stromal_clusters.csv
     Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
@@ -393,7 +397,6 @@ Untracked files:
     Untracked:  output/sce_RNApanel_initial.rds
 
 Unstaged changes:
-    Modified:   _workflowr.yml
     Modified:   analysis/01_quality_control.Rmd
 
 </code></pre>
@@ -433,6 +436,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/65fe03f58630f8aea43a4f8a16ac4c7c605c77ad/analysis/index.Rmd" target="_blank">65fe03f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+<td>
+Add script for tumor/stroma clustering of the protein panel
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/index.html" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -525,9 +562,25 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my research website.</p>
-<p>Initial quality control for both panels: <a href="01_quality_control.html">link</a></p>
-<p>RNApanel: Full dataset clustering: <a href="02_RNApanel_clustering.html">link</a></p>
+<div id="breast-cancer-immune-interaction-exhaustion-project-imc-analysis" class="section level1">
+<h1>Breast cancer immune interaction &amp; exhaustion project: IMC analysis</h1>
+<div id="initial-quality-control-for-both-panels" class="section level2">
+<h2>Initial quality control for both panels:</h2>
+<p><a href="01_quality_control.html">link</a></p>
+</div>
+<div id="rnapanel-full-dataset-clustering" class="section level2">
+<h2>RNApanel: Full dataset clustering</h2>
+<p><a href="02_RNApanel_clustering.html">link</a></p>
+</div>
+<div id="rnapanel-stromal-subclustering-full-celltype-annotation" class="section level2">
+<h2>RNApanel: Stromal subclustering &amp; full celltype annotation</h2>
+<p><a href="03_RNApanel_StromalSubclustering.html">link</a></p>
+</div>
+<div id="protein-panel-full-dataset-clustering" class="section level2">
+<h2>Protein panel: Full dataset clustering</h2>
+<p><a href="04_proteinPanel_clustering.html">link</a></p>
+</div>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
