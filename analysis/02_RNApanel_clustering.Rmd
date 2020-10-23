@@ -1,0 +1,230 @@
+---
+title: "02_RNApanel_clustering"
+author: "SandraTietscher"
+date: "2020-10-22"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script provides UMAP visualization of single cells and performs a first clustering step to separate tumor and stromal cells.
+
+
+# Load libraries and data
+
+First, we will load the needed libraries and the `SingleCellExperiment` object, that was created in the previous section.
+
+```{r read-libraries-and-data, message=FALSE, results="hide"}
+# Load libraries
+library(ggplot2)
+library(SingleCellExperiment)
+library(scater)
+library(viridis)
+library(RColorBrewer)
+library(dittoSeq)
+library(scales)
+library(tidyverse)
+library(ggpubr)
+library(cowplot)
+library(scran)
+
+# Read SingleCellExperiment object
+sce_RNA <- readRDS(paste0(getwd(), "/output/sce_RNApanel_afterQC.rds"))
+```
+
+# UMAP representation
+
+For UMAP calculation, the arcsinh-transformed counts are used. As the goal here is only to identify main cell types, only the main cell type markers are included.
+To speed up UMAP calculation and plotting, only a subset of cells is used.
+
+
+## Calculate tSNE and UMAP on a subset of the cells
+
+```{r compute-UMAP}
+# Subset 10000 cells per sample
+sce_RNA$cellID <- rownames(colData(sce_RNA))
+  
+colData(sce_RNA) %>%
+  as.data.frame() %>%
+  group_by(sample) %>%
+  sample_n(10000) %>% 
+  pull(cellID) -> cell_idx
+
+sce_RNA_sub <- sce_RNA[,cell_idx]
+
+
+# Run Dimensional reduction
+markers_exclude_umap <- c("DNA1", "DNA2", "HH3", "CD206", "PD1", "Ki-67", "DapB", "GLUT1", "CCL4", "CXCL10", "CXCL9", "CCL5", "CCL18", "CXCL13_protein", "CXCL13_mRNA", "CCL22", "CCL17", "CSF1", "CD274", "CCL2", "CD11b")
+markers_include_umap <- rownames(assay(sce_RNA_sub, "counts"))[! (rownames(assay(sce_RNA_sub, "counts")) %in% markers_exclude_umap)]
+
+sce_RNA_sub <- runUMAP(sce_RNA_sub, exprs_values = "exprs", 
+                     subset_row = rownames(assay(sce_RNA_sub, "exprs")) %in% markers_include_umap)
+
+# Save subset SCE object
+saveRDS(sce_RNA_sub, paste0(getwd(), "/output/RNApanel/sce_RNApanel_sub_UMAP.rds"))
+```
+
+## Visualize features on UMAP
+
+```{r visualize-features-umap, message = FALSE, fig.width=10, fig.height=10}
+
+# SlideID, SampleID, ROI, Indication, Tumour mask
+dittoDimPlot(sce_RNA_sub, var = "sample", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$sample)
+
+dittoDimPlot(sce_RNA_sub, var = "sample", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$sample, split.by = "sample") 
+
+dittoDimPlot(sce_RNA_sub, var = "TIG", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$TIG)
+
+dittoDimPlot(sce_RNA_sub, var = "TLS", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$TLS)
+
+```
+
+## Visualize expression on UMAP
+
+Visualize the expression of each marker.
+
+### 1. Arcsinh-transformed counts
+
+```{r arcsinh-expression-umap, fig.width=35, fig.height=25}
+p.list <- list()
+for(i in rownames(sce_RNA_sub)){
+  p.list[[i]] <- plotUMAP(sce_RNA_sub, colour_by = i, by_exprs_values = "exprs", 
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")
+}
+
+plot_grid(plotlist = p.list, ncol = 7)
+```
+
+### 2. Scaled arcsinh-transformed counts
+
+```{r scaled-expression-umap, message=FALSE, fig.width=35, fig.height=25}
+p.list <- list()
+for(i in rownames(sce_RNA_sub)){
+  p.list[[i]] <- plotUMAP(sce_RNA_sub, colour_by = i, by_exprs_values = "scaled", 
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+}
+
+plot_grid(plotlist = p.list, ncol = 7)
+```
+
+
+# Run graph-based clustering (Phenograph)
+
+Use normalized counts for clustering, because this provides a better separation of noise and actual signal compared to arcsinh-transformed counts.  
+Include only markers that are relevant for the general distinction between tumor and stromal cells
+
+```{r phenograph-clustering}
+markers_exclude_phenograph <- c("DNA1", "DNA2", "HH3", "CD206", "PD1", "Ki-67", "DapB", "GLUT1", "CCL4", "CXCL10", "CXCL9", "CCL5", "CCL18", "CXCL13_protein", "CXCL13_mRNA", "CD1c", "CD8a", "CCL22", "CCL17", "CSF1", "CD274", "CCL2", "CD11b", "SMA")
+markers_include_phenograph <- rownames(assay(sce_RNA, "counts"))[! (rownames(assay(sce_RNA, "counts")) %in% markers_exclude_phenograph)]
+
+cluster_counts_normalized <- subset(assay(sce_RNA, "normalized"), rownames(assay(sce_RNA, "normalized")) %in% markers_include_phenograph)
+
+g <- buildSNNGraph(cluster_counts_normalized, k=8)
+clust<- igraph::cluster_louvain(g)$membership
+table(clust)
+write.csv(table(clust), paste0(getwd(), "/output/RNApanel/cluster_cellnumbers.csv"), row.names = FALSE)
+
+#add cluster information to sce object
+sce_RNA$phenograph_cluster <- as.factor(clust)
+```
+
+## Plot mean expression for each cluster
+
+```{r cluster-mean-expression-heatmap, message=FALSE, fig.width=10, fig.height=10}
+clustermean_sce_RNA <- aggregateAcrossCells(sce_RNA, ids = DataFrame(cluster = sce_RNA$phenograph_cluster), average = TRUE)
+colnames(clustermean_sce_RNA) <- clustermean_sce_RNA$cluster
+
+# Center and scale raw counts
+assay(clustermean_sce_RNA, "scaled") <- t(scale(t(assay(clustermean_sce_RNA, "counts"))))
+
+## Plot
+#Raw
+dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = "counts", scale = "none",
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)
+# Scaled
+dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = "scaled", scale = "none",
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))
+
+```
+
+## Display clusters on UMAP
+
+Use the subset SCE object for UMAP plotting.
+
+```{r cluster-umap, fig.width=10, fig.height=8}
+# Assing cluster numbers to the right cells
+sub_cellnames <- colnames(sce_RNA_sub)
+cluster_sub <- sce_RNA[,sub_cellnames]$phenograph_cluster
+sce_RNA_sub$phenograph_cluster <- cluster_sub
+
+#plot on umap
+dittoDimPlot(sce_RNA_sub, var = "phenograph_cluster", reduction.use = "UMAP", size = 0.5, do.label = TRUE, opacity = 0.2)
+dittoDimPlot(sce_RNA_sub, var = "phenograph_cluster", reduction.use = "UMAP", size = 0.5, split.by = "phenograph_cluster", opacity = 0.2)
+
+#subset only one cluster and plot
+# cells_14 <- colnames(sce_sub)[which(sce_sub$louvain_k10_norm_markersubset == "14")]
+# sub.14 <- sce_sub[,cells_14]
+# dittoDimPlot(sub.14, var = "louvain_k10_norm_markersubset", reduction.use = "UMAP", size = 0.5, do.label = TRUE)
+```
+
+# Assign tumor/stroma labels
+
+Look at tumor/stroma proportion per sample.
+
+```{r assign-TS-labels}
+labels <- read.csv(paste0(getwd(), "/data/RNApanel_tumor_stroma_clusters.csv"))
+
+label_list <- labels$class[match(sce_RNA$phenograph_cluster, labels$cluster)]
+sce_RNA$cell_class <- label_list
+
+#plot on UMAP
+label_list_sub <- labels$class[match(sce_RNA_sub$phenograph_cluster, labels$cluster)]
+sce_RNA_sub$cell_class <- label_list_sub
+dittoDimPlot(sce_RNA_sub, var = "cell_class", reduction.use = "UMAP", size = 0.5, do.label = TRUE)
+
+#Plot tumor/stroma ratio per sample
+tab <- as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$cell_class), margin = 1))
+colnames(tab) <- c("sample", "class", "proportion")
+
+ggplot(tab, aes(sample, y = proportion, fill=class)) +
+  geom_bar(stat="identity")+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+
+```
+
+# Subset tumor cell/stroma cell objects and save them
+
+```{r subset-save-objects}
+cellid <- colnames(sce_RNA)
+tumor_x <- which(sce_RNA$cell_class == "tumor")
+stroma_x <- which(sce_RNA$cell_class == "stroma")
+cellid_tumor <- colnames(sce_RNA)[tumor_x]
+cellid_stroma <- colnames(sce_RNA)[stroma_x]
+
+sce_tumor <- sce_RNA[,cellid_tumor]
+sce_stroma <- sce_RNA[,cellid_stroma]
+
+# Save 
+saveRDS(sce_tumor, paste0(getwd(), "/output/RNApanel/sce_RNApanel_tumor.rds"))
+saveRDS(sce_stroma, paste0(getwd(), "/output/RNApanel/sce_RNApanel_stroma.rds"))
+
+# Save updated objects
+saveRDS(sce_RNA, paste0(getwd(), "/output/RNApanel/sce_RNApanel_TS_assigned.rds"))
+saveRDS(sce_RNA_sub, paste0(getwd(), "/output/RNApanel/sce_RNApanel_sub_UMAP.rds"))
+```
+
+

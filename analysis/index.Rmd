@@ -10,4 +10,7 @@ editor_options:
 
 Welcome to my research website.
 
-Click on this [link](01_quality_control.html) to see my results.
+Initial quality control for both panels: [link](01_quality_control.html)
+  
+
+RNApanel: Full dataset clustering: [link](02_RNApanel_clustering.html)  
