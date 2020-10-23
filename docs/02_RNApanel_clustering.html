@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="SandraTietscher" />
+
+<meta name="date" content="2020-10-22" />
+
+<title>02_RNApanel_clustering</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BCexh_IMC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/SandraTietscher/BCexh_IMC">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">02_RNApanel_clustering</h1>
+<h4 class="author">SandraTietscher</h4>
+<h4 class="date">2020-10-22</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-23
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>BCexh_IMC/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9750eeefc701d2d2cb12bd275b0fc1ce06e46240targetblank9750eeea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9750eeefc701d2d2cb12bd275b0fc1ce06e46240" target="_blank">9750eee</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9750eeefc701d2d2cb12bd275b0fc1ce06e46240targetblank9750eeea" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9750eeefc701d2d2cb12bd275b0fc1ce06e46240" target="_blank">9750eee</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/.Rhistory
+
+Untracked files:
+    Untracked:  analysis/03_RNApanel_StromalSubclustering.Rmd
+    Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  output/RNApanel/
+    Untracked:  output/sce_ProteinPanel_afterQC.rds
+    Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_RNApanel_afterQC.rds
+    Untracked:  output/sce_RNApanel_initial.rds
+
+Unstaged changes:
+    Modified:   _workflowr.yml
+    Modified:   analysis/01_quality_control.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/02_RNApanel_clustering.Rmd</code>) and HTML (<code>docs/02_RNApanel_clustering.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/9750eeefc701d2d2cb12bd275b0fc1ce06e46240/analysis/02_RNApanel_clustering.Rmd" target="_blank">9750eee</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+<td>
+Add script for initial clustering for RNA panel
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This script provides UMAP visualization of single cells and performs a first clustering step to separate tumor and stromal cells.</p>
+</div>
+<div id="load-libraries-and-data" class="section level1">
+<h1>Load libraries and data</h1>
+<p>First, we will load the needed libraries and the <code>SingleCellExperiment</code> object, that was created in the previous section.</p>
+<pre class="r"><code># Load libraries
+library(ggplot2)
+library(SingleCellExperiment)
+library(scater)
+library(viridis)
+library(RColorBrewer)
+library(dittoSeq)
+library(scales)
+library(tidyverse)
+library(ggpubr)
+library(cowplot)
+library(scran)
+
+# Read SingleCellExperiment object
+sce_RNA &lt;- readRDS(paste0(getwd(), &quot;/output/sce_RNApanel_afterQC.rds&quot;))</code></pre>
+</div>
+<div id="umap-representation" class="section level1">
+<h1>UMAP representation</h1>
+<p>For UMAP calculation, the arcsinh-transformed counts are used. As the goal here is only to identify main cell types, only the main cell type markers are included. To speed up UMAP calculation and plotting, only a subset of cells is used.</p>
+<div id="calculate-tsne-and-umap-on-a-subset-of-the-cells" class="section level2">
+<h2>Calculate tSNE and UMAP on a subset of the cells</h2>
+<pre class="r"><code># Subset 10000 cells per sample
+sce_RNA$cellID &lt;- rownames(colData(sce_RNA))
+  
+colData(sce_RNA) %&gt;%
+  as.data.frame() %&gt;%
+  group_by(sample) %&gt;%
+  sample_n(10000) %&gt;% 
+  pull(cellID) -&gt; cell_idx
+
+sce_RNA_sub &lt;- sce_RNA[,cell_idx]
+
+
+# Run Dimensional reduction
+markers_exclude_umap &lt;- c(&quot;DNA1&quot;, &quot;DNA2&quot;, &quot;HH3&quot;, &quot;CD206&quot;, &quot;PD1&quot;, &quot;Ki-67&quot;, &quot;DapB&quot;, &quot;GLUT1&quot;, &quot;CCL4&quot;, &quot;CXCL10&quot;, &quot;CXCL9&quot;, &quot;CCL5&quot;, &quot;CCL18&quot;, &quot;CXCL13_protein&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL22&quot;, &quot;CCL17&quot;, &quot;CSF1&quot;, &quot;CD274&quot;, &quot;CCL2&quot;, &quot;CD11b&quot;)
+markers_include_umap &lt;- rownames(assay(sce_RNA_sub, &quot;counts&quot;))[! (rownames(assay(sce_RNA_sub, &quot;counts&quot;)) %in% markers_exclude_umap)]
+
+sce_RNA_sub &lt;- runUMAP(sce_RNA_sub, exprs_values = &quot;exprs&quot;, 
+                     subset_row = rownames(assay(sce_RNA_sub, &quot;exprs&quot;)) %in% markers_include_umap)
+
+# Save subset SCE object
+saveRDS(sce_RNA_sub, paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_sub_UMAP.rds&quot;))</code></pre>
+</div>
+<div id="visualize-features-on-umap" class="section level2">
+<h2>Visualize features on UMAP</h2>
+<pre class="r"><code># SlideID, SampleID, ROI, Indication, Tumour mask
+dittoDimPlot(sce_RNA_sub, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$sample)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$sample, split.by = &quot;sample&quot;) </code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-2.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$TIG)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-3.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_RNA)$colour_vectors$TLS)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-4.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="visualize-expression-on-umap" class="section level2">
+<h2>Visualize expression on UMAP</h2>
+<p>Visualize the expression of each marker.</p>
+<div id="arcsinh-transformed-counts" class="section level3">
+<h3>1. Arcsinh-transformed counts</h3>
+<pre class="r"><code>p.list &lt;- list()
+for(i in rownames(sce_RNA_sub)){
+  p.list[[i]] &lt;- plotUMAP(sce_RNA_sub, colour_by = i, by_exprs_values = &quot;exprs&quot;, 
+                          point_size = 0.5, point_alpha = 1, shape_by = &quot;panel_type&quot;)
+}
+
+plot_grid(plotlist = p.list, ncol = 7)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/arcsinh-expression-umap-1.png" width="3360" style="display: block; margin: auto;" /></p>
+</div>
+<div id="scaled-arcsinh-transformed-counts" class="section level3">
+<h3>2. Scaled arcsinh-transformed counts</h3>
+<pre class="r"><code>p.list &lt;- list()
+for(i in rownames(sce_RNA_sub)){
+  p.list[[i]] &lt;- plotUMAP(sce_RNA_sub, colour_by = i, by_exprs_values = &quot;scaled&quot;, 
+                          point_size = 0.5, point_alpha = 1, shape_by = &quot;panel_type&quot;)  + scale_colour_gradient2(name = i, low = &quot;#2166ac&quot;, mid = &quot;white&quot;, high = &quot;#b2182b&quot;, limits = c(-3, 3))
+}
+
+plot_grid(plotlist = p.list, ncol = 7)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/scaled-expression-umap-1.png" width="3360" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="run-graph-based-clustering-phenograph" class="section level1">
+<h1>Run graph-based clustering (Phenograph)</h1>
+<p>Use normalized counts for clustering, because this provides a better separation of noise and actual signal compared to arcsinh-transformed counts.<br />
+Include only markers that are relevant for the general distinction between tumor and stromal cells</p>
+<pre class="r"><code>markers_exclude_phenograph &lt;- c(&quot;DNA1&quot;, &quot;DNA2&quot;, &quot;HH3&quot;, &quot;CD206&quot;, &quot;PD1&quot;, &quot;Ki-67&quot;, &quot;DapB&quot;, &quot;GLUT1&quot;, &quot;CCL4&quot;, &quot;CXCL10&quot;, &quot;CXCL9&quot;, &quot;CCL5&quot;, &quot;CCL18&quot;, &quot;CXCL13_protein&quot;, &quot;CXCL13_mRNA&quot;, &quot;CD1c&quot;, &quot;CD8a&quot;, &quot;CCL22&quot;, &quot;CCL17&quot;, &quot;CSF1&quot;, &quot;CD274&quot;, &quot;CCL2&quot;, &quot;CD11b&quot;, &quot;SMA&quot;)
+markers_include_phenograph &lt;- rownames(assay(sce_RNA, &quot;counts&quot;))[! (rownames(assay(sce_RNA, &quot;counts&quot;)) %in% markers_exclude_phenograph)]
+
+cluster_counts_normalized &lt;- subset(assay(sce_RNA, &quot;normalized&quot;), rownames(assay(sce_RNA, &quot;normalized&quot;)) %in% markers_include_phenograph)
+
+g &lt;- buildSNNGraph(cluster_counts_normalized, k=8)
+clust&lt;- igraph::cluster_louvain(g)$membership
+table(clust)</code></pre>
+<pre><code>clust
+    1     2     3     4     5     6     7     8     9    10    11    12    13 
+22866 12572 10573 26830 27712 11042 34394 14013 22569 44409 36893  8168 43943 
+   14    15    16    17    18    19    20 
+ 4860 10824 43559  8464  9839  5387 33952 </code></pre>
+<pre class="r"><code>write.csv(table(clust), paste0(getwd(), &quot;/output/RNApanel/cluster_cellnumbers.csv&quot;), row.names = FALSE)
+
+#add cluster information to sce object
+sce_RNA$phenograph_cluster &lt;- as.factor(clust)</code></pre>
+<div id="plot-mean-expression-for-each-cluster" class="section level2">
+<h2>Plot mean expression for each cluster</h2>
+<pre class="r"><code>clustermean_sce_RNA &lt;- aggregateAcrossCells(sce_RNA, ids = DataFrame(cluster = sce_RNA$phenograph_cluster), average = TRUE)
+colnames(clustermean_sce_RNA) &lt;- clustermean_sce_RNA$cluster
+
+# Center and scale raw counts
+assay(clustermean_sce_RNA, &quot;scaled&quot;) &lt;- t(scale(t(assay(clustermean_sce_RNA, &quot;counts&quot;))))
+
+## Plot
+#Raw
+dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = &quot;counts&quot;, scale = &quot;none&quot;,
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Scaled
+dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = &quot;scaled&quot;, scale = &quot;none&quot;,
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-2.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="display-clusters-on-umap" class="section level2">
+<h2>Display clusters on UMAP</h2>
+<p>Use the subset SCE object for UMAP plotting.</p>
+<pre class="r"><code># Assing cluster numbers to the right cells
+sub_cellnames &lt;- colnames(sce_RNA_sub)
+cluster_sub &lt;- sce_RNA[,sub_cellnames]$phenograph_cluster
+sce_RNA_sub$phenograph_cluster &lt;- cluster_sub
+
+#plot on umap
+dittoDimPlot(sce_RNA_sub, var = &quot;phenograph_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE, opacity = 0.2)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-umap-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;phenograph_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, split.by = &quot;phenograph_cluster&quot;, opacity = 0.2)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-umap-2.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#subset only one cluster and plot
+# cells_14 &lt;- colnames(sce_sub)[which(sce_sub$louvain_k10_norm_markersubset == &quot;14&quot;)]
+# sub.14 &lt;- sce_sub[,cells_14]
+# dittoDimPlot(sub.14, var = &quot;louvain_k10_norm_markersubset&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE)</code></pre>
+</div>
+</div>
+<div id="assign-tumorstroma-labels" class="section level1">
+<h1>Assign tumor/stroma labels</h1>
+<p>Look at tumor/stroma proportion per sample.</p>
+<pre class="r"><code>labels &lt;- read.csv(paste0(getwd(), &quot;/data/RNApanel_tumor_stroma_clusters.csv&quot;))
+
+label_list &lt;- labels$class[match(sce_RNA$phenograph_cluster, labels$cluster)]
+sce_RNA$cell_class &lt;- label_list
+
+#plot on UMAP
+label_list_sub &lt;- labels$class[match(sce_RNA_sub$phenograph_cluster, labels$cluster)]
+sce_RNA_sub$cell_class &lt;- label_list_sub
+dittoDimPlot(sce_RNA_sub, var = &quot;cell_class&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/assign-TS-labels-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Plot tumor/stroma ratio per sample
+tab &lt;- as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$cell_class), margin = 1))
+colnames(tab) &lt;- c(&quot;sample&quot;, &quot;class&quot;, &quot;proportion&quot;)
+
+ggplot(tab, aes(sample, y = proportion, fill=class)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/assign-TS-labels-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="subset-tumor-cellstroma-cell-objects-and-save-them" class="section level1">
+<h1>Subset tumor cell/stroma cell objects and save them</h1>
+<pre class="r"><code>cellid &lt;- colnames(sce_RNA)
+tumor_x &lt;- which(sce_RNA$cell_class == &quot;tumor&quot;)
+stroma_x &lt;- which(sce_RNA$cell_class == &quot;stroma&quot;)
+cellid_tumor &lt;- colnames(sce_RNA)[tumor_x]
+cellid_stroma &lt;- colnames(sce_RNA)[stroma_x]
+
+sce_tumor &lt;- sce_RNA[,cellid_tumor]
+sce_stroma &lt;- sce_RNA[,cellid_stroma]
+
+# Save 
+saveRDS(sce_tumor, paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_tumor.rds&quot;))
+saveRDS(sce_stroma, paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_stroma.rds&quot;))
+
+# Save updated objects
+saveRDS(sce_RNA, paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_TS_assigned.rds&quot;))
+saveRDS(sce_RNA_sub, paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_sub_UMAP.rds&quot;))</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04 LTS
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-openmp/libopenblasp-r0.3.8.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] scran_1.16.0                cowplot_1.0.0              
+ [3] ggpubr_0.4.0                forcats_0.5.0              
+ [5] stringr_1.4.0               dplyr_1.0.1                
+ [7] purrr_0.3.4                 readr_1.3.1                
+ [9] tidyr_1.1.1                 tibble_3.0.3               
+[11] tidyverse_1.3.0             scales_1.1.1               
+[13] dittoSeq_1.0.2              RColorBrewer_1.1-2         
+[15] viridis_0.5.1               viridisLite_0.3.0          
+[17] scater_1.16.2               SingleCellExperiment_1.10.1
+[19] SummarizedExperiment_1.18.2 DelayedArray_0.14.1        
+[21] matrixStats_0.56.0          Biobase_2.48.0             
+[23] GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
+[25] IRanges_2.22.2              S4Vectors_0.26.1           
+[27] BiocGenerics_0.34.0         ggplot2_3.3.2              
+[29] workflowr_1.6.2            
+
+loaded via a namespace (and not attached):
+ [1] ggbeeswarm_0.6.0          colorspace_1.4-1         
+ [3] ggsignif_0.6.0            ellipsis_0.3.1           
+ [5] rio_0.5.16                ggridges_0.5.2           
+ [7] rprojroot_1.3-2           XVector_0.28.0           
+ [9] BiocNeighbors_1.6.0       fs_1.5.0                 
+[11] rstudioapi_0.11           farver_2.0.3             
+[13] ggrepel_0.8.2             RSpectra_0.16-0          
+[15] fansi_0.4.1               lubridate_1.7.9          
+[17] xml2_1.3.2                codetools_0.2-16         
+[19] knitr_1.29                jsonlite_1.7.0           
+[21] broom_0.7.0               dbplyr_1.4.4             
+[23] uwot_0.1.8                pheatmap_1.0.12          
+[25] compiler_4.0.2            httr_1.4.2               
+[27] dqrng_0.2.1               backports_1.1.8          
+[29] assertthat_0.2.1          Matrix_1.2-18            
+[31] limma_3.44.3              cli_2.0.2                
+[33] later_1.1.0.1             BiocSingular_1.4.0       
+[35] htmltools_0.5.0           tools_4.0.2              
+[37] igraph_1.2.5              rsvd_1.0.3               
+[39] gtable_0.3.0              glue_1.4.1               
+[41] GenomeInfoDbData_1.2.3    Rcpp_1.0.5               
+[43] carData_3.0-4             cellranger_1.1.0         
+[45] vctrs_0.3.2               DelayedMatrixStats_1.10.1
+[47] xfun_0.16                 openxlsx_4.1.5           
+[49] rvest_0.3.6               lifecycle_0.2.0          
+[51] irlba_2.3.3               statmod_1.4.34           
+[53] rstatix_0.6.0             edgeR_3.30.3             
+[55] zlibbioc_1.34.0           hms_0.5.3                
+[57] promises_1.1.1            yaml_2.2.1               
+[59] curl_4.3                  gridExtra_2.3            
+[61] stringi_1.4.6             zip_2.0.4                
+[63] BiocParallel_1.22.0       rlang_0.4.7              
+[65] pkgconfig_2.0.3           bitops_1.0-6             
+[67] evaluate_0.14             lattice_0.20-41          
+[69] labeling_0.3              tidyselect_1.1.0         
+[71] RcppAnnoy_0.0.16          plyr_1.8.6               
+[73] magrittr_1.5              R6_2.4.1                 
+[75] generics_0.0.2            DBI_1.1.0                
+[77] foreign_0.8-80            pillar_1.4.6             
+[79] haven_2.3.1               whisker_0.4              
+[81] withr_2.2.0               abind_1.4-5              
+[83] RCurl_1.98-1.2            modelr_0.1.8             
+[85] crayon_1.3.4              car_3.0-8                
+[87] rmarkdown_2.3             locfit_1.5-9.4           
+[89] grid_4.0.2                readxl_1.3.1             
+[91] data.table_1.13.0         blob_1.2.1               
+[93] git2r_0.27.1              reprex_0.3.0             
+[95] digest_0.6.25             httpuv_1.5.4             
+[97] munsell_0.5.0             beeswarm_0.2.3           
+[99] vipor_0.4.5              </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
