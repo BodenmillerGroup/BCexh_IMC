@@ -76,7 +76,7 @@ for(i in markers_include_umap){
   p.list[[i]] <- plotUMAP(sce_tumor, colour_by = i, by_exprs_values = "scaled", 
                           point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
 }
-plot_grid(plotlist = p.list, ncol = 7)
+plot_grid(plotlist = p.list, ncol = 5)
 ```
 
 ## Run graph-based clustering for tumor subset (Phenograph)
@@ -101,7 +101,7 @@ dittoDimPlot(sce_tumor, var = "tumor_cluster", reduction.use = "UMAP", size = 0.
 
 ### Plot mean expression for each cluster
 
-```{r tumor-clusters-expression-heatmap, fig.width=5, fig.height=8}
+```{r tumor-clusters-expression-heatmap, fig.width=5, fig.height=5}
 clustermean <- aggregateAcrossCells(sce_tumor, ids = DataFrame(cluster = sce_tumor$tumor_cluster), average = TRUE)
 colnames(clustermean) <- clustermean$cluster
 
@@ -207,7 +207,7 @@ ggplot(sample_means, aes(TIG, counts, fill = TIG))+
 
 ## Correlation of HLA-ABC expression (protein level) and HER2 expression (transcript level)
 
-```{r HLA_ABC-HER2-correlation, fig.width=3.5, fig.height=3}
+```{r HLA_ABC-HER2-correlation, fig.width=5, fig.height=4, message=FALSE}
 # Read in Seurat object
 tumor10x <- readRDS("data/RNAseq_epithelial.rds")
 
@@ -219,7 +219,7 @@ cluster.averages$sample <- rownames(cluster.averages)
 
 # Remove samples that were not measured by IMC
 not.measured <- c("TBB011", "TBB330")
-cluster.averages[!(rownames(cluster.averages) %in% not.measured),]
+cluster.averages <- cluster.averages[!(rownames(cluster.averages) %in% not.measured),]
 
 # Merge with HLA-ABC data from IMC
 IMC_means <- sample_means %>% filter(marker == "HLA_ABC")
@@ -238,7 +238,9 @@ ggplot(comb.tab, aes(HLA_ABC, ERBB2)) +
         panel.background = element_blank())
 ```
 
-# Define cell status based on Ki67, Carbonic Anhydrase IX and Cleaved Caspase/Cleaved PARP expression
+# Define cell status 
+
+Based on Ki67, Carbonic Anhydrase IX and Cleaved Caspase/Cleaved PARP expression
 
 ## Define Ki-67 positive tumor cells
 
@@ -322,7 +324,7 @@ Define order of relevance for assigning cell status:
 2. hypoxic  
 3. apoptotic  
 
-```{r tumor-cell-status-TIG, fig.width=5, fig.height=2.5}
+```{r tumor-cell-status-TIG, fig.width=8, fig.height=5}
 sce_tumor$cell_status <- ifelse(sce_tumor$Ki67_status == TRUE, "tumor_Ki67", ifelse(sce_tumor$hypoxic == TRUE, "tumor_hypoxic", ifelse(sce_tumor$apoptotic == TRUE, "tumor_apoptotic", "tumor")))
 
 # Plot proportions
@@ -345,29 +347,59 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = 0.5)
 ```
 
-```{r tumor-cell-status-barplot, fig.width=4, fig.height=3}
+```{r tumor-cell-status-barplot, fig.width=6, fig.height=4}
 ggplot(tab, aes(sample, y = proportion, fill=cell_status)) +
   geom_bar(stat="identity")+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
 ```
 
-# Save the object
+# Update SCE objects
 
 ```{r save-object}
 saveRDS(sce_tumor, "output/ProteinPanel/sce_ProteinPanel_tumor.rds")
 ```
 
-# Add tumor cell status to main SCE object as "celltype"
+## Add tumor cell status to main SCE object as "celltype"
 
 ```{r update-main-SCE}
 sce_protein <- readRDS(file = "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
 
 tumor_ids <- colnames(sce_tumor)
 sce_protein[,tumor_ids]$celltype <- sce_tumor$cell_status
-table(sce_protein$celltype)
 
 saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
+```
+
+# Cytomapper visualization
+
+```{r cytomapper-tumor}
+library(cytomapper)
+
+# Load mask files
+path.to.images <- "data/masks/ProteinPanel_masks"
+all_masks <- loadImages(path.to.images, pattern = "_mask.tiff")
+all_masks
+
+# Add image number
+imagenr <- read.csv("data/masks/ProteinPanel_masks/image_number_HIER.csv", header=FALSE)[1]
+mcols(all_masks)$ImageNumber <- imagenr$V1
+
+# Scale images
+all_masks <- scaleImages(all_masks, 2^16-1)
+head(unique(as.numeric(all_masks[[1]])))
+
+cur_img <- getImages(all_masks, "20200819_ST_BCexh_H_TBB226_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask")
+
+# Plot cells
+plotCells(cur_img, object = sce_protein,
+            img_id = "ImageNumber", cell_id = "CellNumber",
+            colour_by = "celltype")
+
+plotCells(cur_img, object = sce_protein,
+            img_id = "ImageNumber", cell_id = "CellNumber",
+            colour_by = c("Ki-67", "CAIX"), exprs_values = "exprs")
+
 ```
 
 
