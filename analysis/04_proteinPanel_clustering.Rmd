@@ -65,9 +65,6 @@ markers_include_umap <- rownames(assay(sce_protein_sub, "counts"))[! (rownames(a
 
 sce_protein_sub <- runUMAP(sce_protein_sub, exprs_values = "exprs", 
                      subset_row = rownames(assay(sce_protein_sub, "exprs")) %in% markers_include_umap)
-
-# Save subset SCE object
-saveRDS(sce_protein_sub, paste0(getwd(), "/output/RNApanel/sce_proteinpanel_sub_UMAP.rds"))
 ```
 
 ## Visualize features on UMAP

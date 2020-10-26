@@ -248,7 +248,7 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
 # Save object
 
 ```{r save-objects}
-saveRDS(sce_Protein, paste0(getwd(), "/output/RNApanel/sce_ProteinPanel_celltypes.rds"))
+saveRDS(sce_Protein, "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
 ```
 
 # Compare cell type proportions from CyTOF, RNAseq and IMC
@@ -279,13 +279,13 @@ sce_IMC[,which(sce_IMC$celltype == "aDC")]$celltype <- "myeloid"
 sce_IMC[,which(sce_IMC$celltype == "neutrophil")]$celltype <- "other"
 sce_IMC[,which(sce_IMC$celltype == "stromal_undefined")]$celltype <- "other"
 sce_IMC$celltype <- droplevels(sce_IMC$celltype)
+
 IMC_perc <- as.data.frame(prop.table(x=table(sce_IMC$sample, sce_IMC$celltype), margin=1))
 colnames(IMC_perc) <- c("sample", "celltype", "proportion")
 IMC_perc$method <- "IMC"
 IMC_perc$celltype <- gsub("tumor", "epithelial", IMC_perc$celltype)
 # Remove sample not present in CyTOF
 IMC_perc <- filter(IMC_perc, sample != "TBB338")
-
 
 ## Read in and adapt CyTOF celltypes ##
 cytof_perc <- read.csv(paste0(getwd(), "/data/cytof_celltype_prop.csv"), row.names = 1)
