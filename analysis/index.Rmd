@@ -25,3 +25,7 @@ editor_options:
 
 ## Protein panel: Full dataset clustering     
 [link](04_proteinPanel_clustering.html)  
+
+
+## Protein panel: Stromal subclustering & full celltype annotation     
+[link](05_proteinPanel_StromalSubclustering.html)  
