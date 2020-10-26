@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreedcf83496178fd451340942ef91b81c2c5e57d89etargetblankdcf8349a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/dcf83496178fd451340942ef91b81c2c5e57d89e" target="_blank">dcf8349</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreea231b83c4f080baffd61b80025a0973dc568c0edtargetblanka231b83a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/a231b83c4f080baffd61b80025a0973dc568c0ed" target="_blank">a231b83</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreedcf83496178fd451340942ef91b81c2c5e57d89etargetblankdcf8349a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreea231b83c4f080baffd61b80025a0973dc568c0edtargetblanka231b83a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/dcf83496178fd451340942ef91b81c2c5e57d89e" target="_blank">dcf8349</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/a231b83c4f080baffd61b80025a0973dc568c0ed" target="_blank">a231b83</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -532,15 +532,13 @@ Untracked files:
     Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/cytof_celltype_prop.csv
+    Untracked:  data/masks/
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
-
-Unstaged changes:
-    Modified:   analysis/05_proteinPanel_StromalSubclustering.Rmd
 
 </code></pre>
 <p>
@@ -579,6 +577,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/a231b83c4f080baffd61b80025a0973dc568c0ed/analysis/06_proteinPanel_tumor_analysis.Rmd" target="_blank">a231b83</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+Added cytomapper plots
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/06_proteinPanel_tumor_analysis.html" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -640,15 +672,163 @@ sce_tumor &lt;- runUMAP(sce_tumor, exprs_values = &quot;exprs&quot;,
 <pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_tumor)$colour_vectors$sample, opacity = 0.2) </code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-umap-features-1">
+Past versions of tumor-umap-features-1.png
+</button>
+</p>
+<div id="fig-tumor-umap-features-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_tumor)$colour_vectors$sample, split.by = &quot;sample&quot;, opacity = 0.2) </code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-umap-features-2">
+Past versions of tumor-umap-features-2.png
+</button>
+</p>
+<div id="fig-tumor-umap-features-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-2.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_tumor)$colour_vectors$TIG)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-3.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-umap-features-3">
+Past versions of tumor-umap-features-3.png
+</button>
+</p>
+<div id="fig-tumor-umap-features-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-3.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_tumor)$colour_vectors$TLS)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-4.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-umap-features-4">
+Past versions of tumor-umap-features-4.png
+</button>
+</p>
+<div id="fig-tumor-umap-features-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-4.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="visualize-marker-expression-on-umap" class="section level3">
 <h3>Visualize marker expression on UMAP</h3>
@@ -658,8 +838,45 @@ for(i in markers_include_umap){
   p.list[[i]] &lt;- plotUMAP(sce_tumor, colour_by = i, by_exprs_values = &quot;scaled&quot;, 
                           point_size = 0.5, point_alpha = 1, shape_by = &quot;panel_type&quot;)  + scale_colour_gradient2(name = i, low = &quot;#2166ac&quot;, mid = &quot;white&quot;, high = &quot;#b2182b&quot;, limits = c(-3, 3))
 }
-plot_grid(plotlist = p.list, ncol = 7)</code></pre>
+plot_grid(plotlist = p.list, ncol = 5)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-markerexpression-1.png" width="3360" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-umap-markerexpression-1">
+Past versions of tumor-umap-markerexpression-1.png
+</button>
+</p>
+<div id="fig-tumor-umap-markerexpression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-markerexpression-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="run-graph-based-clustering-for-tumor-subset-phenograph" class="section level2">
@@ -683,8 +900,82 @@ sce_tumor$tumor_cluster &lt;- as.factor(clust)
 #plot on umap
 dittoDimPlot(sce_tumor, var = &quot;tumor_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, do.label = TRUE, opacity = 0.2)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clustering-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-clustering-umap-1">
+Past versions of tumor-clustering-umap-1.png
+</button>
+</p>
+<div id="fig-tumor-clustering-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clustering-umap-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;tumor_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, split.by = &quot;tumor_cluster&quot;, opacity = 0.2)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clustering-umap-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-clustering-umap-2">
+Past versions of tumor-clustering-umap-2.png
+</button>
+</p>
+<div id="fig-tumor-clustering-umap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clustering-umap-2.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="plot-mean-expression-for-each-cluster" class="section level3">
 <h3>Plot mean expression for each cluster</h3>
 <pre class="r"><code>clustermean &lt;- aggregateAcrossCells(sce_tumor, ids = DataFrame(cluster = sce_tumor$tumor_cluster), average = TRUE)
@@ -704,11 +995,85 @@ dittoHeatmap(clustermean[markers_include_umap,], assay = &quot;scaled&quot;, sca
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clusters-expression-heatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-clusters-expression-heatmap-1">
+Past versions of tumor-clusters-expression-heatmap-1.png
+</button>
+</p>
+<div id="fig-tumor-clusters-expression-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clusters-expression-heatmap-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Normalized (0-1)
 dittoHeatmap(clustermean[markers_include_umap,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clusters-expression-heatmap-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-clusters-expression-heatmap-2">
+Past versions of tumor-clusters-expression-heatmap-2.png
+</button>
+</p>
+<div id="fig-tumor-clusters-expression-heatmap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clusters-expression-heatmap-2.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="plot-sample-proportions-per-cluster" class="section level3">
 <h3>Plot sample proportions per cluster</h3>
@@ -720,6 +1085,43 @@ ggplot(props, aes(cluster, y = proportion, fill=sample)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/sample-proportions-cluster-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-sample-proportions-cluster-1">
+Past versions of sample-proportions-cluster-1.png
+</button>
+</p>
+<div id="fig-sample-proportions-cluster-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/sample-proportions-cluster-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -748,6 +1150,43 @@ ggplot(tumor_tab, aes(x=TIG, y = exprs, fill = TIG))+
         axis.title.x = element_blank())+
   ylab(&quot;Marker expression (arcsin-transformed counts)&quot;)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/TIG-marker-comparison-singlecell-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-marker-comparison-singlecell-1">
+Past versions of TIG-marker-comparison-singlecell-1.png
+</button>
+</p>
+<div id="fig-TIG-marker-comparison-singlecell-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/TIG-marker-comparison-singlecell-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Comparison of patient means.</p>
 <pre class="r"><code># Patient means
 counts &lt;- data.frame(HLA_ABC = assay(sce_tumor, &quot;counts&quot;)[&quot;HLA-ABC&quot;,],
@@ -787,6 +1226,43 @@ ggplot(sample_means, aes(TIG, counts, fill = TIG))+
         panel.background = element_blank(),
         strip.background = element_blank())</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/TIG-marker-comparison-patientmeans-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-marker-comparison-patientmeans-1">
+Past versions of TIG-marker-comparison-patientmeans-1.png
+</button>
+</p>
+<div id="fig-TIG-marker-comparison-patientmeans-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/TIG-marker-comparison-patientmeans-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="correlation-of-hla-abc-expression-protein-level-and-her2-expression-transcript-level" class="section level2">
 <h2>Correlation of HLA-ABC expression (protein level) and HER2 expression (transcript level)</h2>
 <pre class="r"><code># Read in Seurat object
@@ -795,54 +1271,14 @@ tumor10x &lt;- readRDS(&quot;data/RNAseq_epithelial.rds&quot;)
 # Calculate averages
 tumor10x_sub &lt;- tumor10x[&quot;ERBB2&quot;,]
 Idents(tumor10x_sub) &lt;- tumor10x_sub$orig.ident
-cluster.averages &lt;- as.data.frame(t(AverageExpression(object = tumor10x_sub, return.seurat = FALSE)[[1]]))</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB075</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB102</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB111</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB129</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB165</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB171</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB214</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB226</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB330</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB338</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB035</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB184</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB212</code></pre>
-<pre><code>Finished averaging RNA for cluster TBB011</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB075</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB102</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB111</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB129</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB165</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB171</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB214</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB226</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB330</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB338</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB035</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB184</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB212</code></pre>
-<pre><code>Finished averaging SCT for cluster TBB011</code></pre>
-<pre class="r"><code>cluster.averages$sample &lt;- rownames(cluster.averages)
+cluster.averages &lt;- as.data.frame(t(AverageExpression(object = tumor10x_sub, return.seurat = FALSE)[[1]]))
+cluster.averages$sample &lt;- rownames(cluster.averages)
 
 # Remove samples that were not measured by IMC
 not.measured &lt;- c(&quot;TBB011&quot;, &quot;TBB330&quot;)
-cluster.averages[!(rownames(cluster.averages) %in% not.measured),]</code></pre>
-<pre><code>           ERBB2 sample
-TBB075 0.5674600 TBB075
-TBB102 1.3458891 TBB102
-TBB111 0.3332238 TBB111
-TBB129 0.3252612 TBB129
-TBB165 0.2911168 TBB165
-TBB171 0.2256089 TBB171
-TBB214 0.9804554 TBB214
-TBB226 1.1478885 TBB226
-TBB338 0.1960882 TBB338
-TBB035 0.7255126 TBB035
-TBB184 0.5627267 TBB184
-TBB212 0.3442039 TBB212</code></pre>
-<pre class="r"><code># Merge with HLA-ABC data from IMC
+cluster.averages &lt;- cluster.averages[!(rownames(cluster.averages) %in% not.measured),]
+
+# Merge with HLA-ABC data from IMC
 IMC_means &lt;- sample_means %&gt;% filter(marker == &quot;HLA_ABC&quot;)
 comb.tab &lt;- merge(IMC_means, cluster.averages, by = &quot;sample&quot;)
 colnames(comb.tab)[4] &lt;- &quot;HLA_ABC&quot;
@@ -857,22 +1293,133 @@ ggplot(comb.tab, aes(HLA_ABC, ERBB2)) +
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
         panel.background = element_blank())</code></pre>
-<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/HLA_ABC-HER2-correlation-1.png" width="336" style="display: block; margin: auto;" /></p>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/HLA_ABC-HER2-correlation-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-HLA_ABC-HER2-correlation-1">
+Past versions of HLA_ABC-HER2-correlation-1.png
+</button>
+</p>
+<div id="fig-HLA_ABC-HER2-correlation-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/HLA_ABC-HER2-correlation-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<div id="define-cell-status-based-on-ki67-carbonic-anhydrase-ix-and-cleaved-caspasecleaved-parp-expression" class="section level1">
-<h1>Define cell status based on Ki67, Carbonic Anhydrase IX and Cleaved Caspase/Cleaved PARP expression</h1>
+</div>
+</div>
+<div id="define-cell-status" class="section level1">
+<h1>Define cell status</h1>
+<p>Based on Ki67, Carbonic Anhydrase IX and Cleaved Caspase/Cleaved PARP expression</p>
 <div id="define-ki-67-positive-tumor-cells" class="section level2">
 <h2>Define Ki-67 positive tumor cells</h2>
 <pre class="r"><code>dittoPlot(sce_tumor, &quot;Ki-67&quot;, group.by = &quot;tumor_cluster&quot;,
     plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;)+
   geom_hline(yintercept = 0.7, lty = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-cutoff-cluster-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Ki67-cutoff-cluster-1">
+Past versions of Ki67-cutoff-cluster-1.png
+</button>
+</p>
+<div id="fig-Ki67-cutoff-cluster-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-cutoff-cluster-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoPlot(sce_tumor, &quot;Ki-67&quot;, group.by = &quot;panel_type&quot;,
     plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;, vlnplot.width = 1)+
   geom_hline(yintercept = 0.7, lty = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-cutoff-full-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Ki67-cutoff-full-1">
+Past versions of Ki67-cutoff-full-1.png
+</button>
+</p>
+<div id="fig-Ki67-cutoff-full-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-cutoff-full-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Assign Ki67-status
 sce_tumor$Ki67_status &lt;- ifelse(assay(sce_tumor, &quot;exprs&quot;)[&quot;Ki-67&quot;,] &gt;= 0.7, TRUE, FALSE)
 
@@ -899,6 +1446,43 @@ ggplot(Ki67_comb, aes(IMC_proportion*100, Ki67_IHC)) +
   ylab(&quot;Ki67_clinical_IHC [%]&quot;)</code></pre>
 <pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-status-IHC-IMC-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Ki67-status-IHC-IMC-1">
+Past versions of Ki67-status-IHC-IMC-1.png
+</button>
+</p>
+<div id="fig-Ki67-status-IHC-IMC-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-status-IHC-IMC-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="define-hypoxic-and-apoptotic-tumor-cells" class="section level2">
 <h2>Define hypoxic and apoptotic tumor cells</h2>
@@ -906,18 +1490,166 @@ ggplot(Ki67_comb, aes(IMC_proportion*100, Ki67_IHC)) +
     plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;)+
   geom_hline(yintercept = 0.5, lty = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-cluster-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cutoff-cluster-1">
+Past versions of cutoff-cluster-1.png
+</button>
+</p>
+<div id="fig-cutoff-cluster-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-cluster-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoPlot(sce_tumor, &quot;CAIX&quot;, group.by = &quot;tumor_cluster&quot;,
     plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;)+
   geom_hline(yintercept = 0.9, lty = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-cluster-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cutoff-cluster-2">
+Past versions of cutoff-cluster-2.png
+</button>
+</p>
+<div id="fig-cutoff-cluster-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-cluster-2.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoPlot(sce_tumor, &quot;Cleaved_CP&quot;, group.by = &quot;panel_type&quot;,
     plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;, vlnplot.width = 1)+
   geom_hline(yintercept = 0.5, lty = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-full-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cutoff-full-1">
+Past versions of cutoff-full-1.png
+</button>
+</p>
+<div id="fig-cutoff-full-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-full-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoPlot(sce_tumor, &quot;CAIX&quot;, group.by = &quot;panel_type&quot;,
     plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;, vlnplot.width = 1)+
   geom_hline(yintercept = 0.9, lty = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-full-2.png" width="288" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cutoff-full-2">
+Past versions of cutoff-full-2.png
+</button>
+</p>
+<div id="fig-cutoff-full-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-full-2.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Assign hypoxia-status and apoptotic status
 sce_tumor$hypoxic &lt;- ifelse(assay(sce_tumor, &quot;exprs&quot;)[&quot;CAIX&quot;,] &gt;= 0.9, TRUE, FALSE)
 sce_tumor$apoptotic &lt;- ifelse(assay(sce_tumor, &quot;exprs&quot;)[&quot;Cleaved_CP&quot;,] &gt;= 0.5, TRUE, FALSE)
@@ -966,35 +1698,156 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
         legend.background = element_blank())+
   ylab(&quot;Of total [%]&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5)</code></pre>
-<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-TIG-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-TIG-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-cell-status-TIG-1">
+Past versions of tumor-cell-status-TIG-1.png
+</button>
+</p>
+<div id="fig-tumor-cell-status-TIG-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-TIG-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(tab, aes(sample, y = proportion, fill=cell_status)) +
   geom_bar(stat=&quot;identity&quot;)+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
-<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-barplot-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-barplot-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-cell-status-barplot-1">
+Past versions of tumor-cell-status-barplot-1.png
+</button>
+</p>
+<div id="fig-tumor-cell-status-barplot-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c75e9434d6e2b7c3cfdc56e8fef634c080356bf0/docs/figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-barplot-1.png" target="_blank">c75e943</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<div id="save-the-object" class="section level1">
-<h1>Save the object</h1>
+</div>
+</div>
+<div id="update-sce-objects" class="section level1">
+<h1>Update SCE objects</h1>
 <pre class="r"><code>saveRDS(sce_tumor, &quot;output/ProteinPanel/sce_ProteinPanel_tumor.rds&quot;)</code></pre>
-</div>
-<div id="add-tumor-cell-status-to-main-sce-object-as-celltype" class="section level1">
-<h1>Add tumor cell status to main SCE object as “celltype”</h1>
+<div id="add-tumor-cell-status-to-main-sce-object-as-celltype" class="section level2">
+<h2>Add tumor cell status to main SCE object as “celltype”</h2>
 <pre class="r"><code>sce_protein &lt;- readRDS(file = &quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)
 
 tumor_ids &lt;- colnames(sce_tumor)
 sce_protein[,tumor_ids]$celltype &lt;- sce_tumor$cell_status
-table(sce_protein$celltype)</code></pre>
+
+saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)</code></pre>
+</div>
+</div>
+<div id="cytomapper-visualization" class="section level1">
+<h1>Cytomapper visualization</h1>
+<pre class="r"><code>library(cytomapper)</code></pre>
+<pre><code>Loading required package: EBImage</code></pre>
 <pre><code>
-              aDC            B_cell       endothelial        fibroblast 
-             3402             10493              5493             47161 
-          myeloid        neutrophil               pDC       plasma_cell 
-            52674              9740              7071              5236 
-stromal_undefined              T_NK             tumor   tumor_apoptotic 
-             8671             59549            148717              3439 
-    tumor_hypoxic        tumor_Ki67 
-            23811             39246 </code></pre>
-<pre class="r"><code>saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)</code></pre>
+Attaching package: &#39;EBImage&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:ggpubr&#39;:
+
+    rotate</code></pre>
+<pre><code>The following object is masked from &#39;package:purrr&#39;:
+
+    transpose</code></pre>
+<pre><code>The following object is masked from &#39;package:SummarizedExperiment&#39;:
+
+    resize</code></pre>
+<pre><code>The following object is masked from &#39;package:Biobase&#39;:
+
+    channel</code></pre>
+<pre><code>The following objects are masked from &#39;package:GenomicRanges&#39;:
+
+    resize, tile</code></pre>
+<pre><code>The following objects are masked from &#39;package:IRanges&#39;:
+
+    resize, tile</code></pre>
+<pre><code>
+Attaching package: &#39;cytomapper&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:Biobase&#39;:
+
+    channelNames, channelNames&lt;-</code></pre>
+<pre class="r"><code># Load mask files
+path.to.images &lt;- &quot;data/masks/ProteinPanel_masks&quot;
+all_masks &lt;- loadImages(path.to.images, pattern = &quot;_mask.tiff&quot;)
+all_masks</code></pre>
+<pre><code>CytoImageList containing 77 image(s)
+names(77): 20200819_ST_BCexh_H_TBB075_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB075_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB075_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB075_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB075_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB075_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB226_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB226_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB226_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB226_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB226_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB226_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200819_ST_BCexh_H_TBB226_s0_p3_r7_a7_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r10_a10_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r7_a7_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r8_a8_ac_ilastik_s2_Probabilities_mask 20200820_ST_BCexh_H_TBB212_s0_p3_r9_a9_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB035_s0_p4_r1_a1_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB035_s0_p4_r2_a2_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB035_s0_p4_r3_a3_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB035_s0_p4_r4_a4_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB035_s0_p4_r5_a5_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB165_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB165_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB165_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB165_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB165_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB165_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200821_ST_BCexh_H_TBB165_s0_p3_r7_a7_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB102_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB102_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB102_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB102_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB102_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB102_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB214_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB214_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB214_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB214_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB214_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB214_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200822_ST_BCexh_H_TBB214_s0_p3_r7_a7_ac_ilastik_s2_Probabilities_mask 20200924_ST_BCexh_H_TBB129_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200924_ST_BCexh_H_TBB129_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200924_ST_BCexh_H_TBB129_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200924_ST_BCexh_H_TBB129_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200924_ST_BCexh_H_TBB129_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200924_ST_BCexh_H_TBB129_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB171_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB171_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB171_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB171_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB171_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB184_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB184_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB184_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB184_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB184_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200925_ST_BCexh_H_TBB184_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB111_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB111_s0_p3_r2_a2_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB111_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB111_s0_p3_r4_a4_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB111_s0_p3_r5_a5_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB338_s0_p4_r1_a1_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB338_s0_p4_r2_a2_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB338_s0_p4_r3_a3_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB338_s0_p4_r4_a4_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB338_s0_p4_r5_a5_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB338_s0_p4_r6_a6_ac_ilastik_s2_Probabilities_mask 20200928_ST_BCexh_H_TBB338_s0_p4_r7_a7_ac_ilastik_s2_Probabilities_mask 
+Each image contains 1 channel</code></pre>
+<pre class="r"><code># Add image number
+imagenr &lt;- read.csv(&quot;data/masks/ProteinPanel_masks/image_number_HIER.csv&quot;, header=FALSE)[1]
+mcols(all_masks)$ImageNumber &lt;- imagenr$V1
+
+# Scale images
+all_masks &lt;- scaleImages(all_masks, 2^16-1)
+head(unique(as.numeric(all_masks[[1]])))</code></pre>
+<pre><code>[1] 0 1 2 3 4 5</code></pre>
+<pre class="r"><code>cur_img &lt;- getImages(all_masks, &quot;20200819_ST_BCexh_H_TBB226_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask&quot;)
+
+# Plot cells
+plotCells(cur_img, object = sce_protein,
+            img_id = &quot;ImageNumber&quot;, cell_id = &quot;CellNumber&quot;,
+            colour_by = &quot;celltype&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cytomapper-tumor-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotCells(cur_img, object = sce_protein,
+            img_id = &quot;ImageNumber&quot;, cell_id = &quot;CellNumber&quot;,
+            colour_by = c(&quot;Ki-67&quot;, &quot;CAIX&quot;), exprs_values = &quot;exprs&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cytomapper-tumor-2.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1023,20 +1876,21 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] Seurat_3.2.2                scran_1.16.0               
- [3] ggpubr_0.4.0                cowplot_1.0.0              
- [5] viridis_0.5.1               viridisLite_0.3.0          
- [7] dittoSeq_1.0.2              forcats_0.5.0              
- [9] stringr_1.4.0               dplyr_1.0.1                
-[11] purrr_0.3.4                 readr_1.3.1                
-[13] tidyr_1.1.1                 tibble_3.0.3               
-[15] tidyverse_1.3.0             scater_1.16.2              
-[17] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
-[19] DelayedArray_0.14.1         matrixStats_0.56.0         
-[21] Biobase_2.48.0              GenomicRanges_1.40.0       
-[23] GenomeInfoDb_1.24.2         IRanges_2.22.2             
-[25] S4Vectors_0.26.1            BiocGenerics_0.34.0        
-[27] ggplot2_3.3.2               workflowr_1.6.2            
+ [1] cytomapper_1.0.0            EBImage_4.30.0             
+ [3] Seurat_3.2.2                scran_1.16.0               
+ [5] ggpubr_0.4.0                cowplot_1.0.0              
+ [7] viridis_0.5.1               viridisLite_0.3.0          
+ [9] dittoSeq_1.0.2              forcats_0.5.0              
+[11] stringr_1.4.0               dplyr_1.0.1                
+[13] purrr_0.3.4                 readr_1.3.1                
+[15] tidyr_1.1.1                 tibble_3.0.3               
+[17] tidyverse_1.3.0             scater_1.16.2              
+[19] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
+[21] DelayedArray_0.14.1         matrixStats_0.56.0         
+[23] Biobase_2.48.0              GenomicRanges_1.40.0       
+[25] GenomeInfoDb_1.24.2         IRanges_2.22.2             
+[27] S4Vectors_0.26.1            BiocGenerics_0.34.0        
+[29] ggplot2_3.3.2               workflowr_1.6.2            
 
 loaded via a namespace (and not attached):
   [1] reticulate_1.17           tidyselect_1.1.0         
@@ -1067,50 +1921,52 @@ loaded via a namespace (and not attached):
  [51] abind_1.4-5               modelr_0.1.8             
  [53] backports_1.1.8           httpuv_1.5.4             
  [55] tools_4.0.2               ellipsis_0.3.1           
- [57] RColorBrewer_1.1-2        ggridges_0.5.2           
- [59] Rcpp_1.0.5                plyr_1.8.6               
- [61] zlibbioc_1.34.0           RCurl_1.98-1.2           
- [63] deldir_0.1-29             rpart_4.1-15             
- [65] pbapply_1.4-3             zoo_1.8-8                
- [67] haven_2.3.1               ggrepel_0.8.2            
- [69] cluster_2.1.0             fs_1.5.0                 
- [71] magrittr_1.5              RSpectra_0.16-0          
- [73] data.table_1.13.0         openxlsx_4.1.5           
- [75] lmtest_0.9-37             reprex_0.3.0             
- [77] RANN_2.6.1                whisker_0.4              
- [79] fitdistrplus_1.1-1        hms_0.5.3                
- [81] patchwork_1.0.1           mime_0.9                 
- [83] evaluate_0.14             xtable_1.8-4             
- [85] rio_0.5.16                readxl_1.3.1             
- [87] gridExtra_2.3             compiler_4.0.2           
- [89] KernSmooth_2.23-17        crayon_1.3.4             
- [91] htmltools_0.5.0           mgcv_1.8-31              
- [93] later_1.1.0.1             lubridate_1.7.9          
- [95] DBI_1.1.0                 dbplyr_1.4.4             
- [97] MASS_7.3-51.6             rappdirs_0.3.1           
- [99] Matrix_1.2-18             car_3.0-8                
-[101] cli_2.0.2                 igraph_1.2.5             
-[103] pkgconfig_2.0.3           foreign_0.8-80           
-[105] plotly_4.9.2.1            xml2_1.3.2               
-[107] vipor_0.4.5               dqrng_0.2.1              
-[109] XVector_0.28.0            rvest_0.3.6              
-[111] digest_0.6.25             sctransform_0.3.1        
-[113] RcppAnnoy_0.0.16          spatstat.data_1.4-3      
-[115] rmarkdown_2.3             cellranger_1.1.0         
-[117] leiden_0.3.3              uwot_0.1.8               
-[119] edgeR_3.30.3              DelayedMatrixStats_1.10.1
-[121] curl_4.3                  shiny_1.5.0              
-[123] nlme_3.1-148              lifecycle_0.2.0          
-[125] jsonlite_1.7.0            carData_3.0-4            
-[127] BiocNeighbors_1.6.0       limma_3.44.3             
-[129] fansi_0.4.1               pillar_1.4.6             
-[131] lattice_0.20-41           fastmap_1.0.1            
-[133] httr_1.4.2                survival_3.2-3           
-[135] glue_1.4.1                zip_2.0.4                
-[137] spatstat_1.64-1           png_0.1-7                
-[139] stringi_1.4.6             blob_1.2.1               
-[141] BiocSingular_1.4.0        irlba_2.3.3              
-[143] future.apply_1.6.0       </code></pre>
+ [57] raster_3.3-13             RColorBrewer_1.1-2       
+ [59] ggridges_0.5.2            Rcpp_1.0.5               
+ [61] plyr_1.8.6                zlibbioc_1.34.0          
+ [63] RCurl_1.98-1.2            deldir_0.1-29            
+ [65] rpart_4.1-15              pbapply_1.4-3            
+ [67] zoo_1.8-8                 haven_2.3.1              
+ [69] ggrepel_0.8.2             cluster_2.1.0            
+ [71] fs_1.5.0                  magrittr_1.5             
+ [73] RSpectra_0.16-0           data.table_1.13.0        
+ [75] openxlsx_4.1.5            lmtest_0.9-37            
+ [77] reprex_0.3.0              RANN_2.6.1               
+ [79] whisker_0.4               fitdistrplus_1.1-1       
+ [81] fftwtools_0.9-8           hms_0.5.3                
+ [83] patchwork_1.0.1           mime_0.9                 
+ [85] evaluate_0.14             xtable_1.8-4             
+ [87] jpeg_0.1-8.1              rio_0.5.16               
+ [89] readxl_1.3.1              gridExtra_2.3            
+ [91] compiler_4.0.2            KernSmooth_2.23-17       
+ [93] crayon_1.3.4              htmltools_0.5.0          
+ [95] tiff_0.1-5                mgcv_1.8-31              
+ [97] later_1.1.0.1             lubridate_1.7.9          
+ [99] DBI_1.1.0                 dbplyr_1.4.4             
+[101] MASS_7.3-51.6             rappdirs_0.3.1           
+[103] Matrix_1.2-18             car_3.0-8                
+[105] cli_2.0.2                 igraph_1.2.5             
+[107] pkgconfig_2.0.3           sp_1.4-2                 
+[109] foreign_0.8-80            plotly_4.9.2.1           
+[111] xml2_1.3.2                vipor_0.4.5              
+[113] dqrng_0.2.1               XVector_0.28.0           
+[115] rvest_0.3.6               digest_0.6.25            
+[117] sctransform_0.3.1         RcppAnnoy_0.0.16         
+[119] spatstat.data_1.4-3       rmarkdown_2.3            
+[121] cellranger_1.1.0          leiden_0.3.3             
+[123] uwot_0.1.8                edgeR_3.30.3             
+[125] DelayedMatrixStats_1.10.1 curl_4.3                 
+[127] shiny_1.5.0               nlme_3.1-148             
+[129] lifecycle_0.2.0           jsonlite_1.7.0           
+[131] carData_3.0-4             BiocNeighbors_1.6.0      
+[133] limma_3.44.3              fansi_0.4.1              
+[135] pillar_1.4.6              lattice_0.20-41          
+[137] fastmap_1.0.1             httr_1.4.2               
+[139] survival_3.2-3            glue_1.4.1               
+[141] zip_2.0.4                 spatstat_1.64-1          
+[143] png_0.1-7                 stringi_1.4.6            
+[145] blob_1.2.1                BiocSingular_1.4.0       
+[147] irlba_2.3.3               future.apply_1.6.0       </code></pre>
 </div>
 </div>
 
