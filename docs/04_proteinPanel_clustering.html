@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-23
+<strong>Last updated:</strong> 2020-10-26
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree65fe03f58630f8aea43a4f8a16ac4c7c605c77adtargetblank65fe03fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/65fe03f58630f8aea43a4f8a16ac4c7c605c77ad" target="_blank">65fe03f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9477c8c5ffcddb2053223d53929b628a4ce82460targetblank9477c8ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9477c8c5ffcddb2053223d53929b628a4ce82460" target="_blank">9477c8c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree65fe03f58630f8aea43a4f8a16ac4c7c605c77adtargetblank65fe03fa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9477c8c5ffcddb2053223d53929b628a4ce82460targetblank9477c8ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/65fe03f58630f8aea43a4f8a16ac4c7c605c77ad" target="_blank">65fe03f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9477c8c5ffcddb2053223d53929b628a4ce82460" target="_blank">9477c8c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,12 +523,16 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
-    Untracked:  analysis/03_RNApanel_StromalSubclustering.Rmd
-    Untracked:  analysis/05_proteinPanel_StromalSubclustering.Rmd
+    Untracked:  data/Ki67_IHC.csv
+    Untracked:  data/ProteinPanel_stromal_clusters.csv
     Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
     Untracked:  data/RNApanel_TNK_clusters.csv
     Untracked:  data/RNApanel_stromal_clusters.csv
     Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_celltype_prop.csv
+    Untracked:  data/RNAseq_epithelial.rds
+    Untracked:  data/cytof_celltype_prop.csv
+    Untracked:  data/masks/
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/sce_ProteinPanel_afterQC.rds
@@ -537,7 +541,7 @@ Untracked files:
     Untracked:  output/sce_RNApanel_initial.rds
 
 Unstaged changes:
-    Modified:   analysis/01_quality_control.Rmd
+    Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
 
 </code></pre>
 <p>
@@ -576,6 +580,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/9477c8c5ffcddb2053223d53929b628a4ce82460/analysis/04_proteinPanel_clustering.Rmd" target="_blank">9477c8c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+Small changes
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/04_proteinPanel_clustering.html" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -645,10 +683,7 @@ markers_exclude_umap &lt;- c(&quot;DNA1&quot;, &quot;DNA2&quot;, &quot;HH3&quot;
 markers_include_umap &lt;- rownames(assay(sce_protein_sub, &quot;counts&quot;))[! (rownames(assay(sce_protein_sub, &quot;counts&quot;)) %in% markers_exclude_umap)]
 
 sce_protein_sub &lt;- runUMAP(sce_protein_sub, exprs_values = &quot;exprs&quot;, 
-                     subset_row = rownames(assay(sce_protein_sub, &quot;exprs&quot;)) %in% markers_include_umap)
-
-# Save subset SCE object
-saveRDS(sce_protein_sub, paste0(getwd(), &quot;/output/RNApanel/sce_proteinpanel_sub_UMAP.rds&quot;))</code></pre>
+                     subset_row = rownames(assay(sce_protein_sub, &quot;exprs&quot;)) %in% markers_include_umap)</code></pre>
 </div>
 <div id="visualize-features-on-umap" class="section level2">
 <h2>Visualize features on UMAP</h2>
@@ -656,15 +691,163 @@ saveRDS(sce_protein_sub, paste0(getwd(), &quot;/output/RNApanel/sce_proteinpanel
 dittoDimPlot(sce_protein_sub, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_protein)$colour_vectors$sample)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-1">
+Past versions of visualize-features-umap-1.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-1.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_protein_sub, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_protein)$colour_vectors$sample, split.by = &quot;sample&quot;) </code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-2">
+Past versions of visualize-features-umap-2.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-2.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_protein_sub, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_protein)$colour_vectors$TIG)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-3">
+Past versions of visualize-features-umap-3.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-3.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_protein_sub, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_protein)$colour_vectors$TLS)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-4">
+Past versions of visualize-features-umap-4.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-4.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="visualize-expression-on-umap" class="section level2">
 <h2>Visualize expression on UMAP</h2>
@@ -679,6 +862,43 @@ for(i in rownames(sce_protein_sub)){
 
 plot_grid(plotlist = p.list, ncol = 7)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/arcsinh-expression-umap-1.png" width="3360" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-arcsinh-expression-umap-1">
+Past versions of arcsinh-expression-umap-1.png
+</button>
+</p>
+<div id="fig-arcsinh-expression-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/arcsinh-expression-umap-1.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="scaled-arcsinh-transformed-counts" class="section level3">
 <h3>2. Scaled arcsinh-transformed counts</h3>
@@ -690,6 +910,43 @@ for(i in rownames(sce_protein_sub)){
 
 plot_grid(plotlist = p.list, ncol = 7)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/scaled-expression-umap-1.png" width="3360" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-scaled-expression-umap-1">
+Past versions of scaled-expression-umap-1.png
+</button>
+</p>
+<div id="fig-scaled-expression-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/scaled-expression-umap-1.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -733,11 +990,85 @@ dittoHeatmap(clustermean_sce_protein[markers_include_phenograph,], assay = &quot
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/cluster-mean-expression-heatmap-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-mean-expression-heatmap-1">
+Past versions of cluster-mean-expression-heatmap-1.png
+</button>
+</p>
+<div id="fig-cluster-mean-expression-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/cluster-mean-expression-heatmap-1.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Normalized (0-1)
 dittoHeatmap(clustermean_sce_protein[markers_include_phenograph,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/cluster-mean-expression-heatmap-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-mean-expression-heatmap-2">
+Past versions of cluster-mean-expression-heatmap-2.png
+</button>
+</p>
+<div id="fig-cluster-mean-expression-heatmap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/cluster-mean-expression-heatmap-2.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="display-clusters-on-umap" class="section level2">
 <h2>Display clusters on UMAP</h2>
@@ -750,8 +1081,82 @@ sce_protein_sub$phenograph_cluster &lt;- cluster_sub
 #plot on umap
 dittoDimPlot(sce_protein_sub, var = &quot;phenograph_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE, opacity = 0.5)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/cluster-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-umap-1">
+Past versions of cluster-umap-1.png
+</button>
+</p>
+<div id="fig-cluster-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/cluster-umap-1.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_protein_sub, var = &quot;phenograph_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, split.by = &quot;phenograph_cluster&quot;, opacity = 0.2)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/cluster-umap-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-umap-2">
+Past versions of cluster-umap-2.png
+</button>
+</p>
+<div id="fig-cluster-umap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/cluster-umap-2.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="assign-tumorstroma-labels" class="section level1">
@@ -767,6 +1172,43 @@ label_list_sub &lt;- labels$class[match(sce_protein_sub$phenograph_cluster, labe
 sce_protein_sub$cell_class &lt;- label_list_sub
 dittoDimPlot(sce_protein_sub, var = &quot;cell_class&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE)</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/assign-TS-labels-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-assign-TS-labels-1">
+Past versions of assign-TS-labels-1.png
+</button>
+</p>
+<div id="fig-assign-TS-labels-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/assign-TS-labels-1.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#Plot tumor/stroma ratio per sample
 tab &lt;- as.data.frame(prop.table(table(sce_protein$sample, sce_protein$cell_class), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;class&quot;, &quot;proportion&quot;)
@@ -777,6 +1219,43 @@ ggplot(tab, aes(sample, y = proportion, fill=class)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/assign-TS-labels-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-assign-TS-labels-2">
+Past versions of assign-TS-labels-2.png
+</button>
+</p>
+<div id="fig-assign-TS-labels-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/assign-TS-labels-2.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="subset-tumor-cellstroma-cell-objects-and-save-them" class="section level1">
 <h1>Subset tumor cell/stroma cell objects and save them</h1>
@@ -814,6 +1293,43 @@ ggplot(tabc, aes(panel, y = proportion, fill=class)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/04_proteinPanel_clustering.Rmd/compare-TS-proportions-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-compare-TS-proportions-1">
+Past versions of compare-TS-proportions-1.png
+</button>
+</p>
+<div id="fig-compare-TS-proportions-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/compare-TS-proportions-1.png" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
