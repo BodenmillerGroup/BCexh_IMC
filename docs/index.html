@@ -333,7 +333,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-23
+<strong>Last updated:</strong> 2020-10-26
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -364,16 +364,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree65fe03f58630f8aea43a4f8a16ac4c7c605c77adtargetblank65fe03fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/65fe03f58630f8aea43a4f8a16ac4c7c605c77ad" target="_blank">65fe03f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree1c5d81a0b3146030d0931c3d9708d3cca613c89ftargetblank1c5d81aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/1c5d81a0b3146030d0931c3d9708d3cca613c89f" target="_blank">1c5d81a</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree65fe03f58630f8aea43a4f8a16ac4c7c605c77adtargetblank65fe03fa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree1c5d81a0b3146030d0931c3d9708d3cca613c89ftargetblank1c5d81aa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/65fe03f58630f8aea43a4f8a16ac4c7c605c77ad" target="_blank">65fe03f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/1c5d81a0b3146030d0931c3d9708d3cca613c89f" target="_blank">1c5d81a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -383,21 +383,19 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
-    Untracked:  analysis/03_RNApanel_StromalSubclustering.Rmd
-    Untracked:  analysis/05_proteinPanel_StromalSubclustering.Rmd
+    Untracked:  data/ProteinPanel_stromal_clusters.csv
     Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
     Untracked:  data/RNApanel_TNK_clusters.csv
     Untracked:  data/RNApanel_stromal_clusters.csv
     Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_celltype_prop.csv
+    Untracked:  data/cytof_celltype_prop.csv
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
-
-Unstaged changes:
-    Modified:   analysis/01_quality_control.Rmd
 
 </code></pre>
 <p>
@@ -436,6 +434,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1c5d81a0b3146030d0931c3d9708d3cca613c89f/analysis/index.Rmd" target="_blank">1c5d81a</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+Add script for stromal subclustering for Protein Panel. Compare cell type proportions across methods.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/index.html" target="_blank">8a8ca8f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -579,6 +611,10 @@ Start workflowr project.
 <div id="protein-panel-full-dataset-clustering" class="section level2">
 <h2>Protein panel: Full dataset clustering</h2>
 <p><a href="04_proteinPanel_clustering.html">link</a></p>
+</div>
+<div id="protein-panel-stromal-subclustering-full-celltype-annotation" class="section level2">
+<h2>Protein panel: Stromal subclustering &amp; full celltype annotation</h2>
+<p><a href="05_proteinPanel_StromalSubclustering.html">link</a></p>
 </div>
 </div>
 
