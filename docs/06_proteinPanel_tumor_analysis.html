@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="SandraTietscher" />
+
+<meta name="date" content="2020-10-26" />
+
+<title>06_proteinPanel_tumor_analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BCexh_IMC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/SandraTietscher/BCexh_IMC">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">06_proteinPanel_tumor_analysis</h1>
+<h4 class="author">SandraTietscher</h4>
+<h4 class="date">2020-10-26</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-26
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>BCexh_IMC/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreedcf83496178fd451340942ef91b81c2c5e57d89etargetblankdcf8349a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/dcf83496178fd451340942ef91b81c2c5e57d89e" target="_blank">dcf8349</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreedcf83496178fd451340942ef91b81c2c5e57d89etargetblankdcf8349a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/dcf83496178fd451340942ef91b81c2c5e57d89e" target="_blank">dcf8349</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/.Rhistory
+
+Untracked files:
+    Untracked:  data/Ki67_IHC.csv
+    Untracked:  data/ProteinPanel_stromal_clusters.csv
+    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNApanel_TNK_clusters.csv
+    Untracked:  data/RNApanel_stromal_clusters.csv
+    Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_celltype_prop.csv
+    Untracked:  data/RNAseq_epithelial.rds
+    Untracked:  data/cytof_celltype_prop.csv
+    Untracked:  output/ProteinPanel/
+    Untracked:  output/RNApanel/
+    Untracked:  output/sce_ProteinPanel_afterQC.rds
+    Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_RNApanel_afterQC.rds
+    Untracked:  output/sce_RNApanel_initial.rds
+
+Unstaged changes:
+    Modified:   analysis/05_proteinPanel_StromalSubclustering.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/06_proteinPanel_tumor_analysis.Rmd</code>) and HTML (<code>docs/06_proteinPanel_tumor_analysis.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/dcf83496178fd451340942ef91b81c2c5e57d89e/analysis/06_proteinPanel_tumor_analysis.Rmd" target="_blank">dcf8349</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+wflow_publish(“analysis/06_proteinPanel_tumor_analysis.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This script looks in more detail into the epithelial cell subset. This is done on the Protein Panel data, because it contains more tumor-relevant markers than the RNA panel. Given that there are still not many tumor markers in the panel, this is a rather coarse analysis.</p>
+</div>
+<div id="load-libraries-and-data" class="section level1">
+<h1>Load libraries and data</h1>
+<pre class="r"><code># Load libraries
+library(ggplot2)
+library(SingleCellExperiment)
+library(scater)
+library(tidyverse)
+library(dittoSeq)
+library(viridis)
+library(cowplot)
+library(ggpubr)
+library(scran)
+library(dplyr)
+library(Seurat)
+
+# Read SingleCellExperiment object (with tumor cells only)
+sce_tumor &lt;- readRDS(paste0(getwd(), &quot;/output/ProteinPanel/sce_ProteinPanel_tumor.rds&quot;))
+
+TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)</code></pre>
+</div>
+<div id="tumor-cell-subclustering" class="section level1">
+<h1>Tumor cell subclustering</h1>
+<div id="calculate-umap-on-all-tumor-cells" class="section level2">
+<h2>Calculate UMAP on all tumor cells</h2>
+<pre class="r"><code>markers_include_umap &lt;- c(&quot;CAIX&quot;, &quot;Cleaved_CP&quot;, &quot;Ki-67&quot;, &quot;E-Cadherin&quot;, &quot;panCK&quot;, &quot;HLA-ABC&quot;, &quot;MMP9&quot;, &quot;SMA&quot;, &quot;CD274&quot;)
+
+sce_tumor &lt;- runUMAP(sce_tumor, exprs_values = &quot;exprs&quot;, 
+                     subset_row = rownames(assay(sce_tumor, &quot;scaled&quot;)) %in% markers_include_umap)</code></pre>
+<div id="visualize-features-on-umap" class="section level3">
+<h3>Visualize features on UMAP</h3>
+<pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_tumor)$colour_vectors$sample, opacity = 0.2) </code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_tumor)$colour_vectors$sample, split.by = &quot;sample&quot;, opacity = 0.2) </code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_tumor)$colour_vectors$TIG)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-3.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_tumor)$colour_vectors$TLS)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-features-4.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="visualize-marker-expression-on-umap" class="section level3">
+<h3>Visualize marker expression on UMAP</h3>
+<pre class="r"><code># Plot expression of all markers
+p.list &lt;- list()
+for(i in markers_include_umap){
+  p.list[[i]] &lt;- plotUMAP(sce_tumor, colour_by = i, by_exprs_values = &quot;scaled&quot;, 
+                          point_size = 0.5, point_alpha = 1, shape_by = &quot;panel_type&quot;)  + scale_colour_gradient2(name = i, low = &quot;#2166ac&quot;, mid = &quot;white&quot;, high = &quot;#b2182b&quot;, limits = c(-3, 3))
+}
+plot_grid(plotlist = p.list, ncol = 7)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-umap-markerexpression-1.png" width="3360" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="run-graph-based-clustering-for-tumor-subset-phenograph" class="section level2">
+<h2>Run graph-based clustering for tumor subset (Phenograph)</h2>
+<p>Display clusters on UMAP.</p>
+<pre class="r"><code>cluster_counts_tumor &lt;- subset(assay(sce_tumor, &quot;normalized&quot;), rownames(assay(sce_tumor, &quot;normalized&quot;)) %in% markers_include_umap)
+
+g &lt;- buildSNNGraph(cluster_counts_tumor, k=50)
+clust &lt;- igraph::cluster_louvain(g)$membership
+table(clust)</code></pre>
+<pre><code>clust
+    1     2     3     4     5     6     7     8     9    10    11    12    13 
+18496 11542  6477 10581  8842 20390 16284  2473 15905 13496  6964  3417 28458 
+   14    15    16 
+17782 15981 18125 </code></pre>
+<pre class="r"><code>#write.csv(table(clust), paste0(getwd(), &quot;/output/ProteinPanel/tumor_cluster_cellnumbers.csv&quot;), row.names = FALSE)
+
+#add cluster information to sce object
+sce_tumor$tumor_cluster &lt;- as.factor(clust)
+
+#plot on umap
+dittoDimPlot(sce_tumor, var = &quot;tumor_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, do.label = TRUE, opacity = 0.2)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clustering-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_tumor, var = &quot;tumor_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, split.by = &quot;tumor_cluster&quot;, opacity = 0.2)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clustering-umap-2.png" width="768" style="display: block; margin: auto;" /></p>
+<div id="plot-mean-expression-for-each-cluster" class="section level3">
+<h3>Plot mean expression for each cluster</h3>
+<pre class="r"><code>clustermean &lt;- aggregateAcrossCells(sce_tumor, ids = DataFrame(cluster = sce_tumor$tumor_cluster), average = TRUE)
+colnames(clustermean) &lt;- clustermean$cluster
+
+# Center and scale raw counts
+assay(clustermean, &quot;scaled&quot;) &lt;- t(scale(t(assay(clustermean, &quot;counts&quot;))))
+
+# Normalize raw counts
+norm_counts &lt;- t(apply(assay(clustermean, &quot;counts&quot;), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
+## Plot
+# Z-scaled
+dittoHeatmap(clustermean[markers_include_umap,], assay = &quot;scaled&quot;, scale = &quot;none&quot;,
+            heatmap.colors = magma(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clusters-expression-heatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Normalized (0-1)
+dittoHeatmap(clustermean[markers_include_umap,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-clusters-expression-heatmap-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-sample-proportions-per-cluster" class="section level3">
+<h3>Plot sample proportions per cluster</h3>
+<pre class="r"><code>props &lt;- as.data.frame(prop.table(table(sce_tumor$tumor_cluster, sce_tumor$sample), margin = 1))
+colnames(props) &lt;- c(&quot;cluster&quot;, &quot;sample&quot;, &quot;proportion&quot;)
+
+ggplot(props, aes(cluster, y = proportion, fill=sample)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/sample-proportions-cluster-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="compare-marker-expression-in-tig2-versus-tig3" class="section level1">
+<h1>Compare marker expression in TIG2 versus TIG3</h1>
+<p>Single-cell violin plots.</p>
+<pre class="r"><code>exprs &lt;- data.frame(HLA_ABC = assay(sce_tumor, &quot;exprs&quot;)[&quot;HLA-ABC&quot;,],
+                    `Ki-67` = assay(sce_tumor, &quot;exprs&quot;)[&quot;Ki-67&quot;,],
+                    CAIX = assay(sce_tumor, &quot;exprs&quot;)[&quot;CAIX&quot;,],
+                    Cleaved_CP = assay(sce_tumor, &quot;exprs&quot;)[&quot;Cleaved_CP&quot;,],
+                    `PD-L1` = assay(sce_tumor, &quot;exprs&quot;)[&quot;CD274&quot;,],
+                    MMP9 = assay(sce_tumor, &quot;exprs&quot;)[&quot;MMP9&quot;,])
+tumor_tab &lt;- cbind(exprs, colData(sce_tumor))
+tumor_tab &lt;- pivot_longer(tumor_tab, 1:6, names_to = &quot;marker&quot;, values_to = &quot;exprs&quot;)
+
+ggplot(tumor_tab, aes(x=TIG, y = exprs, fill = TIG))+
+  geom_violin(aes(fill=TIG))+
+  geom_boxplot(position=position_dodge(width=0.9), width=0.1, color=&quot;black&quot;, aes(fill=TIG))+
+  facet_wrap(~marker, scale = &quot;free&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.title.x = element_blank())+
+  ylab(&quot;Marker expression (arcsin-transformed counts)&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/TIG-marker-comparison-singlecell-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Comparison of patient means.</p>
+<pre class="r"><code># Patient means
+counts &lt;- data.frame(HLA_ABC = assay(sce_tumor, &quot;counts&quot;)[&quot;HLA-ABC&quot;,],
+                    `Ki-67` = assay(sce_tumor, &quot;counts&quot;)[&quot;Ki-67&quot;,],
+                    CAIX = assay(sce_tumor, &quot;counts&quot;)[&quot;CAIX&quot;,],
+                    Cleaved_CP = assay(sce_tumor, &quot;counts&quot;)[&quot;Cleaved_CP&quot;,],
+                    `PD-L1` = assay(sce_tumor, &quot;counts&quot;)[&quot;CD274&quot;,],
+                    MMP9 = assay(sce_tumor, &quot;counts&quot;)[&quot;MMP9&quot;,])
+tumor_tab_2 &lt;- cbind(counts, colData(sce_tumor))
+tumor_tab_2 &lt;- pivot_longer(tumor_tab_2, 1:6, names_to = &quot;marker&quot;, values_to = &quot;counts&quot;)
+
+sample_means &lt;- data.frame(sample = levels(factor(tumor_tab_2$sample)))
+for (i in c(&quot;HLA_ABC&quot;, &quot;CAIX&quot;, &quot;Cleaved_CP&quot;, &quot;Ki.67&quot;, &quot;PD.L1&quot;, &quot;MMP9&quot;)) {
+  tumor.i &lt;- filter(tumor_tab_2, marker == i)
+  i.means &lt;- tumor.i %&gt;% group_by(sample) %&gt;% dplyr::summarise(mean = mean(counts))
+  sample_means[,i] &lt;- i.means$mean
+}</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>sample_means$TIG &lt;- c(rep(&quot;TIG2&quot;, 6), rep(&quot;TIG3&quot;, 6))
+sample_means &lt;- pivot_longer(sample_means, 2:7, names_to = &quot;marker&quot;, values_to = &quot;counts&quot;)
+
+ggplot(sample_means, aes(TIG, counts, fill = TIG))+
+    geom_boxplot(aes(fill=TIG))+
+    geom_point(position=position_dodge(width=0.75), aes(group=TIG))+
+    facet_wrap(~marker, scales = &quot;free&quot;)+
+    stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), vjust = 1, label.x.npc = 0.5)+
+    theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank(),
+        strip.background = element_blank())</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/TIG-marker-comparison-patientmeans-1.png" width="480" style="display: block; margin: auto;" /></p>
+<div id="correlation-of-hla-abc-expression-protein-level-and-her2-expression-transcript-level" class="section level2">
+<h2>Correlation of HLA-ABC expression (protein level) and HER2 expression (transcript level)</h2>
+<pre class="r"><code># Read in Seurat object
+tumor10x &lt;- readRDS(&quot;data/RNAseq_epithelial.rds&quot;)
+
+# Calculate averages
+tumor10x_sub &lt;- tumor10x[&quot;ERBB2&quot;,]
+Idents(tumor10x_sub) &lt;- tumor10x_sub$orig.ident
+cluster.averages &lt;- as.data.frame(t(AverageExpression(object = tumor10x_sub, return.seurat = FALSE)[[1]]))</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB075</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB102</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB111</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB129</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB165</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB171</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB214</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB226</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB330</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB338</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB035</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB184</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB212</code></pre>
+<pre><code>Finished averaging RNA for cluster TBB011</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB075</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB102</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB111</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB129</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB165</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB171</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB214</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB226</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB330</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB338</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB035</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB184</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB212</code></pre>
+<pre><code>Finished averaging SCT for cluster TBB011</code></pre>
+<pre class="r"><code>cluster.averages$sample &lt;- rownames(cluster.averages)
+
+# Remove samples that were not measured by IMC
+not.measured &lt;- c(&quot;TBB011&quot;, &quot;TBB330&quot;)
+cluster.averages[!(rownames(cluster.averages) %in% not.measured),]</code></pre>
+<pre><code>           ERBB2 sample
+TBB075 0.5674600 TBB075
+TBB102 1.3458891 TBB102
+TBB111 0.3332238 TBB111
+TBB129 0.3252612 TBB129
+TBB165 0.2911168 TBB165
+TBB171 0.2256089 TBB171
+TBB214 0.9804554 TBB214
+TBB226 1.1478885 TBB226
+TBB338 0.1960882 TBB338
+TBB035 0.7255126 TBB035
+TBB184 0.5627267 TBB184
+TBB212 0.3442039 TBB212</code></pre>
+<pre class="r"><code># Merge with HLA-ABC data from IMC
+IMC_means &lt;- sample_means %&gt;% filter(marker == &quot;HLA_ABC&quot;)
+comb.tab &lt;- merge(IMC_means, cluster.averages, by = &quot;sample&quot;)
+colnames(comb.tab)[4] &lt;- &quot;HLA_ABC&quot;
+
+ggplot(comb.tab, aes(HLA_ABC, ERBB2)) +
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/HLA_ABC-HER2-correlation-1.png" width="336" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="define-cell-status-based-on-ki67-carbonic-anhydrase-ix-and-cleaved-caspasecleaved-parp-expression" class="section level1">
+<h1>Define cell status based on Ki67, Carbonic Anhydrase IX and Cleaved Caspase/Cleaved PARP expression</h1>
+<div id="define-ki-67-positive-tumor-cells" class="section level2">
+<h2>Define Ki-67 positive tumor cells</h2>
+<pre class="r"><code>dittoPlot(sce_tumor, &quot;Ki-67&quot;, group.by = &quot;tumor_cluster&quot;,
+    plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;)+
+  geom_hline(yintercept = 0.7, lty = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-cutoff-cluster-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoPlot(sce_tumor, &quot;Ki-67&quot;, group.by = &quot;panel_type&quot;,
+    plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;, vlnplot.width = 1)+
+  geom_hline(yintercept = 0.7, lty = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-cutoff-full-1.png" width="288" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Assign Ki67-status
+sce_tumor$Ki67_status &lt;- ifelse(assay(sce_tumor, &quot;exprs&quot;)[&quot;Ki-67&quot;,] &gt;= 0.7, TRUE, FALSE)
+
+Ki67_props &lt;- as.data.frame(proportions(table(sce_tumor$sample, sce_tumor$Ki67_status), margin = 1))
+colnames(Ki67_props) &lt;- c(&quot;sample&quot;, &quot;status&quot;, &quot;IMC_proportion&quot;)
+Ki67_props &lt;- Ki67_props %&gt;% filter(status == TRUE)
+
+# Read in clinically determined Ki67 percentage (IHC)
+Ki67_IHC &lt;- read.csv(&quot;data/Ki67_IHC.csv&quot;)
+
+Ki67_comb &lt;- merge(Ki67_props, Ki67_IHC, by = &quot;sample&quot;)
+
+ggplot(Ki67_comb, aes(IMC_proportion*100, Ki67_IHC)) +
+  geom_point()+
+  geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  xlab(&quot;Ki67_IMC [%]&quot;)+
+  ylab(&quot;Ki67_clinical_IHC [%]&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/Ki67-status-IHC-IMC-1.png" width="288" style="display: block; margin: auto;" /></p>
+</div>
+<div id="define-hypoxic-and-apoptotic-tumor-cells" class="section level2">
+<h2>Define hypoxic and apoptotic tumor cells</h2>
+<pre class="r"><code>dittoPlot(sce_tumor, &quot;Cleaved_CP&quot;, group.by = &quot;tumor_cluster&quot;,
+    plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;)+
+  geom_hline(yintercept = 0.5, lty = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-cluster-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoPlot(sce_tumor, &quot;CAIX&quot;, group.by = &quot;tumor_cluster&quot;,
+    plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;)+
+  geom_hline(yintercept = 0.9, lty = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-cluster-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoPlot(sce_tumor, &quot;Cleaved_CP&quot;, group.by = &quot;panel_type&quot;,
+    plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;, vlnplot.width = 1)+
+  geom_hline(yintercept = 0.5, lty = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-full-1.png" width="288" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoPlot(sce_tumor, &quot;CAIX&quot;, group.by = &quot;panel_type&quot;,
+    plots = c(&quot;vlnplot&quot;), assay = &quot;exprs&quot;, vlnplot.width = 1)+
+  geom_hline(yintercept = 0.9, lty = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/cutoff-full-2.png" width="288" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Assign hypoxia-status and apoptotic status
+sce_tumor$hypoxic &lt;- ifelse(assay(sce_tumor, &quot;exprs&quot;)[&quot;CAIX&quot;,] &gt;= 0.9, TRUE, FALSE)
+sce_tumor$apoptotic &lt;- ifelse(assay(sce_tumor, &quot;exprs&quot;)[&quot;Cleaved_CP&quot;,] &gt;= 0.5, TRUE, FALSE)
+
+# Check overlap
+table(sce_tumor$hypoxic, sce_tumor$apoptotic)</code></pre>
+<pre><code>       
+         FALSE   TRUE
+  FALSE 175187   4607
+  TRUE   33247   2172</code></pre>
+<pre class="r"><code>table(sce_tumor$hypoxic, sce_tumor$Ki67_status)</code></pre>
+<pre><code>       
+         FALSE   TRUE
+  FALSE 152156  27638
+  TRUE   23811  11608</code></pre>
+<pre class="r"><code>table(sce_tumor$apoptotic, sce_tumor$Ki67_status)</code></pre>
+<pre><code>       
+         FALSE   TRUE
+  FALSE 171180  37254
+  TRUE    4787   1992</code></pre>
+</div>
+<div id="assign-cell-status-for-tumor-cells-and-attach-to-main-sce" class="section level2">
+<h2>Assign cell status for tumor cells and attach to main SCE</h2>
+<p>Around 1/3 of all apoptotic cells are also hypoxic. Around 1/3 of all hypoxic cells are Ki67+.</p>
+<p>Define order of relevance for assigning cell status:<br />
+1. Ki-67<br />
+2. hypoxic<br />
+3. apoptotic</p>
+<pre class="r"><code>sce_tumor$cell_status &lt;- ifelse(sce_tumor$Ki67_status == TRUE, &quot;tumor_Ki67&quot;, ifelse(sce_tumor$hypoxic == TRUE, &quot;tumor_hypoxic&quot;, ifelse(sce_tumor$apoptotic == TRUE, &quot;tumor_apoptotic&quot;, &quot;tumor&quot;)))
+
+# Plot proportions
+tab &lt;- as.data.frame(prop.table(table(sce_tumor$sample, sce_tumor$cell_status), margin = 1))
+colnames(tab) &lt;- c(&quot;sample&quot;, &quot;cell_status&quot;, &quot;proportion&quot;)
+tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~cell_status, scales=&quot;free&quot;, ncol=4, strip.position=&quot;top&quot;)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;Of total [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5)</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-TIG-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(tab, aes(sample, y = proportion, fill=cell_status)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/06_proteinPanel_tumor_analysis.Rmd/tumor-cell-status-barplot-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="save-the-object" class="section level1">
+<h1>Save the object</h1>
+<pre class="r"><code>saveRDS(sce_tumor, &quot;output/ProteinPanel/sce_ProteinPanel_tumor.rds&quot;)</code></pre>
+</div>
+<div id="add-tumor-cell-status-to-main-sce-object-as-celltype" class="section level1">
+<h1>Add tumor cell status to main SCE object as “celltype”</h1>
+<pre class="r"><code>sce_protein &lt;- readRDS(file = &quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)
+
+tumor_ids &lt;- colnames(sce_tumor)
+sce_protein[,tumor_ids]$celltype &lt;- sce_tumor$cell_status
+table(sce_protein$celltype)</code></pre>
+<pre><code>
+              aDC            B_cell       endothelial        fibroblast 
+             3402             10493              5493             47161 
+          myeloid        neutrophil               pDC       plasma_cell 
+            52674              9740              7071              5236 
+stromal_undefined              T_NK             tumor   tumor_apoptotic 
+             8671             59549            148717              3439 
+    tumor_hypoxic        tumor_Ki67 
+            23811             39246 </code></pre>
+<pre class="r"><code>saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04 LTS
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-openmp/libopenblasp-r0.3.8.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] Seurat_3.2.2                scran_1.16.0               
+ [3] ggpubr_0.4.0                cowplot_1.0.0              
+ [5] viridis_0.5.1               viridisLite_0.3.0          
+ [7] dittoSeq_1.0.2              forcats_0.5.0              
+ [9] stringr_1.4.0               dplyr_1.0.1                
+[11] purrr_0.3.4                 readr_1.3.1                
+[13] tidyr_1.1.1                 tibble_3.0.3               
+[15] tidyverse_1.3.0             scater_1.16.2              
+[17] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
+[19] DelayedArray_0.14.1         matrixStats_0.56.0         
+[21] Biobase_2.48.0              GenomicRanges_1.40.0       
+[23] GenomeInfoDb_1.24.2         IRanges_2.22.2             
+[25] S4Vectors_0.26.1            BiocGenerics_0.34.0        
+[27] ggplot2_3.3.2               workflowr_1.6.2            
+
+loaded via a namespace (and not attached):
+  [1] reticulate_1.17           tidyselect_1.1.0         
+  [3] htmlwidgets_1.5.1         grid_4.0.2               
+  [5] BiocParallel_1.22.0       Rtsne_0.15               
+  [7] munsell_0.5.0             codetools_0.2-16         
+  [9] ica_1.0-2                 statmod_1.4.34           
+ [11] future_1.19.1             miniUI_0.1.1.1           
+ [13] withr_2.2.0               colorspace_1.4-1         
+ [15] knitr_1.29                rstudioapi_0.11          
+ [17] ROCR_1.0-11               tensor_1.5               
+ [19] ggsignif_0.6.0            listenv_0.8.0            
+ [21] labeling_0.3              git2r_0.27.1             
+ [23] GenomeInfoDbData_1.2.3    polyclip_1.10-0          
+ [25] farver_2.0.3              pheatmap_1.0.12          
+ [27] rprojroot_1.3-2           vctrs_0.3.2              
+ [29] generics_0.0.2            xfun_0.16                
+ [31] R6_2.4.1                  ggbeeswarm_0.6.0         
+ [33] rsvd_1.0.3                locfit_1.5-9.4           
+ [35] bitops_1.0-6              spatstat.utils_1.17-0    
+ [37] assertthat_0.2.1          promises_1.1.1           
+ [39] scales_1.1.1              beeswarm_0.2.3           
+ [41] gtable_0.3.0              globals_0.13.1           
+ [43] goftest_1.2-2             rlang_0.4.7              
+ [45] splines_4.0.2             rstatix_0.6.0            
+ [47] lazyeval_0.2.2            broom_0.7.0              
+ [49] yaml_2.2.1                reshape2_1.4.4           
+ [51] abind_1.4-5               modelr_0.1.8             
+ [53] backports_1.1.8           httpuv_1.5.4             
+ [55] tools_4.0.2               ellipsis_0.3.1           
+ [57] RColorBrewer_1.1-2        ggridges_0.5.2           
+ [59] Rcpp_1.0.5                plyr_1.8.6               
+ [61] zlibbioc_1.34.0           RCurl_1.98-1.2           
+ [63] deldir_0.1-29             rpart_4.1-15             
+ [65] pbapply_1.4-3             zoo_1.8-8                
+ [67] haven_2.3.1               ggrepel_0.8.2            
+ [69] cluster_2.1.0             fs_1.5.0                 
+ [71] magrittr_1.5              RSpectra_0.16-0          
+ [73] data.table_1.13.0         openxlsx_4.1.5           
+ [75] lmtest_0.9-37             reprex_0.3.0             
+ [77] RANN_2.6.1                whisker_0.4              
+ [79] fitdistrplus_1.1-1        hms_0.5.3                
+ [81] patchwork_1.0.1           mime_0.9                 
+ [83] evaluate_0.14             xtable_1.8-4             
+ [85] rio_0.5.16                readxl_1.3.1             
+ [87] gridExtra_2.3             compiler_4.0.2           
+ [89] KernSmooth_2.23-17        crayon_1.3.4             
+ [91] htmltools_0.5.0           mgcv_1.8-31              
+ [93] later_1.1.0.1             lubridate_1.7.9          
+ [95] DBI_1.1.0                 dbplyr_1.4.4             
+ [97] MASS_7.3-51.6             rappdirs_0.3.1           
+ [99] Matrix_1.2-18             car_3.0-8                
+[101] cli_2.0.2                 igraph_1.2.5             
+[103] pkgconfig_2.0.3           foreign_0.8-80           
+[105] plotly_4.9.2.1            xml2_1.3.2               
+[107] vipor_0.4.5               dqrng_0.2.1              
+[109] XVector_0.28.0            rvest_0.3.6              
+[111] digest_0.6.25             sctransform_0.3.1        
+[113] RcppAnnoy_0.0.16          spatstat.data_1.4-3      
+[115] rmarkdown_2.3             cellranger_1.1.0         
+[117] leiden_0.3.3              uwot_0.1.8               
+[119] edgeR_3.30.3              DelayedMatrixStats_1.10.1
+[121] curl_4.3                  shiny_1.5.0              
+[123] nlme_3.1-148              lifecycle_0.2.0          
+[125] jsonlite_1.7.0            carData_3.0-4            
+[127] BiocNeighbors_1.6.0       limma_3.44.3             
+[129] fansi_0.4.1               pillar_1.4.6             
+[131] lattice_0.20-41           fastmap_1.0.1            
+[133] httr_1.4.2                survival_3.2-3           
+[135] glue_1.4.1                zip_2.0.4                
+[137] spatstat_1.64-1           png_0.1-7                
+[139] stringi_1.4.6             blob_1.2.1               
+[141] BiocSingular_1.4.0        irlba_2.3.3              
+[143] future.apply_1.6.0       </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
