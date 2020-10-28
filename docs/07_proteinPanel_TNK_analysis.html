@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="SandraTietscher" />
+
+<meta name="date" content="2020-10-27" />
+
+<title>07_proteinPanel_TNK_analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BCexh_IMC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/SandraTietscher/BCexh_IMC">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">07_proteinPanel_TNK_analysis</h1>
+<h4 class="author">SandraTietscher</h4>
+<h4 class="date">2020-10-27</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-28
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>BCexh_IMC/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree70ab2329e83c31f084fe41e59e3318b611b9a332targetblank70ab232a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/70ab2329e83c31f084fe41e59e3318b611b9a332" target="_blank">70ab232</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree70ab2329e83c31f084fe41e59e3318b611b9a332targetblank70ab232a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/70ab2329e83c31f084fe41e59e3318b611b9a332" target="_blank">70ab232</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/.Rhistory
+
+Untracked files:
+    Untracked:  data/Ki67_IHC.csv
+    Untracked:  data/ProteinPanel_TNK_clusters.csv
+    Untracked:  data/ProteinPanel_stromal_clusters.csv
+    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNApanel_TNK_clusters.csv
+    Untracked:  data/RNApanel_stromal_clusters.csv
+    Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_celltype_prop.csv
+    Untracked:  data/RNAseq_epithelial.rds
+    Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/cytof_celltype_prop.csv
+    Untracked:  data/masks/
+    Untracked:  output/ProteinPanel/
+    Untracked:  output/RNApanel/
+    Untracked:  output/sce_ProteinPanel_afterQC.rds
+    Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_RNApanel_afterQC.rds
+    Untracked:  output/sce_RNApanel_initial.rds
+
+Unstaged changes:
+    Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/07_proteinPanel_TNK_analysis.Rmd</code>) and HTML (<code>docs/07_proteinPanel_TNK_analysis.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/70ab2329e83c31f084fe41e59e3318b611b9a332/analysis/07_proteinPanel_TNK_analysis.Rmd" target="_blank">70ab232</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+<td>
+Protein Panel: add more detailed T/NK cell analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This script performs subclustering of T cells and NK cells for the Protein panel and performs further downstream analysis</p>
+</div>
+<div id="load-libraries-and-data" class="section level1">
+<h1>Load libraries and data</h1>
+<pre class="r"><code># Load libraries
+library(ggplot2)
+library(SingleCellExperiment)
+library(scater)
+library(tidyverse)
+library(dittoSeq)
+library(viridis)
+library(cowplot)
+library(ggpubr)
+library(scran)
+
+# Read SingleCellExperiment object 
+sce_protein &lt;- readRDS(&quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)
+
+# Subset T/NK cells only
+sce_TNK &lt;- sce_protein[,which(sce_protein$celltype == &quot;T_NK&quot;)]</code></pre>
+</div>
+<div id="perform-batch-correction-because-tbb111-is-a-strong-outlier" class="section level1">
+<h1>Perform batch correction (because TBB111 is a strong outlier)</h1>
+<pre class="r"><code># library(batchelor)
+# out &lt;- fastMNN(sce_TNK, batch = sce_TNK$sample, auto.merge = TRUE, correct.all = TRUE,
+#                subset.row = !(grepl(&quot;DNA|Histone&quot;, rownames(sce_TNK))), assay.type = &quot;exprs&quot;)
+# 
+# merge_info &lt;- metadata(out)$merge.info 
+# 
+# # Here, we will have a look at the percentage of lost variance per merge step
+# # As rule of thumb, more than 10% should be investigated further
+# # Here we rank the samples based on the lost variance
+# cur_colmax &lt;- colMaxs(merge_info$lost.var)
+# names(cur_colmax) &lt;- colnames(merge_info$lost.var) 
+# cur_colmax[order(cur_colmax, decreasing = TRUE)]
+# 
+# # Next, we will look at the batch.size argument - the raltive magnitute of the batch effect
+# cur_df &lt;- DataFrame(left = merge_info$left,
+#                      right = merge_info$right,
+#                      batch.size = merge_info$batch.size,
+#                      max_lost_var = rowMax(merge_info$lost.var))
+# 
+# DT::datatable(as.data.frame(cur_df))
+# 
+# # Transfer the correction results to the main sce object
+# reducedDims(sce_TNK)$corrected &lt;- reducedDims(out)$corrected</code></pre>
+</div>
+<div id="tnk-cell-subclustering" class="section level1">
+<h1>T/NK cell subclustering</h1>
+<div id="calculate-umap-on-all-tnk-cells" class="section level2">
+<h2>Calculate UMAP on all TNK cells</h2>
+<p>Use only relevant markers. Exclude LAG-3 (did not work well).</p>
+<pre class="r"><code>markers_include_umap &lt;- c(&quot;CD38&quot;, &quot;CD27&quot;, &quot;CD7&quot;, &quot;CD45RA&quot;, &quot;CD3&quot;, &quot;PD1&quot;, &quot;Tim-3&quot;, &quot;Granzyme_B&quot;, &quot;TCF7&quot;, &quot;CD45RO&quot;, &quot;FOXP3&quot;, &quot;ICOS&quot;, &quot;CD8a&quot;, &quot;GITR&quot;, &quot;CD4&quot;)
+
+sce_TNK &lt;- runUMAP(sce_TNK, exprs_values = &quot;exprs&quot;, subset_row = markers_include_umap)
+
+#sce_TNK &lt;- runUMAP(sce_TNK, dimred = &quot;corrected&quot;, name = &quot;UMAP_mnnCorrected&quot;, subset_row = markers_include_umap)</code></pre>
+<div id="visualize-features-on-umap" class="section level3">
+<h3>Visualize features on UMAP</h3>
+<pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$sample, opacity = 0.2) </code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$sample, split.by = &quot;sample&quot;, opacity = 0.2) </code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-2.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$TIG)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-3.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$TLS)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-4.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="visualize-marker-expression-on-umap" class="section level3">
+<h3>Visualize marker expression on UMAP</h3>
+<pre class="r"><code># Plot expression of all markers
+p.list &lt;- list()
+for(i in markers_include_umap){
+  p.list[[i]] &lt;- plotReducedDim(sce_TNK, colour_by = i, by_exprs_values = &quot;scaled&quot;, 
+                          point_size = 0.5, point_alpha = 1, shape_by = &quot;panel_type&quot;, dimred = &quot;UMAP&quot;,)  + scale_colour_gradient2(name = i, low = &quot;#2166ac&quot;, mid = &quot;white&quot;, high = &quot;#b2182b&quot;, limits = c(-3, 3))
+}
+plot_grid(plotlist = p.list, ncol = 5)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-markerexpression-1.png" width="3360" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="run-graph-based-clustering-for-tnk-subset-phenograph" class="section level2">
+<h2>Run graph-based clustering for TNK subset (Phenograph)</h2>
+<p>Display clusters on UMAP.</p>
+<pre class="r"><code>cluster_counts_TNK &lt;- subset(assay(sce_TNK, &quot;normalized&quot;), rownames(assay(sce_TNK, &quot;normalized&quot;)) %in% markers_include_umap)
+
+g &lt;- buildSNNGraph(cluster_counts_TNK, k=30)
+clust &lt;- igraph::cluster_louvain(g)$membership
+table(clust)</code></pre>
+<pre><code>clust
+   1    2    3    4    5    6    7    8    9 
+7128 8793 7157 7733 3104 6502 6397 9998 2737 </code></pre>
+<pre class="r"><code>#add cluster information to sce object
+sce_TNK$TNK_cluster &lt;- as.factor(clust)
+
+#plot on umap
+dittoDimPlot(sce_TNK, var = &quot;TNK_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, do.label = TRUE, opacity = 0.8)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clustering-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TNK_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, split.by = &quot;TNK_cluster&quot;, opacity = 0.2)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clustering-umap-2.png" width="768" style="display: block; margin: auto;" /></p>
+<div id="plot-mean-expression-for-each-cluster" class="section level3">
+<h3>Plot mean expression for each cluster</h3>
+<pre class="r"><code>clustermean &lt;- aggregateAcrossCells(sce_TNK, ids = DataFrame(cluster = sce_TNK$TNK_cluster), average = TRUE)
+colnames(clustermean) &lt;- clustermean$cluster
+
+# Center and scale raw counts
+assay(clustermean, &quot;scaled&quot;) &lt;- t(scale(t(assay(clustermean, &quot;counts&quot;))))
+
+# Normalize raw counts
+norm_counts &lt;- t(apply(assay(clustermean, &quot;counts&quot;), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
+## Plot only relevant markers
+include_plot &lt;- markers_include_umap
+
+## Plot
+# Z-scaled
+dittoHeatmap(clustermean[include_plot,], assay = &quot;scaled&quot;, scale = &quot;none&quot;,
+            heatmap.colors = magma(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Normalized (0-1)
+dittoHeatmap(clustermean[include_plot,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-cluster-proportions-by-sample-and-sample-proportions-by-cluster" class="section level3">
+<h3>Plot cluster proportions by sample and sample proportions by cluster</h3>
+<pre class="r"><code>props &lt;- as.data.frame(prop.table(table(sce_TNK$TNK_cluster, sce_TNK$sample), margin = 1))
+colnames(props) &lt;- c(&quot;cluster&quot;, &quot;sample&quot;, &quot;proportion&quot;)
+
+ggplot(props, aes(cluster, y = proportion, fill=sample)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  ggtitle(&quot;TNK sample proportions by cluster&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/cluster-proportions-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>props &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$TNK_cluster), margin = 1))
+colnames(props) &lt;- c(&quot;cluster&quot;, &quot;sample&quot;, &quot;proportion&quot;)
+
+ggplot(props, aes(cluster, y = proportion, fill=sample)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  ggtitle(&quot;TNK cluster proportions by sample&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/cluster-proportions-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="exclude-cluster-9-and-plot-mean-expression-for-each-cluster" class="section level3">
+<h3>Exclude cluster 9 and plot mean expression for each cluster</h3>
+<pre class="r"><code>clustermean_wo7 &lt;- clustermean[,-9]
+
+# Center and scale raw counts
+assay(clustermean_wo7, &quot;scaled&quot;) &lt;- t(scale(t(assay(clustermean_wo7, &quot;counts&quot;))))
+
+# Normalize raw counts
+norm_counts &lt;- t(apply(assay(clustermean_wo7, &quot;counts&quot;), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean_wo7, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
+## Plot
+# Z-scaled
+dittoHeatmap(clustermean_wo7[include_plot,], assay = &quot;scaled&quot;, scale = &quot;none&quot;,
+            heatmap.colors = magma(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-woCluster9-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Normalized (0-1)
+dittoHeatmap(clustermean_wo7[include_plot,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-woCluster9-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="assign-cell-type-labels" class="section level3">
+<h3>Assign cell type labels</h3>
+<p>Manual cell type assignment based on canonical marker expression.</p>
+<pre class="r"><code>labels &lt;- read.csv(paste0(getwd(), &quot;/data/ProteinPanel_TNK_clusters.csv&quot;))
+
+label_list &lt;- labels$class[match(sce_TNK$TNK_cluster, labels$cluster)]
+sce_TNK$subtype &lt;- label_list
+
+# Plot on UMAP
+dittoDimPlot(sce_TNK, var = &quot;subtype&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, opacity = 0.5)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-labels-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Plot subtype proportions per sample
+tab &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1))
+colnames(tab) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;proportion&quot;)
+
+ggplot(tab, aes(sample, y = proportion, fill=subtype)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-proportions-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="remove-t_allhigh-cluster-for-further-analysis" class="section level3">
+<h3>Remove “T_AllHigh” cluster for further analysis</h3>
+<p>This cluster is present in only one sample and appears to be an artefact rather than a true cluster.</p>
+<pre class="r"><code>sce_TNK &lt;- sce_TNK[,which(sce_TNK$subtype != &quot;T_AllHigh&quot;)]</code></pre>
+</div>
+</div>
+<div id="compare-subtype-proportions-per-tig" class="section level2">
+<h2>Compare subtype proportions per TIG</h2>
+<p>Including TLS and pre-TLS.</p>
+<pre class="r"><code>tab &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1))
+colnames(tab) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;proportion&quot;)
+TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)
+tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~subtype, scales=&quot;free&quot;, ncol=6, strip.position=&quot;top&quot;)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;Of total [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-TIG-withTLS-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>Excluding TLS and pre-TLS.</p>
+<pre class="r"><code>sce_TNK_woTLS &lt;- sce_TNK[,which(sce_TNK$TLS == &quot;no&quot;)]
+
+tab &lt;- as.data.frame(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
+colnames(tab) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;proportion&quot;)
+TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)
+tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~subtype, scales=&quot;free&quot;, ncol=4, strip.position=&quot;top&quot;)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;Of total [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-TIG-woTLS-1.png" width="960" style="display: block; margin: auto;" /></p>
+<div id="percentage-of-cd8-that-belongs-to-the-pd1-cluster" class="section level3">
+<h3>Percentage of CD8 that belongs to the PD1+ cluster</h3>
+<p>Excluding TLS and pre-TLS.</p>
+<pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
+CD8_PD1_perc &lt;- as.data.frame(tab[,&quot;CD8_PD1&quot;]/(tab[,&quot;CD8&quot;]+tab[,&quot;CD8_PD1&quot;]))
+colnames(CD8_PD1_perc) &lt;- &quot;CD8_PD1_perc&quot;
+CD8_PD1_perc$sample &lt;- rownames(CD8_PD1_perc)
+CD8_PD1_perc$TIG &lt;- ifelse(CD8_PD1_perc$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(CD8_PD1_perc, aes(x= TIG, y = CD8_PD1_perc, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;CD8_PD1 of total CD8+ [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-TIG-woTLS-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>Comparison of TLS, pre-TLS and non-TLS: CD8+ T cells.</p>
+<pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
+CD8_PD1_perc &lt;- as.data.frame(tab[,&quot;CD8_PD1&quot;]/(tab[,&quot;CD8&quot;]+tab[,&quot;CD8_PD1&quot;]))
+colnames(CD8_PD1_perc) &lt;- &quot;CD8_PD1_perc&quot;
+CD8_PD1_perc$ImageNumber &lt;- rownames(CD8_PD1_perc)
+
+# Retrieve TLS status for each image
+img_TLS &lt;- as.data.frame(table(sce_TNK$ImageNumber, sce_TNK$TLS))
+colnames(img_TLS) &lt;- c(&quot;ImageNumber&quot;, &quot;TLS&quot;, &quot;cellnumber_image&quot;)
+img_TLS &lt;- img_TLS %&gt;% filter(cellnumber_image &gt; 0)
+img_TLS$cellnumber_image &lt;- NULL
+
+tab.comb &lt;- merge(CD8_PD1_perc, img_TLS,by = &quot;ImageNumber&quot;)
+
+TLS_comparisons &lt;- list( c(&quot;no&quot;, &quot;pre&quot;), c(&quot;no&quot;, &quot;yes&quot;), c(&quot;pre&quot;, &quot;yes&quot;) )
+ggplot(tab.comb, aes(x= TLS, y = CD8_PD1_perc))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.text.x=element_text(angle = 90, hjust=1),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;CD8_PD1 of all CD8+ [%]&quot;)+
+  xlab(&quot;TLS classification of the ROI&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), comparison = TLS_comparisons)</code></pre>
+<pre><code>Warning: Using `as.character()` on a quosure is deprecated as of rlang 0.3.0.
+Please use `as_label()` or `as_name()` instead.
+This warning is displayed once per session.</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-TLS-comparison-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="percentage-of-cd4-that-belongs-to-the-pd1-cluster" class="section level3">
+<h3>Percentage of CD4 that belongs to the PD1+ cluster</h3>
+<p>Excluding TLS and pre-TLS.</p>
+<pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
+CD4_PD1_perc &lt;- as.data.frame(tab[,&quot;CD4_PD1&quot;]/(tab[,&quot;CD4&quot;]+tab[,&quot;CD4_PD1&quot;]))
+colnames(CD4_PD1_perc) &lt;- &quot;CD4_PD1_perc&quot;
+CD4_PD1_perc$sample &lt;- rownames(CD4_PD1_perc)
+CD4_PD1_perc$TIG &lt;- ifelse(CD4_PD1_perc$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(CD4_PD1_perc, aes(x= TIG, y = CD4_PD1_perc, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;CD4_PD1 of all CD4+ [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-TIG-woTLS-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>Comparison of TLS, pre-TLS and non-TLS: CD4+ T cells.</p>
+<pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
+CD4_PD1_perc &lt;- as.data.frame(tab[,&quot;CD4_PD1&quot;]/(tab[,&quot;CD4&quot;]+tab[,&quot;CD4_PD1&quot;]))
+colnames(CD4_PD1_perc) &lt;- &quot;CD4_PD1_perc&quot;
+CD4_PD1_perc$ImageNumber &lt;- rownames(CD4_PD1_perc)
+
+# Retrieve TLS status for each image
+img_TLS &lt;- as.data.frame(table(sce_TNK$ImageNumber, sce_TNK$TLS))
+colnames(img_TLS) &lt;- c(&quot;ImageNumber&quot;, &quot;TLS&quot;, &quot;cellnumber_image&quot;)
+img_TLS &lt;- img_TLS %&gt;% filter(cellnumber_image &gt; 0)
+img_TLS$cellnumber_image &lt;- NULL
+
+tab.comb &lt;- merge(CD4_PD1_perc, img_TLS,by = &quot;ImageNumber&quot;)
+
+TLS_comparisons &lt;- list( c(&quot;no&quot;, &quot;pre&quot;), c(&quot;no&quot;, &quot;yes&quot;), c(&quot;pre&quot;, &quot;yes&quot;) )
+ggplot(tab.comb, aes(x= TLS, y = CD4_PD1_perc))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.text.x=element_text(angle = 90, hjust=1),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;CD4_PD1 of all CD4+ [%]&quot;)+
+  xlab(&quot;TLS classification of the ROI&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), comparison = TLS_comparisons)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-TLS-comparison-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="within-sample-variation" class="section level3">
+<h3>Within-sample variation</h3>
+<p>Excluding TLS and pre-TLS.</p>
+<pre class="r"><code>#Plot subtype proportions per sample
+tab &lt;- as.data.frame(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
+colnames(tab) &lt;- c(&quot;ImageNumber&quot;, &quot;subtype&quot;, &quot;proportion&quot;)
+
+ROI_info &lt;- read.csv(&quot;data/ROI_info_HIER.csv&quot;)
+colnames(ROI_info)[8] &lt;- &quot;ImageNumber&quot;
+tab.comb &lt;- merge(tab, ROI_info, by = &quot;ImageNumber&quot;)
+tab.comb&lt;- tab.comb %&gt;% filter(TLS == &quot;no&quot;)
+
+## reorder patient levels
+tab.comb$sample &lt;- as.factor(tab.comb$sample)
+old.levels &lt;- levels(tab.comb$sample)
+tab.comb$sample &lt;- factor(tab.comb$sample, levels =  old.levels[c(4:8, 12, 1:3, 9:11)])
+
+ggplot(tab.comb, aes(ImageNumber, y = proportion, fill=subtype)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~sample, scales=&quot;free_x&quot;, ncol = 6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-proportions-sample-variation-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$ImageNumber, sce_TNK_woTLS$subtype), margin = 1))
+CD4_PD1_perc &lt;- as.data.frame(tab[,&quot;CD4_PD1&quot;]/(tab[,&quot;CD4&quot;]+tab[,&quot;CD4_PD1&quot;]))
+colnames(CD4_PD1_perc) &lt;- &quot;CD4_PD1_perc&quot;
+CD4_PD1_perc$ImageNumber &lt;- rownames(CD4_PD1_perc)
+CD4_PD1_perc &lt;- CD4_PD1_perc[!is.na(CD4_PD1_perc$CD4_PD1_perc),]
+
+tab.comb &lt;- merge(CD4_PD1_perc, tab.comb, by = &quot;ImageNumber&quot;)
+
+ggplot(tab.comb, aes(ImageNumber, y = CD4_PD1_perc/6)) +
+  geom_bar(stat=&quot;identity&quot;, aes(fill = TIG))+
+  facet_wrap(~sample, scales=&quot;free_x&quot;, ncol = 6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(), panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1))+
+  ylab(&quot;Proportion CD4_PD1 of all CD4+&quot;)+
+  ggtitle(&quot;CD4_PD1 proportion per ROI&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-sample-variation-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$ImageNumber, sce_TNK_woTLS$subtype), margin = 1))
+CD8_PD1_perc &lt;- as.data.frame(tab[,&quot;CD8_PD1&quot;]/(tab[,&quot;CD8&quot;]+tab[,&quot;CD8_PD1&quot;]))
+colnames(CD8_PD1_perc) &lt;- &quot;CD8_PD1_perc&quot;
+CD8_PD1_perc$ImageNumber &lt;- rownames(CD8_PD1_perc)
+CD8_PD1_perc &lt;- CD8_PD1_perc[!is.na(CD8_PD1_perc$CD8_PD1_perc),]
+
+tab.comb &lt;- merge(CD8_PD1_perc, tab.comb, by = &quot;ImageNumber&quot;)
+
+ggplot(tab.comb, aes(ImageNumber, y = CD8_PD1_perc/6)) +
+  geom_bar(stat=&quot;identity&quot;, aes(fill = TIG))+
+  facet_wrap(~sample, scales=&quot;free_x&quot;, ncol = 6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(), panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1))+
+  ylab(&quot;Proportion CD8_PD1 of all CD8+&quot;)+
+  ggtitle(&quot;CD8_PD1 proportion per ROI&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-sample-variation-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="average-marker-expression-tig2-vs-tig3" class="section level2">
+<h2>Average marker expression TIG2 vs TIG3</h2>
+<p>Compare only CD8 T cells.</p>
+<pre class="r"><code>#Subset CD8 T cells
+sce_CD8 &lt;- sce_TNK[, which(sce_TNK$subtype %in% c(&quot;CD8&quot;, &quot;CD8_PD1&quot;))]
+
+exprs &lt;- data.frame(`Ki-67` = assay(sce_CD8, &quot;exprs&quot;)[&quot;Ki-67&quot;,],
+                    TCF7 = assay(sce_CD8, &quot;exprs&quot;)[&quot;TCF7&quot;,],
+                    Granzyme_B = assay(sce_CD8, &quot;exprs&quot;)[&quot;Granzyme_B&quot;,],
+                    `Tim-3` = assay(sce_CD8, &quot;exprs&quot;)[&quot;Tim-3&quot;,],
+                    GITR = assay(sce_CD8, &quot;exprs&quot;)[&quot;GITR&quot;,],
+                    CD38 = assay(sce_CD8, &quot;exprs&quot;)[&quot;CD38&quot;,])
+TNK_tab &lt;- cbind(exprs, colData(sce_CD8))
+TNK_tab &lt;- pivot_longer(TNK_tab, 1:6, names_to = &quot;marker&quot;, values_to = &quot;exprs&quot;)
+
+ggplot(TNK_tab, aes(x=TIG, y = exprs, fill = TIG))+
+  geom_violin(aes(fill=TIG))+
+  geom_boxplot(position=position_dodge(width=0.9), width=0.1, color=&quot;black&quot;, aes(fill=TIG))+
+  facet_wrap(~marker, scale = &quot;free&quot;, ncol = 6)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.title.x = element_blank())+
+  ylab(&quot;Marker expression (arcsin-transformed counts)&quot;)+
+  ggtitle(&quot;Single-cell violin plots&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TIG-marker-comparison-singlecell-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>Comparison of patient means.</p>
+<pre class="r"><code># Patient means
+counts &lt;- data.frame(`Ki-67` = assay(sce_CD8, &quot;counts&quot;)[&quot;Ki-67&quot;,],
+                    TCF7 = assay(sce_CD8, &quot;counts&quot;)[&quot;TCF7&quot;,],
+                    Granzyme_B = assay(sce_CD8, &quot;counts&quot;)[&quot;Granzyme_B&quot;,],
+                    `Tim-3` = assay(sce_CD8, &quot;counts&quot;)[&quot;Tim-3&quot;,],
+                    GITR = assay(sce_CD8, &quot;counts&quot;)[&quot;GITR&quot;,],
+                    CD38 = assay(sce_CD8, &quot;counts&quot;)[&quot;CD38&quot;,])
+TNK_tab_2 &lt;- cbind(counts, colData(sce_CD8))
+TNK_tab_2 &lt;- pivot_longer(TNK_tab_2, 1:6, names_to = &quot;marker&quot;, values_to = &quot;counts&quot;)
+
+sample_means &lt;- data.frame(sample = levels(factor(TNK_tab_2$sample)))
+for (i in colnames(counts)) {
+  TNK.i &lt;- filter(TNK_tab_2, marker == i)
+  i.means &lt;- TNK.i %&gt;% group_by(sample) %&gt;% dplyr::summarise(mean = mean(counts))
+  sample_means[,i] &lt;- i.means$mean
+}
+
+sample_means$TIG &lt;- c(rep(&quot;TIG2&quot;, 6), rep(&quot;TIG3&quot;, 6))
+sample_means &lt;- pivot_longer(sample_means, 2:7, names_to = &quot;marker&quot;, values_to = &quot;counts&quot;)
+
+ggplot(sample_means, aes(TIG, counts, fill = TIG))+
+    geom_boxplot(aes(fill=TIG))+
+    geom_point(position=position_dodge(width=0.75), aes(group=TIG))+
+    facet_wrap(~marker, scales = &quot;free&quot;, ncol = 6)+
+    stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), vjust = 1, label.x.npc = 0.5)+
+    theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank(),
+        strip.background = element_blank())+
+  ggtitle(&quot;Patient means&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TIG-marker-comparison-patientmeans-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="proliferation-status" class="section level2">
+<h2>Proliferation status</h2>
+<p>Elevated Ki-67 expression in PD1+ T cells (both CD4 and CD8) confirms that these T cell subsets are highly proliferative.</p>
+<pre class="r"><code>sce_TNK.sub &lt;- sce_TNK[,which(sce_TNK$subtype %in% c(&quot;CD4&quot;, &quot;CD8&quot;, &quot;CD4_PD1&quot;, &quot;CD8_PD1&quot;))]
+
+dittoPlot(sce_TNK.sub, &quot;Ki-67&quot;, group.by = &quot;subtype&quot;,
+    plots = c(&quot;vlnplot&quot;), assay = &quot;scaled&quot;)+
+  #geom_hline(yintercept = 0.5, lty = &quot;dashed&quot;)+
+  ylab(&quot;Scaled arcsinh-counts&quot;)+
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/Ki67-expression-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="add-subtypes-to-full-sce-object" class="section level1">
+<h1>Add subtypes to full SCE object</h1>
+<pre class="r"><code>sce_protein &lt;- readRDS(file = &quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)
+sce_protein$subtype &lt;- sce_protein$celltype
+
+TNK_ids &lt;- colnames(sce_TNK)
+sce_protein[,TNK_ids]$subtype &lt;- sce_TNK$subtype
+
+saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_subtypes.rds&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04 LTS
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-openmp/libopenblasp-r0.3.8.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] scran_1.16.0                ggpubr_0.4.0               
+ [3] cowplot_1.0.0               viridis_0.5.1              
+ [5] viridisLite_0.3.0           dittoSeq_1.0.2             
+ [7] forcats_0.5.0               stringr_1.4.0              
+ [9] dplyr_1.0.1                 purrr_0.3.4                
+[11] readr_1.3.1                 tidyr_1.1.1                
+[13] tibble_3.0.3                tidyverse_1.3.0            
+[15] scater_1.16.2               SingleCellExperiment_1.10.1
+[17] SummarizedExperiment_1.18.2 DelayedArray_0.14.1        
+[19] matrixStats_0.56.0          Biobase_2.48.0             
+[21] GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
+[23] IRanges_2.22.2              S4Vectors_0.26.1           
+[25] BiocGenerics_0.34.0         ggplot2_3.3.2              
+[27] workflowr_1.6.2            
+
+loaded via a namespace (and not attached):
+  [1] ggbeeswarm_0.6.0          colorspace_1.4-1         
+  [3] ggsignif_0.6.0            rio_0.5.16               
+  [5] ellipsis_0.3.1            ggridges_0.5.2           
+  [7] rprojroot_1.3-2           XVector_0.28.0           
+  [9] BiocNeighbors_1.6.0       fs_1.5.0                 
+ [11] rstudioapi_0.11           farver_2.0.3             
+ [13] ggrepel_0.8.2             RSpectra_0.16-0          
+ [15] fansi_0.4.1               lubridate_1.7.9          
+ [17] xml2_1.3.2                codetools_0.2-16         
+ [19] knitr_1.29                jsonlite_1.7.0           
+ [21] broom_0.7.0               dbplyr_1.4.4             
+ [23] uwot_0.1.8                pheatmap_1.0.12          
+ [25] compiler_4.0.2            httr_1.4.2               
+ [27] dqrng_0.2.1               backports_1.1.8          
+ [29] assertthat_0.2.1          Matrix_1.2-18            
+ [31] limma_3.44.3              cli_2.0.2                
+ [33] later_1.1.0.1             BiocSingular_1.4.0       
+ [35] htmltools_0.5.0           tools_4.0.2              
+ [37] igraph_1.2.5              rsvd_1.0.3               
+ [39] gtable_0.3.0              glue_1.4.1               
+ [41] GenomeInfoDbData_1.2.3    Rcpp_1.0.5               
+ [43] carData_3.0-4             cellranger_1.1.0         
+ [45] vctrs_0.3.2               DelayedMatrixStats_1.10.1
+ [47] xfun_0.16                 openxlsx_4.1.5           
+ [49] rvest_0.3.6               lifecycle_0.2.0          
+ [51] irlba_2.3.3               statmod_1.4.34           
+ [53] rstatix_0.6.0             edgeR_3.30.3             
+ [55] zlibbioc_1.34.0           scales_1.1.1             
+ [57] hms_0.5.3                 promises_1.1.1           
+ [59] RColorBrewer_1.1-2        curl_4.3                 
+ [61] yaml_2.2.1                gridExtra_2.3            
+ [63] stringi_1.4.6             zip_2.0.4                
+ [65] BiocParallel_1.22.0       rlang_0.4.7              
+ [67] pkgconfig_2.0.3           bitops_1.0-6             
+ [69] evaluate_0.14             lattice_0.20-41          
+ [71] labeling_0.3              tidyselect_1.1.0         
+ [73] RcppAnnoy_0.0.16          plyr_1.8.6               
+ [75] magrittr_1.5              R6_2.4.1                 
+ [77] generics_0.0.2            DBI_1.1.0                
+ [79] foreign_0.8-80            pillar_1.4.6             
+ [81] haven_2.3.1               whisker_0.4              
+ [83] withr_2.2.0               abind_1.4-5              
+ [85] RCurl_1.98-1.2            car_3.0-8                
+ [87] modelr_0.1.8              crayon_1.3.4             
+ [89] rmarkdown_2.3             locfit_1.5-9.4           
+ [91] grid_4.0.2                readxl_1.3.1             
+ [93] data.table_1.13.0         blob_1.2.1               
+ [95] git2r_0.27.1              reprex_0.3.0             
+ [97] digest_0.6.25             httpuv_1.5.4             
+ [99] munsell_0.5.0             beeswarm_0.2.3           
+[101] vipor_0.4.5              </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
