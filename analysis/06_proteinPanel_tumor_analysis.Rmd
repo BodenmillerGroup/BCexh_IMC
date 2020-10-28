@@ -169,7 +169,7 @@ ggplot(tumor_tab, aes(x=TIG, y = exprs, fill = TIG))+
 
 Comparison of patient means.
 
-```{r TIG-marker-comparison-patientmeans, fig.width=5, fig.height=6}
+```{r TIG-marker-comparison-patientmeans, fig.width=5, fig.height=6, message=FALSE}
 
 # Patient means
 counts <- data.frame(HLA_ABC = assay(sce_tumor, "counts")["HLA-ABC",],
@@ -360,20 +360,21 @@ ggplot(tab, aes(sample, y = proportion, fill=cell_status)) +
 saveRDS(sce_tumor, "output/ProteinPanel/sce_ProteinPanel_tumor.rds")
 ```
 
-## Add tumor cell status to main SCE object as "celltype"
+## Add tumor cell status to main SCE object as "subtype"
 
 ```{r update-main-SCE}
 sce_protein <- readRDS(file = "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
+sce_protein$subtype <- sce_protein$celltype
 
 tumor_ids <- colnames(sce_tumor)
-sce_protein[,tumor_ids]$celltype <- sce_tumor$cell_status
+sce_protein[,tumor_ids]$subtype <- sce_tumor$cell_status
 
 saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
 ```
 
 # Cytomapper visualization
 
-```{r cytomapper-tumor}
+```{r cytomapper-tumor, message = FALSE}
 library(cytomapper)
 
 # Load mask files
