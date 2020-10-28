@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree70ab2329e83c31f084fe41e59e3318b611b9a332targetblank70ab232a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/70ab2329e83c31f084fe41e59e3318b611b9a332" target="_blank">70ab232</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree5e88949ef35c0daa11007d4f211771f87537816ctargetblank5e88949a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/5e88949ef35c0daa11007d4f211771f87537816c" target="_blank">5e88949</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree70ab2329e83c31f084fe41e59e3318b611b9a332targetblank70ab232a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree5e88949ef35c0daa11007d4f211771f87537816ctargetblank5e88949a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/70ab2329e83c31f084fe41e59e3318b611b9a332" target="_blank">70ab232</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/5e88949ef35c0daa11007d4f211771f87537816c" target="_blank">5e88949</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,6 +523,9 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
+    Untracked:  analysis/08_proteinPanel_neighbourhood.Rmd
+    Untracked:  analysis/09_RNApanel_cytokine_expression.Rmd
+    Untracked:  code/helper_functions/
     Untracked:  data/Ki67_IHC.csv
     Untracked:  data/ProteinPanel_TNK_clusters.csv
     Untracked:  data/ProteinPanel_stromal_clusters.csv
@@ -533,6 +536,7 @@ Untracked files:
     Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/cpout/
     Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
     Untracked:  output/ProteinPanel/
@@ -541,9 +545,6 @@ Untracked files:
     Untracked:  output/sce_ProteinPanel_initial.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
-
-Unstaged changes:
-    Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
 
 </code></pre>
 <p>
@@ -582,6 +583,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/5e88949ef35c0daa11007d4f211771f87537816c/analysis/07_proteinPanel_TNK_analysis.Rmd" target="_blank">5e88949</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+<td>
+Cell subtype update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/07_proteinPanel_TNK_analysis.html" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -629,32 +664,6 @@ sce_protein &lt;- readRDS(&quot;output/ProteinPanel/sce_ProteinPanel_celltypes.r
 # Subset T/NK cells only
 sce_TNK &lt;- sce_protein[,which(sce_protein$celltype == &quot;T_NK&quot;)]</code></pre>
 </div>
-<div id="perform-batch-correction-because-tbb111-is-a-strong-outlier" class="section level1">
-<h1>Perform batch correction (because TBB111 is a strong outlier)</h1>
-<pre class="r"><code># library(batchelor)
-# out &lt;- fastMNN(sce_TNK, batch = sce_TNK$sample, auto.merge = TRUE, correct.all = TRUE,
-#                subset.row = !(grepl(&quot;DNA|Histone&quot;, rownames(sce_TNK))), assay.type = &quot;exprs&quot;)
-# 
-# merge_info &lt;- metadata(out)$merge.info 
-# 
-# # Here, we will have a look at the percentage of lost variance per merge step
-# # As rule of thumb, more than 10% should be investigated further
-# # Here we rank the samples based on the lost variance
-# cur_colmax &lt;- colMaxs(merge_info$lost.var)
-# names(cur_colmax) &lt;- colnames(merge_info$lost.var) 
-# cur_colmax[order(cur_colmax, decreasing = TRUE)]
-# 
-# # Next, we will look at the batch.size argument - the raltive magnitute of the batch effect
-# cur_df &lt;- DataFrame(left = merge_info$left,
-#                      right = merge_info$right,
-#                      batch.size = merge_info$batch.size,
-#                      max_lost_var = rowMax(merge_info$lost.var))
-# 
-# DT::datatable(as.data.frame(cur_df))
-# 
-# # Transfer the correction results to the main sce object
-# reducedDims(sce_TNK)$corrected &lt;- reducedDims(out)$corrected</code></pre>
-</div>
 <div id="tnk-cell-subclustering" class="section level1">
 <h1>T/NK cell subclustering</h1>
 <div id="calculate-umap-on-all-tnk-cells" class="section level2">
@@ -668,17 +677,165 @@ sce_TNK &lt;- runUMAP(sce_TNK, exprs_values = &quot;exprs&quot;, subset_row = ma
 <div id="visualize-features-on-umap" class="section level3">
 <h3>Visualize features on UMAP</h3>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
-                               color.panel = metadata(sce_TNK)$colour_vectors$sample, opacity = 0.2) </code></pre>
+                               color.panel = metadata(sce_TNK)$colour_vectors$sample, opacity = 0.5) </code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-features-1">
+Past versions of TNK-umap-features-1.png
+</button>
+</p>
+<div id="fig-TNK-umap-features-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
-                               color.panel = metadata(sce_TNK)$colour_vectors$sample, split.by = &quot;sample&quot;, opacity = 0.2) </code></pre>
+                               color.panel = metadata(sce_TNK)$colour_vectors$sample, split.by = &quot;sample&quot;, opacity = 0.5) </code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-features-2">
+Past versions of TNK-umap-features-2.png
+</button>
+</p>
+<div id="fig-TNK-umap-features-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-2.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_TNK)$colour_vectors$TIG)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-3.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-features-3">
+Past versions of TNK-umap-features-3.png
+</button>
+</p>
+<div id="fig-TNK-umap-features-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-3.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_TNK)$colour_vectors$TLS)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-4.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-features-4">
+Past versions of TNK-umap-features-4.png
+</button>
+</p>
+<div id="fig-TNK-umap-features-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-features-4.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="visualize-marker-expression-on-umap" class="section level3">
 <h3>Visualize marker expression on UMAP</h3>
@@ -690,6 +847,43 @@ for(i in markers_include_umap){
 }
 plot_grid(plotlist = p.list, ncol = 5)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-markerexpression-1.png" width="3360" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-markerexpression-1">
+Past versions of TNK-umap-markerexpression-1.png
+</button>
+</p>
+<div id="fig-TNK-umap-markerexpression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-umap-markerexpression-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="run-graph-based-clustering-for-tnk-subset-phenograph" class="section level2">
@@ -709,8 +903,82 @@ sce_TNK$TNK_cluster &lt;- as.factor(clust)
 #plot on umap
 dittoDimPlot(sce_TNK, var = &quot;TNK_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, do.label = TRUE, opacity = 0.8)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clustering-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-clustering-umap-1">
+Past versions of TNK-clustering-umap-1.png
+</button>
+</p>
+<div id="fig-TNK-clustering-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clustering-umap-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TNK_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, split.by = &quot;TNK_cluster&quot;, opacity = 0.2)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clustering-umap-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-clustering-umap-2">
+Past versions of TNK-clustering-umap-2.png
+</button>
+</p>
+<div id="fig-TNK-clustering-umap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clustering-umap-2.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="plot-mean-expression-for-each-cluster" class="section level3">
 <h3>Plot mean expression for each cluster</h3>
 <pre class="r"><code>clustermean &lt;- aggregateAcrossCells(sce_TNK, ids = DataFrame(cluster = sce_TNK$TNK_cluster), average = TRUE)
@@ -733,11 +1001,85 @@ dittoHeatmap(clustermean[include_plot,], assay = &quot;scaled&quot;, scale = &qu
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-clusters-expression-heatmap-1">
+Past versions of TNK-clusters-expression-heatmap-1.png
+</button>
+</p>
+<div id="fig-TNK-clusters-expression-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Normalized (0-1)
 dittoHeatmap(clustermean[include_plot,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-clusters-expression-heatmap-2">
+Past versions of TNK-clusters-expression-heatmap-2.png
+</button>
+</p>
+<div id="fig-TNK-clusters-expression-heatmap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-2.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="plot-cluster-proportions-by-sample-and-sample-proportions-by-cluster" class="section level3">
 <h3>Plot cluster proportions by sample and sample proportions by cluster</h3>
@@ -750,6 +1092,43 @@ ggplot(props, aes(cluster, y = proportion, fill=sample)) +
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
   ggtitle(&quot;TNK sample proportions by cluster&quot;)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/cluster-proportions-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-proportions-1">
+Past versions of cluster-proportions-1.png
+</button>
+</p>
+<div id="fig-cluster-proportions-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/cluster-proportions-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>props &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$TNK_cluster), margin = 1))
 colnames(props) &lt;- c(&quot;cluster&quot;, &quot;sample&quot;, &quot;proportion&quot;)
 
@@ -759,6 +1138,43 @@ ggplot(props, aes(cluster, y = proportion, fill=sample)) +
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
   ggtitle(&quot;TNK cluster proportions by sample&quot;)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/cluster-proportions-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-proportions-2">
+Past versions of cluster-proportions-2.png
+</button>
+</p>
+<div id="fig-cluster-proportions-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/cluster-proportions-2.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="exclude-cluster-9-and-plot-mean-expression-for-each-cluster" class="section level3">
 <h3>Exclude cluster 9 and plot mean expression for each cluster</h3>
@@ -778,11 +1194,85 @@ dittoHeatmap(clustermean_wo7[include_plot,], assay = &quot;scaled&quot;, scale =
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-woCluster9-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-clusters-expression-heatmap-woCluster9-1">
+Past versions of TNK-clusters-expression-heatmap-woCluster9-1.png
+</button>
+</p>
+<div id="fig-TNK-clusters-expression-heatmap-woCluster9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-woCluster9-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Normalized (0-1)
 dittoHeatmap(clustermean_wo7[include_plot,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-woCluster9-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-clusters-expression-heatmap-woCluster9-2">
+Past versions of TNK-clusters-expression-heatmap-woCluster9-2.png
+</button>
+</p>
+<div id="fig-TNK-clusters-expression-heatmap-woCluster9-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-clusters-expression-heatmap-woCluster9-2.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="assign-cell-type-labels" class="section level3">
 <h3>Assign cell type labels</h3>
@@ -795,6 +1285,43 @@ sce_TNK$subtype &lt;- label_list
 # Plot on UMAP
 dittoDimPlot(sce_TNK, var = &quot;subtype&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, opacity = 0.5)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-labels-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-labels-1">
+Past versions of TNK-labels-1.png
+</button>
+</p>
+<div id="fig-TNK-labels-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-labels-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#Plot subtype proportions per sample
 tab &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;proportion&quot;)
@@ -803,7 +1330,44 @@ ggplot(tab, aes(sample, y = proportion, fill=subtype)) +
   geom_bar(stat=&quot;identity&quot;)+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
-<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-proportions-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-proportions-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-proportions-1">
+Past versions of TNK-proportions-1.png
+</button>
+</p>
+<div id="fig-TNK-proportions-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-proportions-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="remove-t_allhigh-cluster-for-further-analysis" class="section level3">
 <h3>Remove “T_AllHigh” cluster for further analysis</h3>
@@ -811,8 +1375,9 @@ ggplot(tab, aes(sample, y = proportion, fill=subtype)) +
 <pre class="r"><code>sce_TNK &lt;- sce_TNK[,which(sce_TNK$subtype != &quot;T_AllHigh&quot;)]</code></pre>
 </div>
 </div>
-<div id="compare-subtype-proportions-per-tig" class="section level2">
-<h2>Compare subtype proportions per TIG</h2>
+</div>
+<div id="compare-subtype-proportions-per-tig" class="section level1">
+<h1>Compare subtype proportions per TIG</h1>
 <p>Including TLS and pre-TLS.</p>
 <pre class="r"><code>tab &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;proportion&quot;)
@@ -833,6 +1398,43 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   ylab(&quot;Of total [%]&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-TIG-withTLS-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subtype-proportions-TIG-withTLS-1">
+Past versions of subtype-proportions-TIG-withTLS-1.png
+</button>
+</p>
+<div id="fig-subtype-proportions-TIG-withTLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-TIG-withTLS-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Excluding TLS and pre-TLS.</p>
 <pre class="r"><code>sce_TNK_woTLS &lt;- sce_TNK[,which(sce_TNK$TLS == &quot;no&quot;)]
 
@@ -844,7 +1446,7 @@ tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
 ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   geom_boxplot()+
   geom_point()+
-  facet_wrap(~subtype, scales=&quot;free&quot;, ncol=4, strip.position=&quot;top&quot;)+
+  facet_wrap(~subtype, scales=&quot;free&quot;, ncol=6, strip.position=&quot;top&quot;)+
   theme(axis.ticks.x = element_blank(),
         axis.text.x=element_text(angle = 90, hjust=1),
         axis.title.x = element_blank(),
@@ -855,8 +1457,45 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   ylab(&quot;Of total [%]&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-TIG-woTLS-1.png" width="960" style="display: block; margin: auto;" /></p>
-<div id="percentage-of-cd8-that-belongs-to-the-pd1-cluster" class="section level3">
-<h3>Percentage of CD8 that belongs to the PD1+ cluster</h3>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subtype-proportions-TIG-woTLS-1">
+Past versions of subtype-proportions-TIG-woTLS-1.png
+</button>
+</p>
+<div id="fig-subtype-proportions-TIG-woTLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-TIG-woTLS-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="percentage-of-cd8-that-belongs-to-the-pd1-cluster" class="section level2">
+<h2>Percentage of CD8 that belongs to the PD1+ cluster</h2>
 <p>Excluding TLS and pre-TLS.</p>
 <pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
 CD8_PD1_perc &lt;- as.data.frame(tab[,&quot;CD8_PD1&quot;]/(tab[,&quot;CD8&quot;]+tab[,&quot;CD8_PD1&quot;]))
@@ -877,7 +1516,44 @@ ggplot(CD8_PD1_perc, aes(x= TIG, y = CD8_PD1_perc, color=TIG))+
   ylab(&quot;CD8_PD1 of total CD8+ [%]&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-TIG-woTLS-1.png" width="384" style="display: block; margin: auto;" /></p>
-<p>Comparison of TLS, pre-TLS and non-TLS: CD8+ T cells.</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CD8PD1-proportions-TIG-woTLS-1">
+Past versions of CD8PD1-proportions-TIG-woTLS-1.png
+</button>
+</p>
+<div id="fig-CD8PD1-proportions-TIG-woTLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-TIG-woTLS-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Comparison of TLS, pre-TLS and non-TLS.</p>
 <pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
 CD8_PD1_perc &lt;- as.data.frame(tab[,&quot;CD8_PD1&quot;]/(tab[,&quot;CD8&quot;]+tab[,&quot;CD8_PD1&quot;]))
 colnames(CD8_PD1_perc) &lt;- &quot;CD8_PD1_perc&quot;
@@ -907,9 +1583,46 @@ ggplot(tab.comb, aes(x= TLS, y = CD8_PD1_perc))+
 Please use `as_label()` or `as_name()` instead.
 This warning is displayed once per session.</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-TLS-comparison-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CD8PD1-proportions-TLS-comparison-1">
+Past versions of CD8PD1-proportions-TLS-comparison-1.png
+</button>
+</p>
+<div id="fig-CD8PD1-proportions-TLS-comparison-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-TLS-comparison-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="percentage-of-cd4-that-belongs-to-the-pd1-cluster" class="section level3">
-<h3>Percentage of CD4 that belongs to the PD1+ cluster</h3>
+</div>
+</div>
+<div id="percentage-of-cd4-that-belongs-to-the-pd1-cluster" class="section level2">
+<h2>Percentage of CD4 that belongs to the PD1+ cluster</h2>
 <p>Excluding TLS and pre-TLS.</p>
 <pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
 CD4_PD1_perc &lt;- as.data.frame(tab[,&quot;CD4_PD1&quot;]/(tab[,&quot;CD4&quot;]+tab[,&quot;CD4_PD1&quot;]))
@@ -930,7 +1643,44 @@ ggplot(CD4_PD1_perc, aes(x= TIG, y = CD4_PD1_perc, color=TIG))+
   ylab(&quot;CD4_PD1 of all CD4+ [%]&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-TIG-woTLS-1.png" width="384" style="display: block; margin: auto;" /></p>
-<p>Comparison of TLS, pre-TLS and non-TLS: CD4+ T cells.</p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CD4PD1-proportions-TIG-woTLS-1">
+Past versions of CD4PD1-proportions-TIG-woTLS-1.png
+</button>
+</p>
+<div id="fig-CD4PD1-proportions-TIG-woTLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-TIG-woTLS-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Comparison of TLS, pre-TLS and non-TLS.</p>
 <pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
 CD4_PD1_perc &lt;- as.data.frame(tab[,&quot;CD4_PD1&quot;]/(tab[,&quot;CD4&quot;]+tab[,&quot;CD4_PD1&quot;]))
 colnames(CD4_PD1_perc) &lt;- &quot;CD4_PD1_perc&quot;
@@ -957,9 +1707,46 @@ ggplot(tab.comb, aes(x= TLS, y = CD4_PD1_perc))+
   xlab(&quot;TLS classification of the ROI&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), comparison = TLS_comparisons)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-TLS-comparison-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CD4PD1-proportions-TLS-comparison-1">
+Past versions of CD4PD1-proportions-TLS-comparison-1.png
+</button>
+</p>
+<div id="fig-CD4PD1-proportions-TLS-comparison-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-TLS-comparison-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="within-sample-variation" class="section level3">
-<h3>Within-sample variation</h3>
+</div>
+</div>
+<div id="within-sample-variation" class="section level2">
+<h2>Within-sample variation</h2>
 <p>Excluding TLS and pre-TLS.</p>
 <pre class="r"><code>#Plot subtype proportions per sample
 tab &lt;- as.data.frame(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
@@ -981,6 +1768,43 @@ ggplot(tab.comb, aes(ImageNumber, y = proportion, fill=subtype)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TNK-proportions-sample-variation-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-proportions-sample-variation-1">
+Past versions of TNK-proportions-sample-variation-1.png
+</button>
+</p>
+<div id="fig-TNK-proportions-sample-variation-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TNK-proportions-sample-variation-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$ImageNumber, sce_TNK_woTLS$subtype), margin = 1))
 CD4_PD1_perc &lt;- as.data.frame(tab[,&quot;CD4_PD1&quot;]/(tab[,&quot;CD4&quot;]+tab[,&quot;CD4_PD1&quot;]))
 colnames(CD4_PD1_perc) &lt;- &quot;CD4_PD1_perc&quot;
@@ -997,7 +1821,44 @@ ggplot(tab.comb, aes(ImageNumber, y = CD4_PD1_perc/6)) +
         axis.ticks.x = element_blank(), panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1))+
   ylab(&quot;Proportion CD4_PD1 of all CD4+&quot;)+
   ggtitle(&quot;CD4_PD1 proportion per ROI&quot;)</code></pre>
-<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-sample-variation-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-sample-variation-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CD4PD1-proportions-sample-variation-1">
+Past versions of CD4PD1-proportions-sample-variation-1.png
+</button>
+</p>
+<div id="fig-CD4PD1-proportions-sample-variation-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/CD4PD1-proportions-sample-variation-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$ImageNumber, sce_TNK_woTLS$subtype), margin = 1))
 CD8_PD1_perc &lt;- as.data.frame(tab[,&quot;CD8_PD1&quot;]/(tab[,&quot;CD8&quot;]+tab[,&quot;CD8_PD1&quot;]))
 colnames(CD8_PD1_perc) &lt;- &quot;CD8_PD1_perc&quot;
@@ -1014,11 +1875,48 @@ ggplot(tab.comb, aes(ImageNumber, y = CD8_PD1_perc/6)) +
         axis.ticks.x = element_blank(), panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1))+
   ylab(&quot;Proportion CD8_PD1 of all CD8+&quot;)+
   ggtitle(&quot;CD8_PD1 proportion per ROI&quot;)</code></pre>
-<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-sample-variation-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-sample-variation-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CD8PD1-proportions-sample-variation-1">
+Past versions of CD8PD1-proportions-sample-variation-1.png
+</button>
+</p>
+<div id="fig-CD8PD1-proportions-sample-variation-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/CD8PD1-proportions-sample-variation-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<div id="average-marker-expression-tig2-vs-tig3" class="section level2">
-<h2>Average marker expression TIG2 vs TIG3</h2>
+</div>
+</div>
+<div id="average-marker-expression-tig2-vs-tig3" class="section level1">
+<h1>Average marker expression TIG2 vs TIG3</h1>
 <p>Compare only CD8 T cells.</p>
 <pre class="r"><code>#Subset CD8 T cells
 sce_CD8 &lt;- sce_TNK[, which(sce_TNK$subtype %in% c(&quot;CD8&quot;, &quot;CD8_PD1&quot;))]
@@ -1045,7 +1943,44 @@ ggplot(TNK_tab, aes(x=TIG, y = exprs, fill = TIG))+
         axis.title.x = element_blank())+
   ylab(&quot;Marker expression (arcsin-transformed counts)&quot;)+
   ggtitle(&quot;Single-cell violin plots&quot;)</code></pre>
-<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TIG-marker-comparison-singlecell-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TIG-marker-comparison-singlecell-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-marker-comparison-singlecell-1">
+Past versions of TIG-marker-comparison-singlecell-1.png
+</button>
+</p>
+<div id="fig-TIG-marker-comparison-singlecell-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TIG-marker-comparison-singlecell-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Comparison of patient means.</p>
 <pre class="r"><code># Patient means
 counts &lt;- data.frame(`Ki-67` = assay(sce_CD8, &quot;counts&quot;)[&quot;Ki-67&quot;,],
@@ -1081,9 +2016,46 @@ ggplot(sample_means, aes(TIG, counts, fill = TIG))+
         strip.background = element_blank())+
   ggtitle(&quot;Patient means&quot;)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/TIG-marker-comparison-patientmeans-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-marker-comparison-patientmeans-1">
+Past versions of TIG-marker-comparison-patientmeans-1.png
+</button>
+</p>
+<div id="fig-TIG-marker-comparison-patientmeans-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/TIG-marker-comparison-patientmeans-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="proliferation-status" class="section level2">
-<h2>Proliferation status</h2>
+</div>
+</div>
+<div id="proliferation-status" class="section level1">
+<h1>Proliferation status</h1>
 <p>Elevated Ki-67 expression in PD1+ T cells (both CD4 and CD8) confirms that these T cell subsets are highly proliferative.</p>
 <pre class="r"><code>sce_TNK.sub &lt;- sce_TNK[,which(sce_TNK$subtype %in% c(&quot;CD4&quot;, &quot;CD8&quot;, &quot;CD4_PD1&quot;, &quot;CD8_PD1&quot;))]
 
@@ -1093,6 +2065,42 @@ dittoPlot(sce_TNK.sub, &quot;Ki-67&quot;, group.by = &quot;subtype&quot;,
   ylab(&quot;Scaled arcsinh-counts&quot;)+
   theme(legend.position = &quot;none&quot;)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/Ki67-expression-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Ki67-expression-1">
+Past versions of Ki67-expression-1.png
+</button>
+</p>
+<div id="fig-Ki67-expression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/ac03081c23b6e20efb30b5dcbf657367d73a7da1/docs/figure/07_proteinPanel_TNK_analysis.Rmd/Ki67-expression-1.png" target="_blank">ac03081</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 <div id="add-subtypes-to-full-sce-object" class="section level1">
@@ -1103,7 +2111,39 @@ sce_protein$subtype &lt;- sce_protein$celltype
 TNK_ids &lt;- colnames(sce_TNK)
 sce_protein[,TNK_ids]$subtype &lt;- sce_TNK$subtype
 
+#Add subtype label also for cluster 9
+sce_protein[,which(sce_protein$subtype == &quot;T_NK&quot;)]$subtype &lt;- &quot;T_AllHigh&quot;
+
 saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_subtypes.rds&quot;)</code></pre>
+</div>
+<div id="marker-expression-heatmap-for-all-cell-subtypes" class="section level1">
+<h1>Marker expression heatmap for all cell subtypes</h1>
+<pre class="r"><code>sce_protein_woTAllHigh &lt;- sce_protein[,which(sce_protein$subtype != &quot;T_AllHigh&quot;)]
+
+# Mean marker expression heatmap for all subtypes
+subtypemean &lt;- aggregateAcrossCells(sce_protein_woTAllHigh, ids = DataFrame(subtype = sce_protein_woTAllHigh$subtype), average = TRUE)
+colnames(subtypemean) &lt;- subtypemean$subtype
+
+# Center and scale raw counts
+assay(subtypemean, &quot;scaled&quot;) &lt;- t(scale(t(assay(subtypemean, &quot;counts&quot;))))
+
+# Normalize raw counts
+norm_counts &lt;- t(apply(assay(subtypemean, &quot;counts&quot;), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(subtypemean, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
+
+## Plot
+# Z-scaled
+dittoHeatmap(subtypemean, assay = &quot;scaled&quot;, scale = &quot;none&quot;,
+            heatmap.colors = magma(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/expression-heatmap-all-subtypes-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Normalized (0-1)
+dittoHeatmap(subtypemean, assay = &quot;normalized&quot;, scale = &quot;none&quot;,
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/expression-heatmap-all-subtypes-2.png" width="768" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
