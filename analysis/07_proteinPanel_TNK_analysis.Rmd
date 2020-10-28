@@ -1,0 +1,572 @@
+---
+title: "07_proteinPanel_TNK_analysis"
+author: "SandraTietscher"
+date: "2020-10-27"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script performs subclustering of T cells and NK cells for the Protein panel and performs further downstream analysis
+
+# Load libraries and data
+
+```{r read-libraries-and-data, message=FALSE, results="hide"}
+# Load libraries
+library(ggplot2)
+library(SingleCellExperiment)
+library(scater)
+library(tidyverse)
+library(dittoSeq)
+library(viridis)
+library(cowplot)
+library(ggpubr)
+library(scran)
+
+# Read SingleCellExperiment object 
+sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
+
+# Subset T/NK cells only
+sce_TNK <- sce_protein[,which(sce_protein$celltype == "T_NK")]
+```
+
+# Perform batch correction (because TBB111 is a strong outlier)
+
+```{r}
+# library(batchelor)
+# out <- fastMNN(sce_TNK, batch = sce_TNK$sample, auto.merge = TRUE, correct.all = TRUE,
+#                subset.row = !(grepl("DNA|Histone", rownames(sce_TNK))), assay.type = "exprs")
+# 
+# merge_info <- metadata(out)$merge.info 
+# 
+# # Here, we will have a look at the percentage of lost variance per merge step
+# # As rule of thumb, more than 10% should be investigated further
+# # Here we rank the samples based on the lost variance
+# cur_colmax <- colMaxs(merge_info$lost.var)
+# names(cur_colmax) <- colnames(merge_info$lost.var) 
+# cur_colmax[order(cur_colmax, decreasing = TRUE)]
+# 
+# # Next, we will look at the batch.size argument - the raltive magnitute of the batch effect
+# cur_df <- DataFrame(left = merge_info$left,
+#                      right = merge_info$right,
+#                      batch.size = merge_info$batch.size,
+#                      max_lost_var = rowMax(merge_info$lost.var))
+# 
+# DT::datatable(as.data.frame(cur_df))
+# 
+# # Transfer the correction results to the main sce object
+# reducedDims(sce_TNK)$corrected <- reducedDims(out)$corrected
+```
+
+
+
+# T/NK cell subclustering
+
+## Calculate UMAP on all TNK cells
+
+Use only relevant markers. Exclude LAG-3 (did not work well).
+
+```{r TNK-umap}
+markers_include_umap <- c("CD38", "CD27", "CD7", "CD45RA", "CD3", "PD1", "Tim-3", "Granzyme_B", "TCF7", "CD45RO", "FOXP3", "ICOS", "CD8a", "GITR", "CD4")
+
+sce_TNK <- runUMAP(sce_TNK, exprs_values = "exprs", subset_row = markers_include_umap)
+
+#sce_TNK <- runUMAP(sce_TNK, dimred = "corrected", name = "UMAP_mnnCorrected", subset_row = markers_include_umap)
+```
+
+### Visualize features on UMAP
+
+```{r TNK-umap-features, fig.width=8, fig.height=8}
+
+dittoDimPlot(sce_TNK, var = "sample", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$sample, opacity = 0.2) 
+
+dittoDimPlot(sce_TNK, var = "sample", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$sample, split.by = "sample", opacity = 0.2) 
+
+dittoDimPlot(sce_TNK, var = "TIG", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$TIG)
+
+dittoDimPlot(sce_TNK, var = "TLS", reduction.use = "UMAP", size = 0.5, 
+                               color.panel = metadata(sce_TNK)$colour_vectors$TLS)
+```
+
+### Visualize marker expression on UMAP
+
+```{r TNK-umap-markerexpression, fig.width=35, fig.height=25, message=FALSE, warning=FALSE}
+
+# Plot expression of all markers
+p.list <- list()
+for(i in markers_include_umap){
+  p.list[[i]] <- plotReducedDim(sce_TNK, colour_by = i, by_exprs_values = "scaled", 
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type", dimred = "UMAP",)  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+}
+plot_grid(plotlist = p.list, ncol = 5)
+```
+
+## Run graph-based clustering for TNK subset (Phenograph)
+
+Display clusters on UMAP.
+
+```{r TNK-clustering-umap, fig.width=8, fig.height=8}
+cluster_counts_TNK <- subset(assay(sce_TNK, "normalized"), rownames(assay(sce_TNK, "normalized")) %in% markers_include_umap)
+
+g <- buildSNNGraph(cluster_counts_TNK, k=30)
+clust <- igraph::cluster_louvain(g)$membership
+table(clust)
+
+#add cluster information to sce object
+sce_TNK$TNK_cluster <- as.factor(clust)
+
+#plot on umap
+dittoDimPlot(sce_TNK, var = "TNK_cluster", reduction.use = "UMAP", size = 0.2, do.label = TRUE, opacity = 0.8)
+dittoDimPlot(sce_TNK, var = "TNK_cluster", reduction.use = "UMAP", size = 0.2, split.by = "TNK_cluster", opacity = 0.2)
+```
+
+### Plot mean expression for each cluster
+
+```{r TNK-clusters-expression-heatmap, fig.width=5, fig.height=8}
+clustermean <- aggregateAcrossCells(sce_TNK, ids = DataFrame(cluster = sce_TNK$TNK_cluster), average = TRUE)
+colnames(clustermean) <- clustermean$cluster
+
+# Center and scale raw counts
+assay(clustermean, "scaled") <- t(scale(t(assay(clustermean, "counts"))))
+
+# Normalize raw counts
+norm_counts <- t(apply(assay(clustermean, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean, "normalized", withDimnames = FALSE) <- norm_counts
+
+## Plot only relevant markers
+include_plot <- markers_include_umap
+
+## Plot
+# Z-scaled
+dittoHeatmap(clustermean[include_plot,], assay = "scaled", scale = "none",
+            heatmap.colors = magma(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))
+
+# Normalized (0-1)
+dittoHeatmap(clustermean[include_plot,], assay = "normalized", scale = "none",
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)
+```
+
+### Plot cluster proportions by sample and sample proportions by cluster
+
+```{r cluster-proportions}
+props <- as.data.frame(prop.table(table(sce_TNK$TNK_cluster, sce_TNK$sample), margin = 1))
+colnames(props) <- c("cluster", "sample", "proportion")
+
+ggplot(props, aes(cluster, y = proportion, fill=sample)) +
+  geom_bar(stat="identity")+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  ggtitle("TNK sample proportions by cluster")
+
+props <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$TNK_cluster), margin = 1))
+colnames(props) <- c("cluster", "sample", "proportion")
+
+ggplot(props, aes(cluster, y = proportion, fill=sample)) +
+  geom_bar(stat="identity")+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  ggtitle("TNK cluster proportions by sample")
+```
+
+### Exclude cluster 9 and plot mean expression for each cluster
+
+```{r TNK-clusters-expression-heatmap-woCluster9, fig.width=5, fig.height=8}
+clustermean_wo7 <- clustermean[,-9]
+
+# Center and scale raw counts
+assay(clustermean_wo7, "scaled") <- t(scale(t(assay(clustermean_wo7, "counts"))))
+
+# Normalize raw counts
+norm_counts <- t(apply(assay(clustermean_wo7, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean_wo7, "normalized", withDimnames = FALSE) <- norm_counts
+
+## Plot
+# Z-scaled
+dittoHeatmap(clustermean_wo7[include_plot,], assay = "scaled", scale = "none",
+            heatmap.colors = magma(100), 
+            cluster_cols = TRUE, show_colnames = TRUE,
+            breaks = seq(-3, 3, length.out = 101))
+
+# Normalized (0-1)
+dittoHeatmap(clustermean_wo7[include_plot,], assay = "normalized", scale = "none",
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)
+```
+
+### Assign cell type labels
+
+Manual cell type assignment based on canonical marker expression.
+
+```{r TNK-labels, fig.width=8, fig.height=7}
+labels <- read.csv(paste0(getwd(), "/data/ProteinPanel_TNK_clusters.csv"))
+
+label_list <- labels$class[match(sce_TNK$TNK_cluster, labels$cluster)]
+sce_TNK$subtype <- label_list
+
+# Plot on UMAP
+dittoDimPlot(sce_TNK, var = "subtype", reduction.use = "UMAP", size = 0.5, opacity = 0.5)
+```
+
+```{r TNK-proportions, fig.width=8, fig.height=6}
+#Plot subtype proportions per sample
+tab <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1))
+colnames(tab) <- c("sample", "subtype", "proportion")
+
+ggplot(tab, aes(sample, y = proportion, fill=subtype)) +
+  geom_bar(stat="identity")+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+```
+
+### Remove "T_AllHigh" cluster for further analysis
+
+This cluster is present in only one sample and appears to be an artefact rather than a true cluster.
+
+```{r}
+sce_TNK <- sce_TNK[,which(sce_TNK$subtype != "T_AllHigh")]
+```
+
+
+## Compare subtype proportions per TIG
+
+Including TLS and pre-TLS.
+```{r subtype-proportions-TIG-withTLS, fig.width=10, fig.height=4}
+tab <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1))
+colnames(tab) <- c("sample", "subtype", "proportion")
+TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
+tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~subtype, scales="free", ncol=6, strip.position="top")+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Of total [%]")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..))
+```
+
+Excluding TLS and pre-TLS.
+```{r subtype-proportions-TIG-woTLS, fig.width=10, fig.height=4}
+sce_TNK_woTLS <- sce_TNK[,which(sce_TNK$TLS == "no")]
+
+tab <- as.data.frame(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
+colnames(tab) <- c("sample", "subtype", "proportion")
+TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
+tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~subtype, scales="free", ncol=4, strip.position="top")+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Of total [%]")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..))
+```
+
+### Percentage of CD8 that belongs to the PD1+ cluster
+
+Excluding TLS and pre-TLS.
+
+```{r CD8PD1-proportions-TIG-woTLS, fig.width=4, fig.height=4}
+tab <- as.matrix(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
+CD8_PD1_perc <- as.data.frame(tab[,"CD8_PD1"]/(tab[,"CD8"]+tab[,"CD8_PD1"]))
+colnames(CD8_PD1_perc) <- "CD8_PD1_perc"
+CD8_PD1_perc$sample <- rownames(CD8_PD1_perc)
+CD8_PD1_perc$TIG <- ifelse(CD8_PD1_perc$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(CD8_PD1_perc, aes(x= TIG, y = CD8_PD1_perc, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("CD8_PD1 of total CD8+ [%]")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..))
+```
+
+Comparison of TLS, pre-TLS and non-TLS: CD8+ T cells.
+
+```{r CD8PD1-proportions-TLS-comparison, fig.width=4, fig.height=4}
+tab <- as.matrix(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
+CD8_PD1_perc <- as.data.frame(tab[,"CD8_PD1"]/(tab[,"CD8"]+tab[,"CD8_PD1"]))
+colnames(CD8_PD1_perc) <- "CD8_PD1_perc"
+CD8_PD1_perc$ImageNumber <- rownames(CD8_PD1_perc)
+
+# Retrieve TLS status for each image
+img_TLS <- as.data.frame(table(sce_TNK$ImageNumber, sce_TNK$TLS))
+colnames(img_TLS) <- c("ImageNumber", "TLS", "cellnumber_image")
+img_TLS <- img_TLS %>% filter(cellnumber_image > 0)
+img_TLS$cellnumber_image <- NULL
+
+tab.comb <- merge(CD8_PD1_perc, img_TLS,by = "ImageNumber")
+
+TLS_comparisons <- list( c("no", "pre"), c("no", "yes"), c("pre", "yes") )
+ggplot(tab.comb, aes(x= TLS, y = CD8_PD1_perc))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.text.x=element_text(angle = 90, hjust=1),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("CD8_PD1 of all CD8+ [%]")+
+  xlab("TLS classification of the ROI")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), comparison = TLS_comparisons)
+```
+
+
+### Percentage of CD4 that belongs to the PD1+ cluster
+
+Excluding TLS and pre-TLS.
+
+```{r CD4PD1-proportions-TIG-woTLS, fig.width=4, fig.height=4}
+tab <- as.matrix(prop.table(table(sce_TNK_woTLS$sample, sce_TNK_woTLS$subtype), margin = 1))
+CD4_PD1_perc <- as.data.frame(tab[,"CD4_PD1"]/(tab[,"CD4"]+tab[,"CD4_PD1"]))
+colnames(CD4_PD1_perc) <- "CD4_PD1_perc"
+CD4_PD1_perc$sample <- rownames(CD4_PD1_perc)
+CD4_PD1_perc$TIG <- ifelse(CD4_PD1_perc$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(CD4_PD1_perc, aes(x= TIG, y = CD4_PD1_perc, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("CD4_PD1 of all CD4+ [%]")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..))
+```
+
+Comparison of TLS, pre-TLS and non-TLS: CD4+ T cells.
+
+```{r CD4PD1-proportions-TLS-comparison, fig.width=4, fig.height=4}
+tab <- as.matrix(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
+CD4_PD1_perc <- as.data.frame(tab[,"CD4_PD1"]/(tab[,"CD4"]+tab[,"CD4_PD1"]))
+colnames(CD4_PD1_perc) <- "CD4_PD1_perc"
+CD4_PD1_perc$ImageNumber <- rownames(CD4_PD1_perc)
+
+# Retrieve TLS status for each image
+img_TLS <- as.data.frame(table(sce_TNK$ImageNumber, sce_TNK$TLS))
+colnames(img_TLS) <- c("ImageNumber", "TLS", "cellnumber_image")
+img_TLS <- img_TLS %>% filter(cellnumber_image > 0)
+img_TLS$cellnumber_image <- NULL
+
+tab.comb <- merge(CD4_PD1_perc, img_TLS,by = "ImageNumber")
+
+TLS_comparisons <- list( c("no", "pre"), c("no", "yes"), c("pre", "yes") )
+ggplot(tab.comb, aes(x= TLS, y = CD4_PD1_perc))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.text.x=element_text(angle = 90, hjust=1),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("CD4_PD1 of all CD4+ [%]")+
+  xlab("TLS classification of the ROI")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), comparison = TLS_comparisons)
+```
+
+### Within-sample variation
+
+Excluding TLS and pre-TLS.
+
+```{r TNK-proportions-sample-variation, fig.width=8, fig.height=6}
+#Plot subtype proportions per sample
+tab <- as.data.frame(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
+colnames(tab) <- c("ImageNumber", "subtype", "proportion")
+
+ROI_info <- read.csv("data/ROI_info_HIER.csv")
+colnames(ROI_info)[8] <- "ImageNumber"
+tab.comb <- merge(tab, ROI_info, by = "ImageNumber")
+tab.comb<- tab.comb %>% filter(TLS == "no")
+
+## reorder patient levels
+tab.comb$sample <- as.factor(tab.comb$sample)
+old.levels <- levels(tab.comb$sample)
+tab.comb$sample <- factor(tab.comb$sample, levels =  old.levels[c(4:8, 12, 1:3, 9:11)])
+
+ggplot(tab.comb, aes(ImageNumber, y = proportion, fill=subtype)) +
+  geom_bar(stat="identity")+
+  facet_wrap(~sample, scales="free_x", ncol = 6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+```
+
+```{r CD4PD1-proportions-sample-variation, fig.width=4, fig.height=4}
+tab <- as.matrix(prop.table(table(sce_TNK_woTLS$ImageNumber, sce_TNK_woTLS$subtype), margin = 1))
+CD4_PD1_perc <- as.data.frame(tab[,"CD4_PD1"]/(tab[,"CD4"]+tab[,"CD4_PD1"]))
+colnames(CD4_PD1_perc) <- "CD4_PD1_perc"
+CD4_PD1_perc$ImageNumber <- rownames(CD4_PD1_perc)
+CD4_PD1_perc <- CD4_PD1_perc[!is.na(CD4_PD1_perc$CD4_PD1_perc),]
+
+tab.comb <- merge(CD4_PD1_perc, tab.comb, by = "ImageNumber")
+
+ggplot(tab.comb, aes(ImageNumber, y = CD4_PD1_perc/6)) +
+  geom_bar(stat="identity", aes(fill = TIG))+
+  facet_wrap(~sample, scales="free_x", ncol = 6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1))+
+  ylab("Proportion CD4_PD1 of all CD4+")+
+  ggtitle("CD4_PD1 proportion per ROI")
+```
+
+```{r CD8PD1-proportions-sample-variation, fig.width=4, fig.height=4}
+tab <- as.matrix(prop.table(table(sce_TNK_woTLS$ImageNumber, sce_TNK_woTLS$subtype), margin = 1))
+CD8_PD1_perc <- as.data.frame(tab[,"CD8_PD1"]/(tab[,"CD8"]+tab[,"CD8_PD1"]))
+colnames(CD8_PD1_perc) <- "CD8_PD1_perc"
+CD8_PD1_perc$ImageNumber <- rownames(CD8_PD1_perc)
+CD8_PD1_perc <- CD8_PD1_perc[!is.na(CD8_PD1_perc$CD8_PD1_perc),]
+
+tab.comb <- merge(CD8_PD1_perc, tab.comb, by = "ImageNumber")
+
+ggplot(tab.comb, aes(ImageNumber, y = CD8_PD1_perc/6)) +
+  geom_bar(stat="identity", aes(fill = TIG))+
+  facet_wrap(~sample, scales="free_x", ncol = 6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1))+
+  ylab("Proportion CD8_PD1 of all CD8+")+
+  ggtitle("CD8_PD1 proportion per ROI")
+```
+
+
+## Average marker expression TIG2 vs TIG3
+
+Compare only CD8 T cells.
+
+
+```{r TIG-marker-comparison-singlecell, fig.width=5, fig.height=4}
+#Subset CD8 T cells
+sce_CD8 <- sce_TNK[, which(sce_TNK$subtype %in% c("CD8", "CD8_PD1"))]
+
+exprs <- data.frame(`Ki-67` = assay(sce_CD8, "exprs")["Ki-67",],
+                    TCF7 = assay(sce_CD8, "exprs")["TCF7",],
+                    Granzyme_B = assay(sce_CD8, "exprs")["Granzyme_B",],
+                    `Tim-3` = assay(sce_CD8, "exprs")["Tim-3",],
+                    GITR = assay(sce_CD8, "exprs")["GITR",],
+                    CD38 = assay(sce_CD8, "exprs")["CD38",])
+TNK_tab <- cbind(exprs, colData(sce_CD8))
+TNK_tab <- pivot_longer(TNK_tab, 1:6, names_to = "marker", values_to = "exprs")
+
+ggplot(TNK_tab, aes(x=TIG, y = exprs, fill = TIG))+
+  geom_violin(aes(fill=TIG))+
+  geom_boxplot(position=position_dodge(width=0.9), width=0.1, color="black", aes(fill=TIG))+
+  facet_wrap(~marker, scale = "free", ncol = 6)+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank(),
+        axis.title.x = element_blank())+
+  ylab("Marker expression (arcsin-transformed counts)")+
+  ggtitle("Single-cell violin plots")
+```
+
+Comparison of patient means.
+
+```{r TIG-marker-comparison-patientmeans, fig.width=10, fig.height=5, message=FALSE}
+
+# Patient means
+counts <- data.frame(`Ki-67` = assay(sce_CD8, "counts")["Ki-67",],
+                    TCF7 = assay(sce_CD8, "counts")["TCF7",],
+                    Granzyme_B = assay(sce_CD8, "counts")["Granzyme_B",],
+                    `Tim-3` = assay(sce_CD8, "counts")["Tim-3",],
+                    GITR = assay(sce_CD8, "counts")["GITR",],
+                    CD38 = assay(sce_CD8, "counts")["CD38",])
+TNK_tab_2 <- cbind(counts, colData(sce_CD8))
+TNK_tab_2 <- pivot_longer(TNK_tab_2, 1:6, names_to = "marker", values_to = "counts")
+
+sample_means <- data.frame(sample = levels(factor(TNK_tab_2$sample)))
+for (i in colnames(counts)) {
+  TNK.i <- filter(TNK_tab_2, marker == i)
+  i.means <- TNK.i %>% group_by(sample) %>% dplyr::summarise(mean = mean(counts))
+  sample_means[,i] <- i.means$mean
+}
+
+sample_means$TIG <- c(rep("TIG2", 6), rep("TIG3", 6))
+sample_means <- pivot_longer(sample_means, 2:7, names_to = "marker", values_to = "counts")
+
+ggplot(sample_means, aes(TIG, counts, fill = TIG))+
+    geom_boxplot(aes(fill=TIG))+
+    geom_point(position=position_dodge(width=0.75), aes(group=TIG))+
+    facet_wrap(~marker, scales = "free", ncol = 6)+
+    stat_compare_means(method = "wilcox.test", aes(label=..p.format..), vjust = 1, label.x.npc = 0.5)+
+    theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank(),
+        strip.background = element_blank())+
+  ggtitle("Patient means")
+```
+
+
+## Proliferation status
+
+Elevated Ki-67 expression in PD1+ T cells (both CD4 and CD8) confirms that these T cell subsets are highly proliferative.
+
+
+```{r Ki67-expression, fig.width=5, fig.height=3}
+sce_TNK.sub <- sce_TNK[,which(sce_TNK$subtype %in% c("CD4", "CD8", "CD4_PD1", "CD8_PD1"))]
+
+dittoPlot(sce_TNK.sub, "Ki-67", group.by = "subtype",
+    plots = c("vlnplot"), assay = "scaled")+
+  #geom_hline(yintercept = 0.5, lty = "dashed")+
+  ylab("Scaled arcsinh-counts")+
+  theme(legend.position = "none")
+```
+
+
+# Add subtypes to full SCE object
+
+```{r update-main-SCE}
+sce_protein <- readRDS(file = "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
+sce_protein$subtype <- sce_protein$celltype
+
+TNK_ids <- colnames(sce_TNK)
+sce_protein[,TNK_ids]$subtype <- sce_TNK$subtype
+
+saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
+```
+
+
+
+
+
+
+

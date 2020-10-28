@@ -11,24 +11,23 @@ editor_options:
 # Breast cancer immune interaction & exhaustion project: IMC analysis
 
 
+
 [Initial quality control for both panels](01_quality_control.html)
   
 
-## RNApanel: Full dataset clustering   
-[link](02_RNApanel_clustering.html)  
+## RNApanel: 
+  
+[Full dataset clustering](02_RNApanel_clustering.html)  
+
+[Stromal subclustering & full celltype annotation](03_RNApanel_StromalSubclustering.html)  
 
 
-## RNApanel: Stromal subclustering & full celltype annotation  
-[link](03_RNApanel_StromalSubclustering.html)  
+## Protein panel: 
+     
+[Full dataset clustering](04_proteinPanel_clustering.html)  
 
+[Stromal subclustering & full celltype annotation](05_proteinPanel_StromalSubclustering.html)  
 
-## Protein panel: Full dataset clustering     
-[link](04_proteinPanel_clustering.html)  
+[Detailed analysis of tumor cells](06_proteinPanel_tumor_analysis.html)  
 
-
-## Protein panel: Stromal subclustering & full celltype annotation     
-[link](05_proteinPanel_StromalSubclustering.html)  
-
-
-## Protein panel: Detailed analysis of tumor cells     
-[link](06_proteinPanel_tumor_analysis.html)  
+[Detailed analysis of T/NK cells](07_proteinPanel_TNK_analysis.html)  
