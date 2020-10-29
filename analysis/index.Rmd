@@ -19,7 +19,10 @@ editor_options:
   
 [Full dataset clustering](02_RNApanel_clustering.html)  
 
-[Stromal subclustering & full celltype annotation](03_RNApanel_StromalSubclustering.html)  
+[Stromal subclustering & full celltype annotation](03_RNApanel_StromalSubclustering.html) 
+
+[Cytokine expression](09_RNApanel_cytokine_expression.html) 
+
 
 
 ## Protein panel: 
@@ -31,3 +34,5 @@ editor_options:
 [Detailed analysis of tumor cells](06_proteinPanel_tumor_analysis.html)  
 
 [Detailed analysis of T/NK cells](07_proteinPanel_TNK_analysis.html)  
+
+[Pairwise neighbourhood analysis](08_proteinPanel_neighbourhood.html) 

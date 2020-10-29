@@ -369,7 +369,7 @@ sce_protein$subtype <- sce_protein$celltype
 tumor_ids <- colnames(sce_tumor)
 sce_protein[,tumor_ids]$subtype <- sce_tumor$cell_status
 
-saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
+saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
 ```
 
 # Cytomapper visualization
@@ -395,7 +395,7 @@ cur_img <- getImages(all_masks, "20200819_ST_BCexh_H_TBB226_s0_p3_r6_a6_ac_ilast
 # Plot cells
 plotCells(cur_img, object = sce_protein,
             img_id = "ImageNumber", cell_id = "CellNumber",
-            colour_by = "celltype")
+            colour_by = "subtype")
 
 plotCells(cur_img, object = sce_protein,
             img_id = "ImageNumber", cell_id = "CellNumber",

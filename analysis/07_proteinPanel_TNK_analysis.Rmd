@@ -526,7 +526,7 @@ dittoPlot(sce_TNK.sub, "Ki-67", group.by = "subtype",
 # Add subtypes to full SCE object
 
 ```{r update-main-SCE}
-sce_protein <- readRDS(file = "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
+sce_protein <- readRDS(file = "output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
 
 TNK_ids <- colnames(sce_TNK)
 sce_protein[,TNK_ids]$subtype <- sce_TNK$subtype
@@ -534,7 +534,7 @@ sce_protein[,TNK_ids]$subtype <- sce_TNK$subtype
 #Add subtype label also for cluster 9
 sce_protein[,which(sce_protein$subtype == "T_NK")]$subtype <- "T_AllHigh"
 
-saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
+saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
 ```
 
 # Marker expression heatmap for all cell subtypes

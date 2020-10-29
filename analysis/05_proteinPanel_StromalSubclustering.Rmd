@@ -223,7 +223,7 @@ ggplot(tab, aes(image, y = proportion, fill=celltype)) +
 
 ## Compare celltype proportions per TIG
 
-```{r}
+```{r celltype-proportions-TIG-boxplot, fig.width=10, fig.height=8}
 tab <- as.data.frame(prop.table(table(sce_Protein$sample, sce_Protein$celltype), margin = 1))
 colnames(tab) <- c("sample", "celltype", "proportion")
 TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
