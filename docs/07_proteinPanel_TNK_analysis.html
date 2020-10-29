@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreebbb7eb7698119680501f37f499f0d9947438307ftargetblankbbb7eb7a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/bbb7eb7698119680501f37f499f0d9947438307f" target="_blank">bbb7eb7</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreebbb7eb7698119680501f37f499f0d9947438307ftargetblankbbb7eb7a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/bbb7eb7698119680501f37f499f0d9947438307f" target="_blank">bbb7eb7</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,7 +523,6 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
-    Untracked:  analysis/08_proteinPanel_neighbourhood.Rmd
     Untracked:  analysis/09_RNApanel_cytokine_expression.Rmd
     Untracked:  code/helper_functions/
     Untracked:  data/Ki67_IHC.csv
@@ -536,11 +535,13 @@ Untracked files:
     Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/TLS_scores.csv
     Untracked:  data/cpout/
     Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
+    Untracked:  output/TLS_score_25samples.png
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
@@ -583,6 +584,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/05a9ffe6b01a015e7a471281f7d83941005cf015/analysis/07_proteinPanel_TNK_analysis.Rmd" target="_blank">05a9ffe</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Better naming of intermediate files
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/270a816f82c7328e636abac19d68029f1e234273/docs/07_proteinPanel_TNK_analysis.html" target="_blank">270a816</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2293,7 +2328,7 @@ SandraTietscher
 </div>
 <div id="add-subtypes-to-full-sce-object" class="section level1">
 <h1>Add subtypes to full SCE object</h1>
-<pre class="r"><code>sce_protein &lt;- readRDS(file = &quot;output/ProteinPanel/sce_ProteinPanel_celltypes.rds&quot;)
+<pre class="r"><code>sce_protein &lt;- readRDS(file = &quot;output/ProteinPanel/sce_ProteinPanel_subtypes.rds&quot;)
 
 TNK_ids &lt;- colnames(sce_TNK)
 sce_protein[,TNK_ids]$subtype &lt;- sce_TNK$subtype
@@ -2301,7 +2336,7 @@ sce_protein[,TNK_ids]$subtype &lt;- sce_TNK$subtype
 #Add subtype label also for cluster 9
 sce_protein[,which(sce_protein$subtype == &quot;T_NK&quot;)]$subtype &lt;- &quot;T_AllHigh&quot;
 
-saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_subtypes.rds&quot;)</code></pre>
+saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds&quot;)</code></pre>
 </div>
 <div id="marker-expression-heatmap-for-all-cell-subtypes" class="section level1">
 <h1>Marker expression heatmap for all cell subtypes</h1>
@@ -2350,6 +2385,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/270a816f82c7328e636abac19d68029f1e234273/docs/figure/07_proteinPanel_TNK_analysis.Rmd/expression-heatmap-all-subtypes-1.png" target="_blank">270a816</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/b76baeb225342dc6266976bb5a3739038bbaef00/docs/figure/07_proteinPanel_TNK_analysis.Rmd/expression-heatmap-all-subtypes-1.png" target="_blank">b76baeb</a>
 </td>
 <td>
@@ -2390,6 +2436,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/270a816f82c7328e636abac19d68029f1e234273/docs/figure/07_proteinPanel_TNK_analysis.Rmd/expression-heatmap-all-subtypes-2.png" target="_blank">270a816</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/b76baeb225342dc6266976bb5a3739038bbaef00/docs/figure/07_proteinPanel_TNK_analysis.Rmd/expression-heatmap-all-subtypes-2.png" target="_blank">b76baeb</a>

@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree09c307f7fd3599a306f69777ad39359cec01165ftargetblank09c307fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/09c307f7fd3599a306f69777ad39359cec01165f" target="_blank">09c307f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree09c307f7fd3599a306f69777ad39359cec01165ftargetblank09c307fa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/09c307f7fd3599a306f69777ad39359cec01165f" target="_blank">09c307f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -535,18 +535,17 @@ Untracked files:
     Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/TLS_scores.csv
     Untracked:  data/cpout/
     Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
+    Untracked:  output/TLS_score_25samples.png
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
-
-Unstaged changes:
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -585,6 +584,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/05a9ffe6b01a015e7a471281f7d83941005cf015/analysis/08_proteinPanel_neighbourhood.Rmd" target="_blank">05a9ffe</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Better naming of intermediate files
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/08_proteinPanel_neighbourhood.html" target="_blank">7fdc24b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -629,7 +662,7 @@ library(RColorBrewer)
 library(corrplot)
 
 # Read SingleCellExperiment object
-sce_protein &lt;- readRDS(&quot;output/ProteinPanel/sce_ProteinPanel_subtypes.rds&quot;)
+sce_protein &lt;- readRDS(&quot;output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds&quot;)
 
 # Read object relationship file (output from Cellprofiler)
 dat_relation &lt;- fread(&quot;data/cpout/Object_relationships_ProteinPanel.csv&quot;)</code></pre>
@@ -688,14 +721,9 @@ rname = pmat$FirstLabel
 
 pmat = pmat %&gt;%
   select(-c(&#39;FirstLabel&#39;)) %&gt;%
-  as.matrix()</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>row.names(pmat) &lt;- rname
+  as.matrix()
+
+row.names(pmat) &lt;- rname
 
 #Remove T_AllHigh
 pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]
@@ -713,7 +741,44 @@ heatmap.2(pmat,
           col=cmap(75),
           density.info =&#39;none&#39;, margins=c(8,8)
 )</code></pre>
-<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-all-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-all-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pairwise-classic-all-1">
+Past versions of pairwise-classic-all-1.png
+</button>
+</p>
+<div id="fig-pairwise-classic-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-all-1.png" target="_blank">7fdc24b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="relative-number-of-images-reaching-significance-for-each-pairwise-interaction" class="section level3">
 <h3>Relative number of images reaching significance for each pairwise interaction</h3>
@@ -726,14 +791,8 @@ nmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;present
 rname = nmat$FirstLabel
 nmat = nmat %&gt;%
   select(-c(&#39;FirstLabel&#39;)) %&gt;%
-  as.matrix()</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>row.names(nmat) &lt;- rname
+  as.matrix()
+row.names(nmat) &lt;- rname
 
 #Remove T_AllHigh
 nmat &lt;- nmat[rownames(nmat) != &quot;T_AllHigh&quot;, colnames(nmat) != &quot;T_AllHigh&quot;]
@@ -749,27 +808,53 @@ heatmap.2(rmat,
           col=cmap(75),
           density.info =&#39;none&#39;, margins=c(8,8)
 )</code></pre>
-<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-all-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-all-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pairwise-relative-all-1">
+Past versions of pairwise-relative-all-1.png
+</button>
+</p>
+<div id="fig-pairwise-relative-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-all-1.png" target="_blank">7fdc24b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="run-only-for-tls-images-including-pre-tls" class="section level1">
 <h1>Run only for TLS images (including pre-TLS)</h1>
-<pre class="r"><code>dat_cells_TLS &lt;- dat_cells %&gt;% filter(ImageNumber %in% TLS_nr)</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>dat_relation_TLS &lt;- dat_relation %&gt;% filter(`First Image Number` %in% TLS_nr)</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>d = prepare_tables(dat_cells_TLS, dat_relation_TLS)
+<pre class="r"><code>dat_cells_TLS &lt;- dat_cells %&gt;% filter(ImageNumber %in% TLS_nr)
+dat_relation_TLS &lt;- dat_relation %&gt;% filter(`First Image Number` %in% TLS_nr)
+
+d = prepare_tables(dat_cells_TLS, dat_relation_TLS)
 
 # Calculate the baseline statistics
 dat_baseline = apply_labels(d[[1]], d[[2]]) %&gt;%
@@ -798,14 +883,9 @@ rname = pmat$FirstLabel
 
 pmat = pmat %&gt;%
   select(-c(&#39;FirstLabel&#39;)) %&gt;%
-  as.matrix()</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>row.names(pmat) &lt;- rname
+  as.matrix()
+
+row.names(pmat) &lt;- rname
 
 #Remove T_AllHigh
 pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]
@@ -823,7 +903,44 @@ heatmap.2(pmat,
           col=cmap(75),
           density.info =&#39;none&#39;, margins=c(8,8)
 )</code></pre>
-<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-TLS-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-TLS-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pairwise-classic-TLS-1">
+Past versions of pairwise-classic-TLS-1.png
+</button>
+</p>
+<div id="fig-pairwise-classic-TLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-TLS-1.png" target="_blank">7fdc24b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="relative-number-of-images-reaching-significance-for-each-pairwise-interaction-1" class="section level3">
 <h3>Relative number of images reaching significance for each pairwise interaction</h3>
@@ -836,14 +953,8 @@ nmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;present
 rname = nmat$FirstLabel
 nmat = nmat %&gt;%
   select(-c(&#39;FirstLabel&#39;)) %&gt;%
-  as.matrix()</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>row.names(nmat) &lt;- rname
+  as.matrix()
+row.names(nmat) &lt;- rname
 
 #Remove T_AllHigh
 nmat &lt;- nmat[rownames(nmat) != &quot;T_AllHigh&quot;, colnames(nmat) != &quot;T_AllHigh&quot;]
@@ -859,27 +970,53 @@ heatmap.2(rmat,
           col=cmap(75),
           density.info =&#39;none&#39;, margins=c(8,8)
 )</code></pre>
-<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TLS-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TLS-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pairwise-relative-TLS-1">
+Past versions of pairwise-relative-TLS-1.png
+</button>
+</p>
+<div id="fig-pairwise-relative-TLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TLS-1.png" target="_blank">7fdc24b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="run-only-for-non-tls-images" class="section level1">
 <h1>Run only for non-TLS images</h1>
-<pre class="r"><code>dat_cells_nonTLS &lt;- dat_cells %&gt;% filter(ImageNumber %in% nonTLS_nr)</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>dat_relation_nonTLS &lt;- dat_relation %&gt;% filter(`First Image Number` %in% nonTLS_nr)</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>d = prepare_tables(dat_cells_nonTLS, dat_relation_nonTLS)
+<pre class="r"><code>dat_cells_nonTLS &lt;- dat_cells %&gt;% filter(ImageNumber %in% nonTLS_nr)
+dat_relation_nonTLS &lt;- dat_relation %&gt;% filter(`First Image Number` %in% nonTLS_nr)
+
+d = prepare_tables(dat_cells_nonTLS, dat_relation_nonTLS)
 
 # Calculate the baseline statistics
 dat_baseline = apply_labels(d[[1]], d[[2]]) %&gt;%
@@ -908,14 +1045,9 @@ rname = pmat$FirstLabel
 
 pmat = pmat %&gt;%
   select(-c(&#39;FirstLabel&#39;)) %&gt;%
-  as.matrix()</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>row.names(pmat) &lt;- rname
+  as.matrix()
+
+row.names(pmat) &lt;- rname
 
 #Remove T_AllHigh
 pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]
@@ -933,7 +1065,44 @@ heatmap.2(pmat,
           col=cmap(75),
           density.info =&#39;none&#39;, margins=c(8,8)
 )</code></pre>
-<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-nonTLS-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-nonTLS-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pairwise-classic-nonTLS-1">
+Past versions of pairwise-classic-nonTLS-1.png
+</button>
+</p>
+<div id="fig-pairwise-classic-nonTLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-nonTLS-1.png" target="_blank">7fdc24b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="relative-number-of-images-reaching-significance-for-each-pairwise-interaction-2" class="section level3">
 <h3>Relative number of images reaching significance for each pairwise interaction</h3>
@@ -946,14 +1115,8 @@ nmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;present
 rname = nmat$FirstLabel
 nmat = nmat %&gt;%
   select(-c(&#39;FirstLabel&#39;)) %&gt;%
-  as.matrix()</code></pre>
-<pre><code>Warning: You are using a dplyr method on a raw data.table, which will call the
-* data frame implementation, and is likely to be inefficient.
-* 
-* To suppress this message, either generate a data.table translation with
-* `lazy_dt()` or convert to a data frame or tibble with
-* `as.data.frame()`/`as_tibble()`.</code></pre>
-<pre class="r"><code>row.names(nmat) &lt;- rname
+  as.matrix()
+row.names(nmat) &lt;- rname
 
 #Remove T_AllHigh
 nmat &lt;- nmat[rownames(nmat) != &quot;T_AllHigh&quot;, colnames(nmat) != &quot;T_AllHigh&quot;]
@@ -969,7 +1132,44 @@ heatmap.2(rmat,
           col=cmap(75),
           density.info =&#39;none&#39;, margins=c(8,8)
 )</code></pre>
-<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-nonTLS-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-nonTLS-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-pairwise-relative-nonTLS-1">
+Past versions of pairwise-relative-nonTLS-1.png
+</button>
+</p>
+<div id="fig-pairwise-relative-nonTLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-nonTLS-1.png" target="_blank">7fdc24b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
