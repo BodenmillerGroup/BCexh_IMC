@@ -72,7 +72,7 @@ saveRDS(sce_RNA_sub, paste0(getwd(), "/output/RNApanel/sce_RNApanel_sub_UMAP.rds
 
 ## Visualize features on UMAP
 
-```{r visualize-features-umap, message = FALSE, fig.width=10, fig.height=10}
+```{r visualize-features-umap, message = FALSE, fig.width=6, fig.height=5}
 
 # SlideID, SampleID, ROI, Indication, Tumour mask
 dittoDimPlot(sce_RNA_sub, var = "sample", reduction.use = "UMAP", size = 0.5, 
@@ -140,23 +140,28 @@ sce_RNA$phenograph_cluster <- as.factor(clust)
 
 ## Plot mean expression for each cluster
 
-```{r cluster-mean-expression-heatmap, message=FALSE, fig.width=10, fig.height=10}
+```{r cluster-mean-expression-heatmap, message=FALSE, fig.width=6, fig.height=6}
 clustermean_sce_RNA <- aggregateAcrossCells(sce_RNA, ids = DataFrame(cluster = sce_RNA$phenograph_cluster), average = TRUE)
 colnames(clustermean_sce_RNA) <- clustermean_sce_RNA$cluster
 
 # Center and scale raw counts
 assay(clustermean_sce_RNA, "scaled") <- t(scale(t(assay(clustermean_sce_RNA, "counts"))))
 
+# Normalize raw counts
+norm_counts <- t(apply(assay(clustermean_sce_RNA, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean_sce_RNA, "normalized", withDimnames = FALSE) <- norm_counts
+
 ## Plot
-#Raw
-dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = "counts", scale = "none",
-            heatmap.colors = viridis(100), 
-            cluster_cols = TRUE, show_colnames = TRUE)
-# Scaled
+# Z-scaled
 dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = "scaled", scale = "none",
-            heatmap.colors = viridis(100), 
+            heatmap.colors = magma(100), 
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))
+
+# Normalized (0-1)
+dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = "normalized", scale = "none",
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)
 
 ```
 
@@ -164,7 +169,7 @@ dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = "scaled",
 
 Use the subset SCE object for UMAP plotting.
 
-```{r cluster-umap, fig.width=10, fig.height=8}
+```{r cluster-umap, fig.width=8, fig.height=7}
 # Assing cluster numbers to the right cells
 sub_cellnames <- colnames(sce_RNA_sub)
 cluster_sub <- sce_RNA[,sub_cellnames]$phenograph_cluster
@@ -184,7 +189,7 @@ dittoDimPlot(sce_RNA_sub, var = "phenograph_cluster", reduction.use = "UMAP", si
 
 Look at tumor/stroma proportion per sample.
 
-```{r assign-TS-labels}
+```{r assign-TS-labels, fig.width=5, fig.height=3}
 labels <- read.csv(paste0(getwd(), "/data/RNApanel_tumor_stroma_clusters.csv"))
 
 label_list <- labels$class[match(sce_RNA$phenograph_cluster, labels$cluster)]
