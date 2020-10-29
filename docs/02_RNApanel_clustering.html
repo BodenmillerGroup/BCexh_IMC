@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-23
+<strong>Last updated:</strong> 2020-10-29
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9750eeefc701d2d2cb12bd275b0fc1ce06e46240targetblank9750eeea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9750eeefc701d2d2cb12bd275b0fc1ce06e46240" target="_blank">9750eee</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeeb8fa9beaddb3ce50e0790ecfe3d60ad2b67e52ftargetblankeb8fa9ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/eb8fa9beaddb3ce50e0790ecfe3d60ad2b67e52f" target="_blank">eb8fa9b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree9750eeefc701d2d2cb12bd275b0fc1ce06e46240targetblank9750eeea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeeb8fa9beaddb3ce50e0790ecfe3d60ad2b67e52ftargetblankeb8fa9ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/9750eeefc701d2d2cb12bd275b0fc1ce06e46240" target="_blank">9750eee</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/eb8fa9beaddb3ce50e0790ecfe3d60ad2b67e52f" target="_blank">eb8fa9b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,10 +521,25 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
 
 Untracked files:
-    Untracked:  analysis/03_RNApanel_StromalSubclustering.Rmd
+    Untracked:  analysis/09_RNApanel_cytokine_expression.Rmd
+    Untracked:  code/helper_functions/
+    Untracked:  data/Ki67_IHC.csv
+    Untracked:  data/ProteinPanel_TNK_clusters.csv
+    Untracked:  data/ProteinPanel_stromal_clusters.csv
+    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNApanel_TNK_clusters.csv
+    Untracked:  data/RNApanel_stromal_clusters.csv
     Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_celltype_prop.csv
+    Untracked:  data/RNAseq_epithelial.rds
+    Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/cpout/
+    Untracked:  data/cytof_celltype_prop.csv
+    Untracked:  data/masks/
+    Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
@@ -532,8 +547,11 @@ Untracked files:
     Untracked:  output/sce_RNApanel_initial.rds
 
 Unstaged changes:
-    Modified:   _workflowr.yml
-    Modified:   analysis/01_quality_control.Rmd
+    Modified:   analysis/05_proteinPanel_StromalSubclustering.Rmd
+    Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
+    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
+    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -572,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/eb8fa9beaddb3ce50e0790ecfe3d60ad2b67e52f/analysis/02_RNApanel_clustering.Rmd" target="_blank">eb8fa9b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Changes in plot size and colors
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/02_RNApanel_clustering.html" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -651,16 +703,164 @@ saveRDS(sce_RNA_sub, paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_sub_UMA
 <pre class="r"><code># SlideID, SampleID, ROI, Indication, Tumour mask
 dittoDimPlot(sce_RNA_sub, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_RNA)$colour_vectors$sample)</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-1">
+Past versions of visualize-features-umap-1.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/visualize-features-umap-1.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_RNA)$colour_vectors$sample, split.by = &quot;sample&quot;) </code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-2.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-2">
+Past versions of visualize-features-umap-2.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/visualize-features-umap-2.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_RNA)$colour_vectors$TIG)</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-3.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-3">
+Past versions of visualize-features-umap-3.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/visualize-features-umap-3.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_RNA)$colour_vectors$TLS)</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-4.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/visualize-features-umap-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-visualize-features-umap-4">
+Past versions of visualize-features-umap-4.png
+</button>
+</p>
+<div id="fig-visualize-features-umap-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/visualize-features-umap-4.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="visualize-expression-on-umap" class="section level2">
 <h2>Visualize expression on UMAP</h2>
@@ -675,6 +875,43 @@ for(i in rownames(sce_RNA_sub)){
 
 plot_grid(plotlist = p.list, ncol = 7)</code></pre>
 <p><img src="figure/02_RNApanel_clustering.Rmd/arcsinh-expression-umap-1.png" width="3360" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-arcsinh-expression-umap-1">
+Past versions of arcsinh-expression-umap-1.png
+</button>
+</p>
+<div id="fig-arcsinh-expression-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/arcsinh-expression-umap-1.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="scaled-arcsinh-transformed-counts" class="section level3">
 <h3>2. Scaled arcsinh-transformed counts</h3>
@@ -686,6 +923,43 @@ for(i in rownames(sce_RNA_sub)){
 
 plot_grid(plotlist = p.list, ncol = 7)</code></pre>
 <p><img src="figure/02_RNApanel_clustering.Rmd/scaled-expression-umap-1.png" width="3360" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-scaled-expression-umap-1">
+Past versions of scaled-expression-umap-1.png
+</button>
+</p>
+<div id="fig-scaled-expression-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/scaled-expression-umap-1.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -718,18 +992,96 @@ colnames(clustermean_sce_RNA) &lt;- clustermean_sce_RNA$cluster
 # Center and scale raw counts
 assay(clustermean_sce_RNA, &quot;scaled&quot;) &lt;- t(scale(t(assay(clustermean_sce_RNA, &quot;counts&quot;))))
 
+# Normalize raw counts
+norm_counts &lt;- t(apply(assay(clustermean_sce_RNA, &quot;counts&quot;), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean_sce_RNA, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
 ## Plot
-#Raw
-dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = &quot;counts&quot;, scale = &quot;none&quot;,
-            heatmap.colors = viridis(100), 
-            cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-1.png" width="960" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># Scaled
+# Z-scaled
 dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = &quot;scaled&quot;, scale = &quot;none&quot;,
-            heatmap.colors = viridis(100), 
+            heatmap.colors = magma(100), 
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-2.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-mean-expression-heatmap-1">
+Past versions of cluster-mean-expression-heatmap-1.png
+</button>
+</p>
+<div id="fig-cluster-mean-expression-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-1.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># Normalized (0-1)
+dittoHeatmap(clustermean_sce_RNA[markers_include_phenograph,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
+            heatmap.colors = viridis(100), 
+            cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-mean-expression-heatmap-2">
+Past versions of cluster-mean-expression-heatmap-2.png
+</button>
+</p>
+<div id="fig-cluster-mean-expression-heatmap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/cluster-mean-expression-heatmap-2.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="display-clusters-on-umap" class="section level2">
 <h2>Display clusters on UMAP</h2>
@@ -741,9 +1093,83 @@ sce_RNA_sub$phenograph_cluster &lt;- cluster_sub
 
 #plot on umap
 dittoDimPlot(sce_RNA_sub, var = &quot;phenograph_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE, opacity = 0.2)</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-umap-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-umap-1">
+Past versions of cluster-umap-1.png
+</button>
+</p>
+<div id="fig-cluster-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/cluster-umap-1.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_RNA_sub, var = &quot;phenograph_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, split.by = &quot;phenograph_cluster&quot;, opacity = 0.2)</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-umap-2.png" width="960" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/cluster-umap-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-umap-2">
+Past versions of cluster-umap-2.png
+</button>
+</p>
+<div id="fig-cluster-umap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/cluster-umap-2.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#subset only one cluster and plot
 # cells_14 &lt;- colnames(sce_sub)[which(sce_sub$louvain_k10_norm_markersubset == &quot;14&quot;)]
 # sub.14 &lt;- sce_sub[,cells_14]
@@ -762,7 +1188,44 @@ sce_RNA$cell_class &lt;- label_list
 label_list_sub &lt;- labels$class[match(sce_RNA_sub$phenograph_cluster, labels$cluster)]
 sce_RNA_sub$cell_class &lt;- label_list_sub
 dittoDimPlot(sce_RNA_sub, var = &quot;cell_class&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE)</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/assign-TS-labels-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/assign-TS-labels-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-assign-TS-labels-1">
+Past versions of assign-TS-labels-1.png
+</button>
+</p>
+<div id="fig-assign-TS-labels-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/assign-TS-labels-1.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#Plot tumor/stroma ratio per sample
 tab &lt;- as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$cell_class), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;class&quot;, &quot;proportion&quot;)
@@ -771,7 +1234,44 @@ ggplot(tab, aes(sample, y = proportion, fill=class)) +
   geom_bar(stat=&quot;identity&quot;)+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
-<p><img src="figure/02_RNApanel_clustering.Rmd/assign-TS-labels-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/02_RNApanel_clustering.Rmd/assign-TS-labels-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-assign-TS-labels-2">
+Past versions of assign-TS-labels-2.png
+</button>
+</p>
+<div id="fig-assign-TS-labels-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0bb57be21afe880bbd1a4b46e3dbbe8e0c06f18f/docs/figure/02_RNApanel_clustering.Rmd/assign-TS-labels-2.png" target="_blank">0bb57be</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="subset-tumor-cellstroma-cell-objects-and-save-them" class="section level1">
 <h1>Subset tumor cell/stroma cell objects and save them</h1>
