@@ -55,10 +55,19 @@ ncores=10
 
 #TLS image numbers
 TLS_nr <- c(4,7,8,14,16,18,37,42,43,71,17,21,54,60,68)
-#preTLS_nr <- c(17,21,54,60,68)
 nonTLS_nr <- c(1:77)
 nonTLS_nr <- setdiff(nonTLS_nr, TLS_nr)
-#nonTLS_nr <- setdiff(nonTLS_nr, preTLS_nr)
+
+#TIG image numbers
+ROI_info <- read.csv("data/ROI_info_HIER.csv")
+ROI_info$ImageNumber <- c(1:77)
+TIG2 <- ROI_info %>% filter(TIG == "TIG2" & TLS == "no")
+TIG2 <- TIG2$ImageNumber
+TIG3 <- ROI_info %>% filter(TIG == "TIG3" & TLS == "no")
+TIG3 <- TIG3$ImageNumber
+
+cols = rev(brewer.pal(11,'Spectral'))
+cmap = colorRampPalette(cols)
 ```
 
 # Run for all images separately and sum up number of "significant" images for each pairwise interaction
@@ -107,10 +116,6 @@ row.names(pmat) <- rname
 pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
 
 # Plot the heatmap
-cols = rev(brewer.pal(11,'Spectral'))
-cmap = colorRampPalette(cols)
-
-
 hr <- hclust(dist(pmat), method="ward.D")
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
@@ -200,10 +205,6 @@ row.names(pmat) <- rname
 pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
 
 # Plot the heatmap
-cols = rev(brewer.pal(11,'Spectral'))
-cmap = colorRampPalette(cols)
-
-
 hr <- hclust(dist(pmat), method="ward.D")
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
@@ -283,21 +284,15 @@ pmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'sigval', fun.aggreg
              fill=0, drop=F)
 
 rname = pmat$FirstLabel
-
 pmat = pmat %>%
   select(-c('FirstLabel')) %>%
   as.matrix()
-
 row.names(pmat) <- rname
 
 #Remove T_AllHigh
 pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
 
 # Plot the heatmap
-cols = rev(brewer.pal(11,'Spectral'))
-cmap = colorRampPalette(cols)
-
-
 hr <- hclust(dist(pmat), method="ward.D")
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
@@ -338,5 +333,174 @@ heatmap.2(rmat,
           col=cmap(75),
           density.info ='none', margins=c(8,8)
 )
+```
+
+# Run only for TIG2-images (non-TLS)
+
+```{r pairwise-classic-TIG2-run}
+dat_cells_TIG2 <- dat_cells %>% filter(ImageNumber %in% TIG2)
+dat_relation_TIG2 <- dat_relation %>% filter(`First Image Number` %in% TIG2)
+
+d = prepare_tables(dat_cells_TIG2, dat_relation_TIG2)
+
+# Calculate the baseline statistics
+dat_baseline = apply_labels(d[[1]], d[[2]]) %>%
+  aggregate_classic()
+
+# Calculate the permutation statistic
+dat_perm = rbindlist(mclapply(1:n_perm, function(x){
+  dat_labels = shuffle_labels(d[[1]])
+  apply_labels(dat_labels, d[[2]]) %>%
+    aggregate_classic()
+},mc.cores = ncores
+), idcol = 'run') 
+
+# Calculate the p-values
+dat_p <- calc_p_vals(dat_baseline, dat_perm, n_perm = 1000, p_tresh = 0.01) 
+```
+
+## Visualizations
+
+Generate a heatmap of the number of significant interactions for the labels.
+
+### Absolute number of images reaching significance for each pairwise interaction
+
+```{r pairwise-classic-TIG2, fig.width=8, fig.height=8}
+# Prepare the data
+pmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'sigval', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = pmat$FirstLabel
+pmat = pmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+row.names(pmat) <- rname
+
+#Remove T_AllHigh
+pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
+```
+### Relative number of images reaching significance for each pairwise interaction 
+
+Here, the number of "significant" images is divided by the number of images where both of the cell types are actually present (i.e. respective cell type proportion > 0).
+
+```{r pairwise-relative-TIG2, fig.width=8, fig.height=8}
+# Prepare data table with number of images containing both interaction partners
+dat_p$present <- 1
+nmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'present', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = nmat$FirstLabel
+nmat = nmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+row.names(nmat) <- rname
+
+#Remove T_AllHigh
+nmat <- nmat[rownames(nmat) != "T_AllHigh", colnames(nmat) != "T_AllHigh"]
+
+# Divide number of significant images by total number of images whith cell types present
+rmat.TIG2 <- pmat/nmat
+
+hr <- hclust(dist(rmat.TIG2), method="ward.D")
+heatmap.2(rmat.TIG2,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8))
+
+```
+
+# Run only for TIG3-images (non-TLS)
+
+```{r pairwise-classic-TIG3-run}
+dat_cells_TIG3 <- dat_cells %>% filter(ImageNumber %in% TIG3)
+dat_relation_TIG3 <- dat_relation %>% filter(`First Image Number` %in% TIG3)
+
+d = prepare_tables(dat_cells_TIG3, dat_relation_TIG3)
+
+# Calculate the baseline statistics
+dat_baseline = apply_labels(d[[1]], d[[2]]) %>%
+  aggregate_classic()
+
+# Calculate the permutation statistic
+dat_perm = rbindlist(mclapply(1:n_perm, function(x){
+  dat_labels = shuffle_labels(d[[1]])
+  apply_labels(dat_labels, d[[2]]) %>%
+    aggregate_classic()
+},mc.cores = ncores
+), idcol = 'run') 
+
+# Calculate the p-values
+dat_p <- calc_p_vals(dat_baseline, dat_perm, n_perm = 1000, p_tresh = 0.01) 
+```
+
+## Visualizations
+
+Generate a heatmap of the number of significant interactions for the labels.
+
+### Absolute number of images reaching significance for each pairwise interaction
+
+```{r pairwise-classic-TIG3, fig.width=8, fig.height=8}
+# Prepare the data
+pmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'sigval', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = pmat$FirstLabel
+pmat = pmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+row.names(pmat) <- rname
+
+#Remove T_AllHigh
+pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
+```
+
+### Relative number of images reaching significance for each pairwise interaction 
+
+Here, the number of "significant" images is divided by the number of images where both of the cell types are actually present (i.e. respective cell type proportion > 0).
+
+```{r pairwise-relative-TIG3, fig.width=8, fig.height=8}
+# Prepare data table with number of images containing both interaction partners
+dat_p$present <- 1
+nmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'present', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = nmat$FirstLabel
+nmat = nmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+row.names(nmat) <- rname
+
+#Remove T_AllHigh
+nmat <- nmat[rownames(nmat) != "T_AllHigh", colnames(nmat) != "T_AllHigh"]
+
+# Divide number of significant images by total number of images whith cell types present
+rmat.TIG3 <- pmat/nmat
+
+hr <- hclust(dist(rmat.TIG3), method="ward.D")
+heatmap.2(rmat.TIG3,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8))
+
+```
+
+## Visualize difference between TIG2 and TIG3
+
+Positive values indicate that TIG2 has higher enrichment/less avoidance, negative values indicate that TIG3 has higher enrichment/less avoidance.
+
+```{r TIG-comparison}
+rmat.delta <- rmat.TIG2-rmat.TIG3
+
+hr <- hclust(dist(rmat.delta), method="ward.D")
+heatmap.2(rmat.delta,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8))
 ```
 
