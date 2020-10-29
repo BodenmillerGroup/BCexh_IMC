@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree75acc91e91ba6e08f60f207f86d0ee1d7477f935targetblank75acc91a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/75acc91e91ba6e08f60f207f86d0ee1d7477f935" target="_blank">75acc91</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree75acc91e91ba6e08f60f207f86d0ee1d7477f935targetblank75acc91a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/75acc91e91ba6e08f60f207f86d0ee1d7477f935" target="_blank">75acc91</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -539,6 +539,7 @@ Untracked files:
     Untracked:  data/cpout/
     Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
+    Untracked:  neighbourhood_test.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/TLS_score_25samples.png
@@ -546,6 +547,7 @@ Untracked files:
     Untracked:  output/sce_ProteinPanel_initial.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
+    Untracked:  test.png
 
 </code></pre>
 <p>
@@ -584,6 +586,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/75acc91e91ba6e08f60f207f86d0ee1d7477f935/analysis/08_proteinPanel_neighbourhood.Rmd" target="_blank">75acc91</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Add TIG comparison
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/200dd71e282355c3da9148b056593e83fa1ae88e/docs/08_proteinPanel_neighbourhood.html" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -682,10 +718,19 @@ ncores=10
 
 #TLS image numbers
 TLS_nr &lt;- c(4,7,8,14,16,18,37,42,43,71,17,21,54,60,68)
-#preTLS_nr &lt;- c(17,21,54,60,68)
 nonTLS_nr &lt;- c(1:77)
 nonTLS_nr &lt;- setdiff(nonTLS_nr, TLS_nr)
-#nonTLS_nr &lt;- setdiff(nonTLS_nr, preTLS_nr)</code></pre>
+
+#TIG image numbers
+ROI_info &lt;- read.csv(&quot;data/ROI_info_HIER.csv&quot;)
+ROI_info$ImageNumber &lt;- c(1:77)
+TIG2 &lt;- ROI_info %&gt;% filter(TIG == &quot;TIG2&quot; &amp; TLS == &quot;no&quot;)
+TIG2 &lt;- TIG2$ImageNumber
+TIG3 &lt;- ROI_info %&gt;% filter(TIG == &quot;TIG3&quot; &amp; TLS == &quot;no&quot;)
+TIG3 &lt;- TIG3$ImageNumber
+
+cols = rev(brewer.pal(11,&#39;Spectral&#39;))
+cmap = colorRampPalette(cols)</code></pre>
 </div>
 <div id="run-for-all-images-separately-and-sum-up-number-of-significant-images-for-each-pairwise-interaction" class="section level1">
 <h1>Run for all images separately and sum up number of “significant” images for each pairwise interaction</h1>
@@ -729,10 +774,6 @@ row.names(pmat) &lt;- rname
 pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]
 
 # Plot the heatmap
-cols = rev(brewer.pal(11,&#39;Spectral&#39;))
-cmap = colorRampPalette(cols)
-
-
 hr &lt;- hclust(dist(pmat), method=&quot;ward.D&quot;)
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
@@ -764,6 +805,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/200dd71e282355c3da9148b056593e83fa1ae88e/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-all-1.png" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-all-1.png" target="_blank">7fdc24b</a>
@@ -833,6 +885,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/200dd71e282355c3da9148b056593e83fa1ae88e/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-all-1.png" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-all-1.png" target="_blank">7fdc24b</a>
 </td>
 <td>
@@ -891,10 +954,6 @@ row.names(pmat) &lt;- rname
 pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]
 
 # Plot the heatmap
-cols = rev(brewer.pal(11,&#39;Spectral&#39;))
-cmap = colorRampPalette(cols)
-
-
 hr &lt;- hclust(dist(pmat), method=&quot;ward.D&quot;)
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
@@ -926,6 +985,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/200dd71e282355c3da9148b056593e83fa1ae88e/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-TLS-1.png" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-TLS-1.png" target="_blank">7fdc24b</a>
@@ -995,6 +1065,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/200dd71e282355c3da9148b056593e83fa1ae88e/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TLS-1.png" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TLS-1.png" target="_blank">7fdc24b</a>
 </td>
 <td>
@@ -1042,21 +1123,15 @@ pmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;sigval&
              fill=0, drop=F)
 
 rname = pmat$FirstLabel
-
 pmat = pmat %&gt;%
   select(-c(&#39;FirstLabel&#39;)) %&gt;%
   as.matrix()
-
 row.names(pmat) &lt;- rname
 
 #Remove T_AllHigh
 pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]
 
 # Plot the heatmap
-cols = rev(brewer.pal(11,&#39;Spectral&#39;))
-cmap = colorRampPalette(cols)
-
-
 hr &lt;- hclust(dist(pmat), method=&quot;ward.D&quot;)
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
@@ -1088,6 +1163,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/200dd71e282355c3da9148b056593e83fa1ae88e/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-nonTLS-1.png" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-nonTLS-1.png" target="_blank">7fdc24b</a>
@@ -1157,6 +1243,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/200dd71e282355c3da9148b056593e83fa1ae88e/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-nonTLS-1.png" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7fdc24bc6dc3816703f635b3706215b27e814cea/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-nonTLS-1.png" target="_blank">7fdc24b</a>
 </td>
 <td>
@@ -1170,6 +1267,161 @@ SandraTietscher
 </table>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="run-only-for-tig2-images-non-tls" class="section level1">
+<h1>Run only for TIG2-images (non-TLS)</h1>
+<pre class="r"><code>dat_cells_TIG2 &lt;- dat_cells %&gt;% filter(ImageNumber %in% TIG2)
+dat_relation_TIG2 &lt;- dat_relation %&gt;% filter(`First Image Number` %in% TIG2)
+
+d = prepare_tables(dat_cells_TIG2, dat_relation_TIG2)
+
+# Calculate the baseline statistics
+dat_baseline = apply_labels(d[[1]], d[[2]]) %&gt;%
+  aggregate_classic()
+
+# Calculate the permutation statistic
+dat_perm = rbindlist(mclapply(1:n_perm, function(x){
+  dat_labels = shuffle_labels(d[[1]])
+  apply_labels(dat_labels, d[[2]]) %&gt;%
+    aggregate_classic()
+},mc.cores = ncores
+), idcol = &#39;run&#39;) 
+
+# Calculate the p-values
+dat_p &lt;- calc_p_vals(dat_baseline, dat_perm, n_perm = 1000, p_tresh = 0.01) </code></pre>
+<div id="visualizations-3" class="section level2">
+<h2>Visualizations</h2>
+<p>Generate a heatmap of the number of significant interactions for the labels.</p>
+<div id="absolute-number-of-images-reaching-significance-for-each-pairwise-interaction-3" class="section level3">
+<h3>Absolute number of images reaching significance for each pairwise interaction</h3>
+<pre class="r"><code># Prepare the data
+pmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;sigval&#39;, fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = pmat$FirstLabel
+pmat = pmat %&gt;%
+  select(-c(&#39;FirstLabel&#39;)) %&gt;%
+  as.matrix()
+row.names(pmat) &lt;- rname
+
+#Remove T_AllHigh
+pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]</code></pre>
+</div>
+<div id="relative-number-of-images-reaching-significance-for-each-pairwise-interaction-3" class="section level3">
+<h3>Relative number of images reaching significance for each pairwise interaction</h3>
+<p>Here, the number of “significant” images is divided by the number of images where both of the cell types are actually present (i.e. respective cell type proportion &gt; 0).</p>
+<pre class="r"><code># Prepare data table with number of images containing both interaction partners
+dat_p$present &lt;- 1
+nmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;present&#39;, fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = nmat$FirstLabel
+nmat = nmat %&gt;%
+  select(-c(&#39;FirstLabel&#39;)) %&gt;%
+  as.matrix()
+row.names(nmat) &lt;- rname
+
+#Remove T_AllHigh
+nmat &lt;- nmat[rownames(nmat) != &quot;T_AllHigh&quot;, colnames(nmat) != &quot;T_AllHigh&quot;]
+
+# Divide number of significant images by total number of images whith cell types present
+rmat.TIG2 &lt;- pmat/nmat
+
+hr &lt;- hclust(dist(rmat.TIG2), method=&quot;ward.D&quot;)
+heatmap.2(rmat.TIG2,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = &quot;none&quot;,
+          col=cmap(75),
+          density.info =&#39;none&#39;, margins=c(8,8))</code></pre>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TIG2-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="run-only-for-tig3-images-non-tls" class="section level1">
+<h1>Run only for TIG3-images (non-TLS)</h1>
+<pre class="r"><code>dat_cells_TIG3 &lt;- dat_cells %&gt;% filter(ImageNumber %in% TIG3)
+dat_relation_TIG3 &lt;- dat_relation %&gt;% filter(`First Image Number` %in% TIG3)
+
+d = prepare_tables(dat_cells_TIG3, dat_relation_TIG3)
+
+# Calculate the baseline statistics
+dat_baseline = apply_labels(d[[1]], d[[2]]) %&gt;%
+  aggregate_classic()
+
+# Calculate the permutation statistic
+dat_perm = rbindlist(mclapply(1:n_perm, function(x){
+  dat_labels = shuffle_labels(d[[1]])
+  apply_labels(dat_labels, d[[2]]) %&gt;%
+    aggregate_classic()
+},mc.cores = ncores
+), idcol = &#39;run&#39;) 
+
+# Calculate the p-values
+dat_p &lt;- calc_p_vals(dat_baseline, dat_perm, n_perm = 1000, p_tresh = 0.01) </code></pre>
+<div id="visualizations-4" class="section level2">
+<h2>Visualizations</h2>
+<p>Generate a heatmap of the number of significant interactions for the labels.</p>
+<div id="absolute-number-of-images-reaching-significance-for-each-pairwise-interaction-4" class="section level3">
+<h3>Absolute number of images reaching significance for each pairwise interaction</h3>
+<pre class="r"><code># Prepare the data
+pmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;sigval&#39;, fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = pmat$FirstLabel
+pmat = pmat %&gt;%
+  select(-c(&#39;FirstLabel&#39;)) %&gt;%
+  as.matrix()
+row.names(pmat) &lt;- rname
+
+#Remove T_AllHigh
+pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]</code></pre>
+</div>
+<div id="relative-number-of-images-reaching-significance-for-each-pairwise-interaction-4" class="section level3">
+<h3>Relative number of images reaching significance for each pairwise interaction</h3>
+<p>Here, the number of “significant” images is divided by the number of images where both of the cell types are actually present (i.e. respective cell type proportion &gt; 0).</p>
+<pre class="r"><code># Prepare data table with number of images containing both interaction partners
+dat_p$present &lt;- 1
+nmat = dcast(dat_p, &#39;FirstLabel ~ SecondLabel&#39;, value.var = &#39;present&#39;, fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = nmat$FirstLabel
+nmat = nmat %&gt;%
+  select(-c(&#39;FirstLabel&#39;)) %&gt;%
+  as.matrix()
+row.names(nmat) &lt;- rname
+
+#Remove T_AllHigh
+nmat &lt;- nmat[rownames(nmat) != &quot;T_AllHigh&quot;, colnames(nmat) != &quot;T_AllHigh&quot;]
+
+# Divide number of significant images by total number of images whith cell types present
+rmat.TIG3 &lt;- pmat/nmat
+
+hr &lt;- hclust(dist(rmat.TIG3), method=&quot;ward.D&quot;)
+heatmap.2(rmat.TIG3,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = &quot;none&quot;,
+          col=cmap(75),
+          density.info =&#39;none&#39;, margins=c(8,8))</code></pre>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TIG3-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="visualize-difference-between-tig2-and-tig3" class="section level2">
+<h2>Visualize difference between TIG2 and TIG3</h2>
+<p>Positive values indicate that TIG2 has higher enrichment/less avoidance, negative values indicate that TIG3 has higher enrichment/less avoidance.</p>
+<pre class="r"><code>rmat.delta &lt;- rmat.TIG2-rmat.TIG3
+
+hr &lt;- hclust(dist(rmat.delta), method=&quot;ward.D&quot;)
+heatmap.2(rmat.delta,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = &quot;none&quot;,
+          col=cmap(75),
+          density.info =&#39;none&#39;, margins=c(8,8))</code></pre>
+<p><img src="figure/08_proteinPanel_neighbourhood.Rmd/TIG-comparison-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1227,7 +1479,6 @@ loaded via a namespace (and not attached):
 [43] vctrs_0.3.2            tools_4.0.2            glue_1.4.1            
 [46] purrr_0.3.4            yaml_2.2.1             colorspace_1.4-1      
 [49] caTools_1.18.0         knitr_1.29            </code></pre>
-</div>
 </div>
 </div>
 </div>
