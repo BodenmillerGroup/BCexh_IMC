@@ -1,0 +1,342 @@
+---
+title: "08_proteinPanel_neighbourhood"
+author: "SandraTietscher"
+date: "2020-10-28"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+```
+
+This script performs pairwise neighbourhood analysis as implemented in the HistoCAT paper.  
+It performs random shuffling of the cell labels in order to calculate p-values for the enrichment/depletion of pairwise spatial interactions.
+
+# Load libraries and data
+
+```{r read-libraries-and-data, message=FALSE, results="hide"}
+# Load libraries
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(dtplyr)
+library(ggplot2)
+library(parallel)
+library(neighbouRhood)
+library(gplots)
+library(RColorBrewer)
+library(corrplot)
+
+# Read SingleCellExperiment object
+sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
+
+# Read object relationship file (output from Cellprofiler)
+dat_relation <- fread("data/cpout/Object_relationships_ProteinPanel.csv")
+
+```
+
+# Prepare data for neighbourhood analysis
+```{r neighbouRhood-data-preparation}
+
+# Extract the relevant information into a datatable
+dat_cells <- data.table(ImageNumber = sce_protein$HIER_ImageNumber,
+                        ObjectNumber = sce_protein$CellNumber,
+                        label = sce_protein$subtype, 
+                        group = "all")
+
+n_perm = 1000
+
+# Number of cores used for multicore:
+ncores=10
+
+#TLS image numbers
+TLS_nr <- c(4,7,8,14,16,18,37,42,43,71,17,21,54,60,68)
+#preTLS_nr <- c(17,21,54,60,68)
+nonTLS_nr <- c(1:77)
+nonTLS_nr <- setdiff(nonTLS_nr, TLS_nr)
+#nonTLS_nr <- setdiff(nonTLS_nr, preTLS_nr)
+```
+
+# Run for all images separately and sum up number of "significant" images for each pairwise interaction
+
+## Prepare the data and run
+
+```{r pairwise-classic-all-run}
+d = prepare_tables(dat_cells, dat_relation)
+
+# Calculate the baseline statistics
+dat_baseline = apply_labels(d[[1]], d[[2]]) %>%
+  aggregate_classic()
+
+# Calculate the permutation statistic
+dat_perm = rbindlist(mclapply(1:n_perm, function(x){
+  dat_labels = shuffle_labels(d[[1]])
+  apply_labels(dat_labels, d[[2]]) %>%
+    aggregate_classic()
+},mc.cores = ncores
+), idcol = 'run') 
+
+# Calculate the p-values
+dat_p <- calc_p_vals(dat_baseline, dat_perm, n_perm = 1000, p_tresh = 0.01) 
+```
+
+## Visualizations
+
+Generate a heatmap of the number of significant interactions for the labels.
+
+### Absolute number of images reaching significance for each pairwise interaction
+
+```{r pairwise-classic-all, fig.width=10, fig.height=10}
+# Prepare the data
+pmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'sigval', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = pmat$FirstLabel
+
+pmat = pmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+
+row.names(pmat) <- rname
+
+#Remove T_AllHigh
+pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
+
+# Plot the heatmap
+cols = rev(brewer.pal(11,'Spectral'))
+cmap = colorRampPalette(cols)
+
+
+hr <- hclust(dist(pmat), method="ward.D")
+heatmap.2(pmat,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8)
+)
+```
+
+### Relative number of images reaching significance for each pairwise interaction 
+
+Here, the number of "significant" images is divided by the number of images where both of the cell types are actually present (i.e. respective cell type proportion > 0).
+
+```{r pairwise-relative-all, fig.width=10, fig.height=10}
+# Prepare data table with number of images containing both interaction partners
+dat_p$present <- 1
+nmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'present', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = nmat$FirstLabel
+nmat = nmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+row.names(nmat) <- rname
+
+#Remove T_AllHigh
+nmat <- nmat[rownames(nmat) != "T_AllHigh", colnames(nmat) != "T_AllHigh"]
+
+# Divide number of significant images by total number of images whith cell types present
+rmat <- pmat/nmat
+
+hr <- hclust(dist(rmat), method="ward.D")
+heatmap.2(rmat,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8)
+)
+```
+
+# Run only for TLS images (including pre-TLS)
+
+```{r pairwise-classic-TLs-run}
+dat_cells_TLS <- dat_cells %>% filter(ImageNumber %in% TLS_nr)
+dat_relation_TLS <- dat_relation %>% filter(`First Image Number` %in% TLS_nr)
+
+d = prepare_tables(dat_cells_TLS, dat_relation_TLS)
+
+# Calculate the baseline statistics
+dat_baseline = apply_labels(d[[1]], d[[2]]) %>%
+  aggregate_classic()
+
+# Calculate the permutation statistic
+dat_perm = rbindlist(mclapply(1:n_perm, function(x){
+  dat_labels = shuffle_labels(d[[1]])
+  apply_labels(dat_labels, d[[2]]) %>%
+    aggregate_classic()
+},mc.cores = ncores
+), idcol = 'run') 
+
+# Calculate the p-values
+dat_p <- calc_p_vals(dat_baseline, dat_perm, n_perm = 1000, p_tresh = 0.01) 
+```
+
+## Visualizations
+
+Generate a heatmap of the number of significant interactions for the labels.
+
+### Absolute number of images reaching significance for each pairwise interaction
+
+```{r pairwise-classic-TLS, fig.width=10, fig.height=10}
+# Prepare the data
+pmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'sigval', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = pmat$FirstLabel
+
+pmat = pmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+
+row.names(pmat) <- rname
+
+#Remove T_AllHigh
+pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
+
+# Plot the heatmap
+cols = rev(brewer.pal(11,'Spectral'))
+cmap = colorRampPalette(cols)
+
+
+hr <- hclust(dist(pmat), method="ward.D")
+heatmap.2(pmat,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8)
+)
+```
+
+### Relative number of images reaching significance for each pairwise interaction 
+
+Here, the number of "significant" images is divided by the number of images where both of the cell types are actually present (i.e. respective cell type proportion > 0).
+
+```{r pairwise-relative-TLS, fig.width=10, fig.height=10}
+# Prepare data table with number of images containing both interaction partners
+dat_p$present <- 1
+nmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'present', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = nmat$FirstLabel
+nmat = nmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+row.names(nmat) <- rname
+
+#Remove T_AllHigh
+nmat <- nmat[rownames(nmat) != "T_AllHigh", colnames(nmat) != "T_AllHigh"]
+
+# Divide number of significant images by total number of images whith cell types present
+rmat <- pmat/nmat
+
+hr <- hclust(dist(rmat), method="ward.D")
+heatmap.2(rmat,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8)
+)
+```
+
+
+# Run only for non-TLS images
+
+```{r pairwise-classic-nonTLs-run}
+dat_cells_nonTLS <- dat_cells %>% filter(ImageNumber %in% nonTLS_nr)
+dat_relation_nonTLS <- dat_relation %>% filter(`First Image Number` %in% nonTLS_nr)
+
+d = prepare_tables(dat_cells_nonTLS, dat_relation_nonTLS)
+
+# Calculate the baseline statistics
+dat_baseline = apply_labels(d[[1]], d[[2]]) %>%
+  aggregate_classic()
+
+# Calculate the permutation statistic
+dat_perm = rbindlist(mclapply(1:n_perm, function(x){
+  dat_labels = shuffle_labels(d[[1]])
+  apply_labels(dat_labels, d[[2]]) %>%
+    aggregate_classic()
+},mc.cores = ncores
+), idcol = 'run') 
+
+# Calculate the p-values
+dat_p <- calc_p_vals(dat_baseline, dat_perm, n_perm = 1000, p_tresh = 0.01) 
+```
+
+## Visualizations
+
+Generate a heatmap of the number of significant interactions for the labels.
+
+### Absolute number of images reaching significance for each pairwise interaction
+
+```{r pairwise-classic-nonTLS, fig.width=10, fig.height=10}
+# Prepare the data
+pmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'sigval', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = pmat$FirstLabel
+
+pmat = pmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+
+row.names(pmat) <- rname
+
+#Remove T_AllHigh
+pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
+
+# Plot the heatmap
+cols = rev(brewer.pal(11,'Spectral'))
+cmap = colorRampPalette(cols)
+
+
+hr <- hclust(dist(pmat), method="ward.D")
+heatmap.2(pmat,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8)
+)
+```
+
+### Relative number of images reaching significance for each pairwise interaction 
+
+Here, the number of "significant" images is divided by the number of images where both of the cell types are actually present (i.e. respective cell type proportion > 0).
+
+```{r pairwise-relative-nonTLS, fig.width=10, fig.height=10}
+# Prepare data table with number of images containing both interaction partners
+dat_p$present <- 1
+nmat = dcast(dat_p, 'FirstLabel ~ SecondLabel', value.var = 'present', fun.aggregate = sum,
+             fill=0, drop=F)
+
+rname = nmat$FirstLabel
+nmat = nmat %>%
+  select(-c('FirstLabel')) %>%
+  as.matrix()
+row.names(nmat) <- rname
+
+#Remove T_AllHigh
+nmat <- nmat[rownames(nmat) != "T_AllHigh", colnames(nmat) != "T_AllHigh"]
+
+# Divide number of significant images by total number of images whith cell types present
+rmat <- pmat/nmat
+
+hr <- hclust(dist(rmat), method="ward.D")
+heatmap.2(rmat,
+          Colv = as.dendrogram(hr),
+          Rowv = as.dendrogram(hr),
+          trace = "none",
+          col=cmap(75),
+          density.info ='none', margins=c(8,8)
+)
+```
+
