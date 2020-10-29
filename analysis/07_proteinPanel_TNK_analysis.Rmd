@@ -565,7 +565,70 @@ dittoHeatmap(subtypemean, assay = "scaled", scale = "none",
 dittoHeatmap(subtypemean, assay = "normalized", scale = "none",
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)
+```
 
+# Check cell type preference for TLS
+
+```{r TLS-cellsubtype-preference-timeline}
+# Plot as simple timeline
+tab <- as.data.frame(prop.table(table(sce_protein$TLS, sce_protein$celltype), margin = 1))
+colnames(tab) <- c("TLS", "subtype", "proportion")
+tab$TLS <- as.factor(tab$TLS)
+
+ggplot(tab, aes(TLS, proportion, group = 1))+
+  geom_line()+
+  geom_point()+
+  facet_wrap(~subtype, scales = "fixed")
+```
+
+```{r TLS-cellsubtype-preference-boxplots, fig.width=12, fig.height=14}
+# Boxplots (individual ROIs as points): subtype proportions
+tab2 <- as.data.frame(prop.table(table(sce_protein$ImageNumber, sce_protein$subtype), margin = 1))
+colnames(tab2) <- c("ImageNumber", "subtype", "proportion")
+tab3 <- as.data.frame(table(sce_protein$ImageNumber, sce_protein$TLS))
+colnames(tab3) <- c("ImageNumber", "TLS", "cellnumber")
+tab3 <- tab3 %>% filter(cellnumber > 0)
+tab.comb <- merge(tab2, tab3, by = "ImageNumber")
+
+my_comparisons <- list( c("no", "pre"), c("no", "yes"), c("pre", "yes") )
+
+ggplot(tab.comb, aes(TLS, proportion))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~subtype, scales = "free")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Of all stromal [%]")+
+  stat_compare_means(comparisons = my_comparisons, method = "wilcox.test", aes(label=..p.signif..))
+```
+
+```{r TLS-cellsubtype-number-boxplots, fig.width=12, fig.height=14}
+
+# Boxplots (individual ROIs as points): total celltype number
+tab2 <- as.data.frame(table(sce_protein$ImageNumber, sce_protein$subtype), margin = 1)
+colnames(tab2) <- c("ImageNumber", "subtype", "cellnumber")
+tab3 <- as.data.frame(table(sce_protein$ImageNumber, sce_protein$TLS))
+colnames(tab3) <- c("ImageNumber", "TLS", "cellnumber_image")
+tab3 <- tab3 %>% filter(cellnumber_image > 0)
+tab.comb <- merge(tab2, tab3, by = "ImageNumber")
+
+ggplot(tab.comb, aes(TLS, cellnumber))+
+  geom_boxplot()+
+  geom_point()+
+  stat_compare_means(comparisons = my_comparisons, label = "p.signif")+
+  facet_wrap(~subtype, scales = "free")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())
 
 ```
 
