@@ -1,0 +1,332 @@
+---
+title: "09_RNApanel_cytokine_expression"
+author: "SandraTietscher"
+date: "2020-10-28"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This script defines cytokine-expressing cells, making use of the negative control mRNA DapB.
+
+# Load libraries and data
+
+```{r read-libraries-and-data, message=FALSE, results="hide"}
+source("code/helper_functions/detect_mRNA_expression.R")
+source("code/helper_functions/validityChecks.R")
+library(SingleCellExperiment)
+library(dplyr)
+library(ggplot2)
+library(scater)
+library(reshape2)
+library(data.table)
+library(ComplexHeatmap)
+library(corrplot)
+library(pheatmap)
+library(grid)
+library(gridExtra)
+library(tidyr)
+library(ggpubr)
+library(cowplot)
+
+sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_celltypes.rds")
+```
+
+# Detect Cytokine Expressing Cells
+
+```{r cytokine-detection}
+# get the names of the cytokine channels
+cytokine_channels = c("CCL4", "CCL18", "CSF1", "CXCL10", "CXCL13_mRNA", "CCL2", "CCL22", "CXCL9", "CCL17", "CCL5")
+
+# run function to define cytokine expressing cells 
+output_list <- compute_difference(sce_RNA, 
+                          cellID = "cellID", 
+                          assay_name = "exprs", 
+                          threshold = 0.01, 
+                          mRNA_channels = cytokine_channels, 
+                          negative_control = "DapB", 
+                          return_calc_metrics = TRUE)
+
+# overwrite SCE object
+sce_RNA <- output_list$output_sce
+```
+
+## Plot results from cytokine detection
+
+```{r detection-results-vsDapB,fig.height=15, fig.width=8}
+
+# check difference between DapB and signal (histogram)
+p.list <- list()
+
+for(i in cytokine_channels){
+  
+  # subset whole data set for visualization purposes
+  diff_chemo <- output_list[[i]]
+  diff_chemo_sub <- diff_chemo[sample(nrow(diff_chemo), nrow(diff_chemo)*0.1), ]
+  
+  # significant cells defined by subtraction
+  c = ggplot(data=diff_chemo_sub, aes(x=mean_negative_control, y=mean_chemokine)) + 
+    geom_point(alpha=0.2, aes(col = 
+                                ifelse(padj <= 0.01 & scaled_diff > 0 & mean_negative_control < 2.5, 'p<0.01', 'n.s.'))) + 
+    scale_color_manual(values = c("black", "deepskyblue1")) +
+    xlim(0,5.5) + ylim(0,5.5) +
+    ylab(paste("Mean expression of", i, sep=" ")) +
+    xlab("Mean DapB mRNAexpression") +
+    ggtitle(paste("DapB mRNA vs.", i, sep = " ")) +
+    theme(legend.title = element_blank())
+  p.list[[i]] <- c
+}
+
+plot_grid(plotlist = p.list, ncol = 2)
+```
+
+# Basic Stats
+
+## Basic numbers on the chemokine expressing cells 
+
+```{r cytokine-basic-stats}
+cytokines <- data.frame(colData(sce_RNA))
+cytokines <- cytokines[, cytokine_channels]
+
+# calculate the amount of cells that are positive for 1, 2 and multiple combinations. 
+single_combinations = cytokines[rowSums(cytokines) == 1,]
+
+# number of single-cytokine positive cells 
+nrow(single_combinations)
+
+double_combinations = cytokines[rowSums(cytokines) == 2,]
+# number of double-cytokines positive cells 
+nrow(double_combinations)
+
+
+multiple_combinations = cytokines[rowSums(cytokines) >= 3,]
+# number of cells that express 3 or more cytokines
+nrow(multiple_combinations)
+
+
+# number of double positives per cytokine
+double_counts <- colSums(double_combinations)
+
+# frequency matrix and corrplot for frequency matrix
+double_combinations[double_combinations == 0] <- NA
+count_matrix = psych::pairwiseCount(x=double_combinations)
+
+# normalize the frequency matrix by the amount of double combinations that occur for each cytokine
+frequency_matrix <- count_matrix
+for (i in colnames(count_matrix)){
+  frequency_matrix[,i] <- frequency_matrix[,i]/double_counts[i]
+}
+```
+
+## Frequency double-positive cells
+The next plot shows the frequencies of all double positive cell occurences. e.g. of all CXCL10 expressing cells that also express another chemokine (More than 50% express CXCL9).
+
+```{r frequency_of_double_positive_chemokines, fig.height=10, fig.width=10}
+corrplot(frequency_matrix, is.corr = FALSE, tl.col = 'black', method = 'pie', type = 'full', 
+         tl.srt = 45, tl.cex = 0.8, tl.offset = 0.5, cl.length = 2, cl.cex = 1, cl.align.text = "l", cl.ratio = 0.3,
+         diag=TRUE, order = "hclust")
+```
+
+## Corrplot of Frequency matrix
+Now we normalize the numbers of double positives by the numbers of all respective positive chemokines. this shows that usually between 20-40 percent of chemokine expressing cells are double positive expressors.
+
+```{r freq_corrplot}
+single_counts <- colSums(single_combinations)
+frequency_matrix <- count_matrix
+for (i in colnames(count_matrix)){
+  frequency_matrix[,i] <- frequency_matrix[,i]/single_counts[i]
+}
+
+corrplot(frequency_matrix, is.corr = FALSE, tl.col = 'black', method = 'pie', type = 'full', 
+         tl.srt = 45, tl.cex = 0.8, tl.offset = 0.5, cl.length = 2, cl.cex = 1, cl.align.text = "l", cl.ratio = 0.3,
+         cl.lim = c(0,1), diag=TRUE, order = "hclust")
+```
+## Save SCE object
+
+```{r save sce object}
+# general cytokine producer tag for every cell (logical binary)
+sce_RNA$cytokine <- ifelse(rowSums(data.frame(colData(sce_RNA)[,cytokine_channels])) > 0, TRUE, FALSE)
+
+# rename colData entry names
+idx <- match(cytokine_channels, colnames(colData(sce_RNA)))
+for(i in idx){
+  colnames(colData(sce_RNA))[i] <- paste0(colnames(colData(sce_RNA))[i], "_expression")
+}
+
+saveRDS(object = sce_RNA,file = "output/RNApanel/sce_RNApanel_celltypes_cytokines.rds")
+```
+
+# Advanced stats
+
+## Plot chemokine expression by celltype
+
+```{r chemokine-celltype-proportion, fig.width=8, fig.height=7}
+# Plot percentage of each cell type that expresses a certain cytokine
+
+cytokine_prop <- data.frame("celltype" = levels(as.factor(sce_RNA$celltype)))
+cytokine_colnames <- paste0(cytokine_channels, "_expression")
+for (i in cytokine_colnames) {
+  cytokine_prop[[i]] <- prop.table(table(sce_RNA$celltype, colData(sce_RNA)[,i]), margin = 1)[,2]
+}
+
+cytokine_prop_g <- gather(cytokine_prop, key = "cytokine", value = "proportion_expressing", 2:11)
+
+ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
+  geom_bar(stat="identity")+
+  facet_wrap(~celltype)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ggtitle("Proportion of celltype that expresses a given cytokine")
+
+ggplot(cytokine_prop_g, aes(celltype, proportion_expressing, fill = celltype))+
+  geom_bar(stat="identity")+
+  facet_wrap(~cytokine)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+   ggtitle("Proportion of celltype that expresses a given cytokine")
+```
+
+## Plot chemokine expression by celltype - for non-TLS images only
+
+```{r chemokine-celltype-proportion-nonTLS, fig.width=8, fig.height=7}
+sce_TLSex <- sce_RNA[,which(sce_RNA$TLS == "no")]
+sce_TLSex$ImageNumber <- droplevels(sce_TLSex$ImageNumber)
+
+# Plot percentage of each cell type that expresses a certain cytokine
+cytokine_prop <- data.frame("celltype" = levels(as.factor(sce_TLSex$celltype)))
+cytokine_colnames <- paste0(cytokine_channels, "_expression")
+for (i in cytokine_colnames) {
+  cytokine_prop[[i]] <- prop.table(table(sce_TLSex$celltype, colData(sce_TLSex)[,i]), margin = 1)[,2]
+}
+
+cytokine_prop_g <- gather(cytokine_prop, key = "cytokine", value = "proportion_expressing", 2:11)
+
+ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
+  geom_bar(stat="identity")+
+  facet_wrap(~celltype)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())
+
+ggplot(cytokine_prop_g, aes(celltype, proportion_expressing, fill = celltype))+
+  geom_bar(stat="identity")+
+  facet_wrap(~cytokine)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())
+```
+
+# Compare cytokine expression in TIGs
+
+In non-TLS images only.
+
+```{r TIG-comparison-all, fig.width=4, fig.height=3}
+# Compare total proportion of expressing cells
+tab <- as.data.frame(prop.table(table(sce_TLSex$cytokine, sce_TLSex$TIG), margin = 2))
+colnames(tab) <- c("Cytokine_expressing", "TIG", "proportion")
+
+ggplot(tab, aes(TIG, proportion))+
+  geom_col(aes(fill=Cytokine_expressing))+
+  scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
+  theme(axis.title.x = element_blank())
+```
+
+```{r TIG-comparison-byCelltype, fig.width=6, fig.height=5}
+
+# For each celltype individually
+celltypes <- levels(as.factor(sce_TLSex$celltype))
+tab <- data.frame( TIG2 = double(), TIG3 = double())
+
+for (i in celltypes) {
+  sce_i <- sce_TLSex[,which(sce_TLSex$celltype == i)]
+  tab[i,] <- prop.table(table(sce_i$cytokine, sce_i$TIG), margin = 2)[2,]
+}
+
+tab$celltype <- row.names(tab)
+tab <- pivot_longer(tab, 1:2, names_to = "TIG", values_to = "proportion")
+ggplot(tab, aes(celltype, proportion, fill = TIG))+
+  geom_bar(stat = "identity", positio = "dodge")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.25),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion expressing at least one cytokine")
+```
+
+## Correlation of myeloid cells that express T-attracting chemokines with T cells 
+(per ROI, excluding TLS)
+
+```{r macrophage-cytokines-CD8, fig.widt=5, fig.height=5}
+library(Hmisc)
+
+# T-attracting chemokine producer tag for every myeloid cell (logical binary)
+sce_myeloid <- sce_TLSex[,which(sce_TLSex$celltype == "myeloid")]
+sce_myeloid$Tattr_chemokine <- ifelse(rowSums(data.frame(colData(sce_myeloid)[,c("CCL2_expression", "CCL17_expression", "CCL4_expression", "CCL5_expression", "CXCL10_expression", "CXCL9_expression")])) > 0, TRUE, FALSE)
+
+Tattr_chemokine_img <- prop.table(table(sce_myeloid$ImageNumber, sce_myeloid$Tattr_chemokine), margin = 1)[,2]
+celltype_img <- as.data.frame(table(sce_TLSex$ImageNumber, sce_TLSex$celltype))
+celltype_img <- pivot_wider(celltype_img, names_from = "Var2", values_from = "Freq")
+Tattr_chemokine_comb <- cbind(Tattr_chemokine_img, celltype_img[,-1])
+
+img_TIG <- as.data.frame(table(sce_TLSex$ImageNumber, sce_TLSex$TIG)) %>% filter(Freq > 0)
+rownames(img_TIG) <- img_TIG$Var1
+Tattr_chemokine_comb <- cbind(Tattr_chemokine_comb, img_TIG[,"Var2"][match(rownames(Tattr_chemokine_comb), rownames(img_TIG))])
+colnames(Tattr_chemokine_comb)[13] <- "TIG"
+
+corrs <- rcorr(as.matrix(Tattr_chemokine_comb[,1:12]), type = "spearman")
+r_cor <- corrs$r[1, 2:12]
+p_cor <- corrs$P[1, 2:12]
+
+# Scatterplot
+ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  xlab("Proportion of myeloid cells expressing\nat least one T-cell attracting chemokine")+
+  ylab("Number of CD8+ T cells")
+
+ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4))+
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  xlab("Proportion of myeloid cells expressing\nat least one T-cell attracting chemokine")+
+  ylab("Number of CD4+ T cells")
+
+ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4+T_CD8))+
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  xlab("Proportion of myeloid cells expressing\nat least one T-cell attracting chemokine")+
+  ylab("Number of T cells")
+```
