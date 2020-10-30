@@ -34,6 +34,7 @@ library(gridExtra)
 library(tidyr)
 library(ggpubr)
 library(cowplot)
+library(Hmisc)
 
 sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_celltypes.rds")
 ```
@@ -75,7 +76,7 @@ for(i in cytokine_channels){
     geom_point(alpha=0.2, aes(col = 
                                 ifelse(padj <= 0.01 & scaled_diff > 0 & mean_negative_control < 2.5, 'p<0.01', 'n.s.'))) + 
     scale_color_manual(values = c("black", "deepskyblue1")) +
-    xlim(0,5.5) + ylim(0,5.5) +
+    xlim(0,4) + ylim(0,4) +
     ylab(paste("Mean expression of", i, sep=" ")) +
     xlab("Mean DapB mRNAexpression") +
     ggtitle(paste("DapB mRNA vs.", i, sep = " ")) +
@@ -276,7 +277,6 @@ ggplot(tab, aes(celltype, proportion, fill = TIG))+
 (per ROI, excluding TLS)
 
 ```{r macrophage-cytokines-CD8, fig.widt=5, fig.height=5}
-library(Hmisc)
 
 # T-attracting chemokine producer tag for every myeloid cell (logical binary)
 sce_myeloid <- sce_TLSex[,which(sce_TLSex$celltype == "myeloid")]
@@ -300,7 +300,7 @@ p_cor <- corrs$P[1, 2:12]
 ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
   geom_point(aes(color=TIG))+
   geom_smooth(method = lm, color = "black", se=FALSE)+
-  stat_cor(method="spearman")+
+  stat_cor(method="spearman", label.x.npc = "right")+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
@@ -311,7 +311,7 @@ ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
 ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4))+
   geom_point(aes(color=TIG))+
   geom_smooth(method = lm, color = "black", se=FALSE)+
-  stat_cor(method="spearman")+
+  stat_cor(method="spearman", label.x.npc = "right")+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
@@ -322,7 +322,7 @@ ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4))+
 ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4+T_CD8))+
   geom_point(aes(color=TIG))+
   geom_smooth(method = lm, color = "black", se=FALSE)+
-  stat_cor(method="spearman")+
+  stat_cor(method="spearman", label.x.npc = "right")+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
