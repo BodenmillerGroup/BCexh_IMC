@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree49b1bad749c8eeb6fd002bc801158210636d7122targetblank49b1bada"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/49b1bad749c8eeb6fd002bc801158210636d7122" target="_blank">49b1bad</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree1787ff8f3f9f3474b2ed9e857439d821a9474c78targetblank1787ff8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/1787ff8f3f9f3474b2ed9e857439d821a9474c78" target="_blank">1787ff8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree49b1bad749c8eeb6fd002bc801158210636d7122targetblank49b1bada" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree1787ff8f3f9f3474b2ed9e857439d821a9474c78targetblank1787ff8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/49b1bad749c8eeb6fd002bc801158210636d7122" target="_blank">49b1bad</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/1787ff8f3f9f3474b2ed9e857439d821a9474c78" target="_blank">1787ff8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -594,6 +594,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1787ff8f3f9f3474b2ed9e857439d821a9474c78/analysis/09_RNApanel_cytokine_expression.Rmd" target="_blank">1787ff8</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+<td>
+Add script to quantify cytokine expression
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/09_RNApanel_cytokine_expression.html" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/49b1bad749c8eeb6fd002bc801158210636d7122/analysis/09_RNApanel_cytokine_expression.Rmd" target="_blank">49b1bad</a>
 </td>
 <td>
@@ -635,6 +669,7 @@ library(gridExtra)
 library(tidyr)
 library(ggpubr)
 library(cowplot)
+library(Hmisc)
 
 sce_RNA &lt;- readRDS(&quot;output/RNApanel/sce_RNApanel_celltypes.rds&quot;)</code></pre>
 </div>
@@ -670,7 +705,7 @@ for(i in cytokine_channels){
     geom_point(alpha=0.2, aes(col = 
                                 ifelse(padj &lt;= 0.01 &amp; scaled_diff &gt; 0 &amp; mean_negative_control &lt; 2.5, &#39;p&lt;0.01&#39;, &#39;n.s.&#39;))) + 
     scale_color_manual(values = c(&quot;black&quot;, &quot;deepskyblue1&quot;)) +
-    xlim(0,5.5) + ylim(0,5.5) +
+    xlim(0,4) + ylim(0,4) +
     ylab(paste(&quot;Mean expression of&quot;, i, sep=&quot; &quot;)) +
     xlab(&quot;Mean DapB mRNAexpression&quot;) +
     ggtitle(paste(&quot;DapB mRNA vs.&quot;, i, sep = &quot; &quot;)) +
@@ -680,6 +715,43 @@ for(i in cytokine_channels){
 
 plot_grid(plotlist = p.list, ncol = 2)</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/detection-results-vsDapB-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-detection-results-vsDapB-1">
+Past versions of detection-results-vsDapB-1.png
+</button>
+</p>
+<div id="fig-detection-results-vsDapB-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/detection-results-vsDapB-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="basic-stats" class="section level1">
@@ -723,6 +795,43 @@ for (i in colnames(count_matrix)){
          tl.srt = 45, tl.cex = 0.8, tl.offset = 0.5, cl.length = 2, cl.cex = 1, cl.align.text = &quot;l&quot;, cl.ratio = 0.3,
          diag=TRUE, order = &quot;hclust&quot;)</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/frequency_of_double_positive_chemokines-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-frequency_of_double_positive_chemokines-1">
+Past versions of frequency_of_double_positive_chemokines-1.png
+</button>
+</p>
+<div id="fig-frequency_of_double_positive_chemokines-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/frequency_of_double_positive_chemokines-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="corrplot-of-frequency-matrix" class="section level2">
 <h2>Corrplot of Frequency matrix</h2>
@@ -736,7 +845,47 @@ for (i in colnames(count_matrix)){
 corrplot(frequency_matrix, is.corr = FALSE, tl.col = &#39;black&#39;, method = &#39;pie&#39;, type = &#39;full&#39;, 
          tl.srt = 45, tl.cex = 0.8, tl.offset = 0.5, cl.length = 2, cl.cex = 1, cl.align.text = &quot;l&quot;, cl.ratio = 0.3,
          cl.lim = c(0,1), diag=TRUE, order = &quot;hclust&quot;)</code></pre>
-<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/freq_corrplot-1.png" width="672" style="display: block; margin: auto;" /> ## Save SCE object</p>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/freq_corrplot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-freq_corrplot-1">
+Past versions of freq_corrplot-1.png
+</button>
+</p>
+<div id="fig-freq_corrplot-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/freq_corrplot-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="save-sce-object" class="section level2">
+<h2>Save SCE object</h2>
 <pre class="r"><code># general cytokine producer tag for every cell (logical binary)
 sce_RNA$cytokine &lt;- ifelse(rowSums(data.frame(colData(sce_RNA)[,cytokine_channels])) &gt; 0, TRUE, FALSE)
 
@@ -774,6 +923,43 @@ ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
         legend.background = element_blank())+
   ggtitle(&quot;Proportion of celltype that expresses a given cytokine&quot;)</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-chemokine-celltype-proportion-1">
+Past versions of chemokine-celltype-proportion-1.png
+</button>
+</p>
+<div id="fig-chemokine-celltype-proportion-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(cytokine_prop_g, aes(celltype, proportion_expressing, fill = celltype))+
   geom_bar(stat=&quot;identity&quot;)+
   facet_wrap(~cytokine)+
@@ -785,6 +971,43 @@ ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
         legend.background = element_blank())+
    ggtitle(&quot;Proportion of celltype that expresses a given cytokine&quot;)</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-chemokine-celltype-proportion-2">
+Past versions of chemokine-celltype-proportion-2.png
+</button>
+</p>
+<div id="fig-chemokine-celltype-proportion-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-2.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="plot-chemokine-expression-by-celltype---for-non-tls-images-only" class="section level2">
 <h2>Plot chemokine expression by celltype - for non-TLS images only</h2>
@@ -810,6 +1033,43 @@ ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
         strip.background = element_blank(),
         legend.background = element_blank())</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-nonTLS-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-chemokine-celltype-proportion-nonTLS-1">
+Past versions of chemokine-celltype-proportion-nonTLS-1.png
+</button>
+</p>
+<div id="fig-chemokine-celltype-proportion-nonTLS-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-nonTLS-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(cytokine_prop_g, aes(celltype, proportion_expressing, fill = celltype))+
   geom_bar(stat=&quot;identity&quot;)+
   facet_wrap(~cytokine)+
@@ -820,6 +1080,43 @@ ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
         strip.background = element_blank(),
         legend.background = element_blank())</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-nonTLS-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-chemokine-celltype-proportion-nonTLS-2">
+Past versions of chemokine-celltype-proportion-nonTLS-2.png
+</button>
+</p>
+<div id="fig-chemokine-celltype-proportion-nonTLS-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-nonTLS-2.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="compare-cytokine-expression-in-tigs" class="section level1">
@@ -834,6 +1131,43 @@ ggplot(tab, aes(TIG, proportion))+
   scale_fill_manual(values = c(&quot;#E69F00&quot;, &quot;#56B4E9&quot;))+
   theme(axis.title.x = element_blank())</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-all-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-comparison-all-1">
+Past versions of TIG-comparison-all-1.png
+</button>
+</p>
+<div id="fig-TIG-comparison-all-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-all-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># For each celltype individually
 celltypes &lt;- levels(as.factor(sce_TLSex$celltype))
 tab &lt;- data.frame( TIG2 = double(), TIG3 = double())
@@ -852,24 +1186,46 @@ ggplot(tab, aes(celltype, proportion, fill = TIG))+
         panel.background = element_blank())+
   ylab(&quot;Proportion expressing at least one cytokine&quot;)</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-byCelltype-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-comparison-byCelltype-1">
+Past versions of TIG-comparison-byCelltype-1.png
+</button>
+</p>
+<div id="fig-TIG-comparison-byCelltype-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-byCelltype-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="correlation-of-myeloid-cells-that-express-t-attracting-chemokines-with-t-cells" class="section level2">
 <h2>Correlation of myeloid cells that express T-attracting chemokines with T cells</h2>
 <p>(per ROI, excluding TLS)</p>
-<pre class="r"><code>library(Hmisc)</code></pre>
-<pre><code>Loading required package: lattice</code></pre>
-<pre><code>Loading required package: survival</code></pre>
-<pre><code>Loading required package: Formula</code></pre>
-<pre><code>
-Attaching package: &#39;Hmisc&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
-
-    src, summarize</code></pre>
-<pre><code>The following object is masked from &#39;package:Biobase&#39;:
-
-    contents</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    format.pval, units</code></pre>
 <pre class="r"><code># T-attracting chemokine producer tag for every myeloid cell (logical binary)
 sce_myeloid &lt;- sce_TLSex[,which(sce_TLSex$celltype == &quot;myeloid&quot;)]
 sce_myeloid$Tattr_chemokine &lt;- ifelse(rowSums(data.frame(colData(sce_myeloid)[,c(&quot;CCL2_expression&quot;, &quot;CCL17_expression&quot;, &quot;CCL4_expression&quot;, &quot;CCL5_expression&quot;, &quot;CXCL10_expression&quot;, &quot;CXCL9_expression&quot;)])) &gt; 0, TRUE, FALSE)
@@ -892,7 +1248,7 @@ p_cor &lt;- corrs$P[1, 2:12]
 ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
   geom_point(aes(color=TIG))+
   geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
-  stat_cor(method=&quot;spearman&quot;)+
+  stat_cor(method=&quot;spearman&quot;, label.x.npc = &quot;right&quot;)+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
@@ -901,10 +1257,47 @@ ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
   ylab(&quot;Number of CD8+ T cells&quot;)</code></pre>
 <pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-macrophage-cytokines-CD8-1">
+Past versions of macrophage-cytokines-CD8-1.png
+</button>
+</p>
+<div id="fig-macrophage-cytokines-CD8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-1.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4))+
   geom_point(aes(color=TIG))+
   geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
-  stat_cor(method=&quot;spearman&quot;)+
+  stat_cor(method=&quot;spearman&quot;, label.x.npc = &quot;right&quot;)+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
@@ -913,10 +1306,47 @@ ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
   ylab(&quot;Number of CD4+ T cells&quot;)</code></pre>
 <pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-macrophage-cytokines-CD8-2">
+Past versions of macrophage-cytokines-CD8-2.png
+</button>
+</p>
+<div id="fig-macrophage-cytokines-CD8-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-2.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4+T_CD8))+
   geom_point(aes(color=TIG))+
   geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
-  stat_cor(method=&quot;spearman&quot;)+
+  stat_cor(method=&quot;spearman&quot;, label.x.npc = &quot;right&quot;)+
   theme(panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
@@ -925,6 +1355,43 @@ ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
   ylab(&quot;Number of T cells&quot;)</code></pre>
 <pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-macrophage-cytokines-CD8-3">
+Past versions of macrophage-cytokines-CD8-3.png
+</button>
+</p>
+<div id="fig-macrophage-cytokines-CD8-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/97b74e7f2f1bed50c3b164ee267b7eb241041ce6/docs/figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-3.png" target="_blank">97b74e7</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1002,7 +1469,7 @@ loaded via a namespace (and not attached):
 [61] shape_1.4.4               rlang_0.4.7              
 [63] pkgconfig_2.0.3           bitops_1.0-6             
 [65] evaluate_0.14             purrr_0.3.4              
-[67] htmlwidgets_1.5.1         labeling_0.3             
+[67] labeling_0.3              htmlwidgets_1.5.1        
 [69] tidyselect_1.1.0          plyr_1.8.6               
 [71] magrittr_1.5              R6_2.4.1                 
 [73] generics_0.0.2            mgcv_1.8-31              
