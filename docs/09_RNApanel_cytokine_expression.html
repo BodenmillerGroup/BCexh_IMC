@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="SandraTietscher" />
+
+<meta name="date" content="2020-10-28" />
+
+<title>09_RNApanel_cytokine_expression</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BCexh_IMC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/SandraTietscher/BCexh_IMC">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">09_RNApanel_cytokine_expression</h1>
+<h4 class="author">SandraTietscher</h4>
+<h4 class="date">2020-10-28</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-30
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>BCexh_IMC/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed12345code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(12345)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed12345code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(12345)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree49b1bad749c8eeb6fd002bc801158210636d7122targetblank49b1bada"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/49b1bad749c8eeb6fd002bc801158210636d7122" target="_blank">49b1bad</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree49b1bad749c8eeb6fd002bc801158210636d7122targetblank49b1bada" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/49b1bad749c8eeb6fd002bc801158210636d7122" target="_blank">49b1bad</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    analysis/.Rhistory
+
+Untracked files:
+    Untracked:  code/helper_functions/
+    Untracked:  data/Ki67_IHC.csv
+    Untracked:  data/ProteinPanel_TNK_clusters.csv
+    Untracked:  data/ProteinPanel_stromal_clusters.csv
+    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNApanel_TNK_clusters.csv
+    Untracked:  data/RNApanel_stromal_clusters.csv
+    Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_celltype_prop.csv
+    Untracked:  data/RNAseq_epithelial.rds
+    Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/TLS_scores.csv
+    Untracked:  data/cpout/
+    Untracked:  data/cytof_celltype_prop.csv
+    Untracked:  data/masks/
+    Untracked:  neighbourhood_test.png
+    Untracked:  output/ProteinPanel/
+    Untracked:  output/RNApanel/
+    Untracked:  output/TLS_score_25samples.png
+    Untracked:  output/sce_ProteinPanel_afterQC.rds
+    Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_RNApanel_afterQC.rds
+    Untracked:  output/sce_RNApanel_initial.rds
+    Untracked:  test.png
+
+Unstaged changes:
+    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
+    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/09_RNApanel_cytokine_expression.Rmd</code>) and HTML (<code>docs/09_RNApanel_cytokine_expression.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/49b1bad749c8eeb6fd002bc801158210636d7122/analysis/09_RNApanel_cytokine_expression.Rmd" target="_blank">49b1bad</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+<td>
+Add script to quantify cytokine expression
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This script defines cytokine-expressing cells, making use of the negative control mRNA DapB.</p>
+</div>
+<div id="load-libraries-and-data" class="section level1">
+<h1>Load libraries and data</h1>
+<pre class="r"><code>source(&quot;code/helper_functions/detect_mRNA_expression.R&quot;)
+source(&quot;code/helper_functions/validityChecks.R&quot;)
+library(SingleCellExperiment)
+library(dplyr)
+library(ggplot2)
+library(scater)
+library(reshape2)
+library(data.table)
+library(ComplexHeatmap)
+library(corrplot)
+library(pheatmap)
+library(grid)
+library(gridExtra)
+library(tidyr)
+library(ggpubr)
+library(cowplot)
+
+sce_RNA &lt;- readRDS(&quot;output/RNApanel/sce_RNApanel_celltypes.rds&quot;)</code></pre>
+</div>
+<div id="detect-cytokine-expressing-cells" class="section level1">
+<h1>Detect Cytokine Expressing Cells</h1>
+<pre class="r"><code># get the names of the cytokine channels
+cytokine_channels = c(&quot;CCL4&quot;, &quot;CCL18&quot;, &quot;CSF1&quot;, &quot;CXCL10&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL2&quot;, &quot;CCL22&quot;, &quot;CXCL9&quot;, &quot;CCL17&quot;, &quot;CCL5&quot;)
+
+# run function to define cytokine expressing cells 
+output_list &lt;- compute_difference(sce_RNA, 
+                          cellID = &quot;cellID&quot;, 
+                          assay_name = &quot;exprs&quot;, 
+                          threshold = 0.01, 
+                          mRNA_channels = cytokine_channels, 
+                          negative_control = &quot;DapB&quot;, 
+                          return_calc_metrics = TRUE)
+
+# overwrite SCE object
+sce_RNA &lt;- output_list$output_sce</code></pre>
+<div id="plot-results-from-cytokine-detection" class="section level2">
+<h2>Plot results from cytokine detection</h2>
+<pre class="r"><code># check difference between DapB and signal (histogram)
+p.list &lt;- list()
+
+for(i in cytokine_channels){
+  
+  # subset whole data set for visualization purposes
+  diff_chemo &lt;- output_list[[i]]
+  diff_chemo_sub &lt;- diff_chemo[sample(nrow(diff_chemo), nrow(diff_chemo)*0.1), ]
+  
+  # significant cells defined by subtraction
+  c = ggplot(data=diff_chemo_sub, aes(x=mean_negative_control, y=mean_chemokine)) + 
+    geom_point(alpha=0.2, aes(col = 
+                                ifelse(padj &lt;= 0.01 &amp; scaled_diff &gt; 0 &amp; mean_negative_control &lt; 2.5, &#39;p&lt;0.01&#39;, &#39;n.s.&#39;))) + 
+    scale_color_manual(values = c(&quot;black&quot;, &quot;deepskyblue1&quot;)) +
+    xlim(0,5.5) + ylim(0,5.5) +
+    ylab(paste(&quot;Mean expression of&quot;, i, sep=&quot; &quot;)) +
+    xlab(&quot;Mean DapB mRNAexpression&quot;) +
+    ggtitle(paste(&quot;DapB mRNA vs.&quot;, i, sep = &quot; &quot;)) +
+    theme(legend.title = element_blank())
+  p.list[[i]] &lt;- c
+}
+
+plot_grid(plotlist = p.list, ncol = 2)</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/detection-results-vsDapB-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="basic-stats" class="section level1">
+<h1>Basic Stats</h1>
+<div id="basic-numbers-on-the-chemokine-expressing-cells" class="section level2">
+<h2>Basic numbers on the chemokine expressing cells</h2>
+<pre class="r"><code>cytokines &lt;- data.frame(colData(sce_RNA))
+cytokines &lt;- cytokines[, cytokine_channels]
+
+# calculate the amount of cells that are positive for 1, 2 and multiple combinations. 
+single_combinations = cytokines[rowSums(cytokines) == 1,]
+
+# number of single-cytokine positive cells 
+nrow(single_combinations)</code></pre>
+<pre><code>[1] 23697</code></pre>
+<pre class="r"><code>double_combinations = cytokines[rowSums(cytokines) == 2,]
+# number of double-cytokines positive cells 
+nrow(double_combinations)</code></pre>
+<pre><code>[1] 4594</code></pre>
+<pre class="r"><code>multiple_combinations = cytokines[rowSums(cytokines) &gt;= 3,]
+# number of cells that express 3 or more cytokines
+nrow(multiple_combinations)</code></pre>
+<pre><code>[1] 1293</code></pre>
+<pre class="r"><code># number of double positives per cytokine
+double_counts &lt;- colSums(double_combinations)
+
+# frequency matrix and corrplot for frequency matrix
+double_combinations[double_combinations == 0] &lt;- NA
+count_matrix = psych::pairwiseCount(x=double_combinations)
+
+# normalize the frequency matrix by the amount of double combinations that occur for each cytokine
+frequency_matrix &lt;- count_matrix
+for (i in colnames(count_matrix)){
+  frequency_matrix[,i] &lt;- frequency_matrix[,i]/double_counts[i]
+}</code></pre>
+</div>
+<div id="frequency-double-positive-cells" class="section level2">
+<h2>Frequency double-positive cells</h2>
+<p>The next plot shows the frequencies of all double positive cell occurences. e.g. of all CXCL10 expressing cells that also express another chemokine (More than 50% express CXCL9).</p>
+<pre class="r"><code>corrplot(frequency_matrix, is.corr = FALSE, tl.col = &#39;black&#39;, method = &#39;pie&#39;, type = &#39;full&#39;, 
+         tl.srt = 45, tl.cex = 0.8, tl.offset = 0.5, cl.length = 2, cl.cex = 1, cl.align.text = &quot;l&quot;, cl.ratio = 0.3,
+         diag=TRUE, order = &quot;hclust&quot;)</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/frequency_of_double_positive_chemokines-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="corrplot-of-frequency-matrix" class="section level2">
+<h2>Corrplot of Frequency matrix</h2>
+<p>Now we normalize the numbers of double positives by the numbers of all respective positive chemokines. this shows that usually between 20-40 percent of chemokine expressing cells are double positive expressors.</p>
+<pre class="r"><code>single_counts &lt;- colSums(single_combinations)
+frequency_matrix &lt;- count_matrix
+for (i in colnames(count_matrix)){
+  frequency_matrix[,i] &lt;- frequency_matrix[,i]/single_counts[i]
+}
+
+corrplot(frequency_matrix, is.corr = FALSE, tl.col = &#39;black&#39;, method = &#39;pie&#39;, type = &#39;full&#39;, 
+         tl.srt = 45, tl.cex = 0.8, tl.offset = 0.5, cl.length = 2, cl.cex = 1, cl.align.text = &quot;l&quot;, cl.ratio = 0.3,
+         cl.lim = c(0,1), diag=TRUE, order = &quot;hclust&quot;)</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/freq_corrplot-1.png" width="672" style="display: block; margin: auto;" /> ## Save SCE object</p>
+<pre class="r"><code># general cytokine producer tag for every cell (logical binary)
+sce_RNA$cytokine &lt;- ifelse(rowSums(data.frame(colData(sce_RNA)[,cytokine_channels])) &gt; 0, TRUE, FALSE)
+
+# rename colData entry names
+idx &lt;- match(cytokine_channels, colnames(colData(sce_RNA)))
+for(i in idx){
+  colnames(colData(sce_RNA))[i] &lt;- paste0(colnames(colData(sce_RNA))[i], &quot;_expression&quot;)
+}
+
+saveRDS(object = sce_RNA,file = &quot;output/RNApanel/sce_RNApanel_celltypes_cytokines.rds&quot;)</code></pre>
+</div>
+</div>
+<div id="advanced-stats" class="section level1">
+<h1>Advanced stats</h1>
+<div id="plot-chemokine-expression-by-celltype" class="section level2">
+<h2>Plot chemokine expression by celltype</h2>
+<pre class="r"><code># Plot percentage of each cell type that expresses a certain cytokine
+
+cytokine_prop &lt;- data.frame(&quot;celltype&quot; = levels(as.factor(sce_RNA$celltype)))
+cytokine_colnames &lt;- paste0(cytokine_channels, &quot;_expression&quot;)
+for (i in cytokine_colnames) {
+  cytokine_prop[[i]] &lt;- prop.table(table(sce_RNA$celltype, colData(sce_RNA)[,i]), margin = 1)[,2]
+}
+
+cytokine_prop_g &lt;- gather(cytokine_prop, key = &quot;cytokine&quot;, value = &quot;proportion_expressing&quot;, 2:11)
+
+ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~celltype)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ggtitle(&quot;Proportion of celltype that expresses a given cytokine&quot;)</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(cytokine_prop_g, aes(celltype, proportion_expressing, fill = celltype))+
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~cytokine)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+   ggtitle(&quot;Proportion of celltype that expresses a given cytokine&quot;)</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-2.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-chemokine-expression-by-celltype---for-non-tls-images-only" class="section level2">
+<h2>Plot chemokine expression by celltype - for non-TLS images only</h2>
+<pre class="r"><code>sce_TLSex &lt;- sce_RNA[,which(sce_RNA$TLS == &quot;no&quot;)]
+sce_TLSex$ImageNumber &lt;- droplevels(sce_TLSex$ImageNumber)
+
+# Plot percentage of each cell type that expresses a certain cytokine
+cytokine_prop &lt;- data.frame(&quot;celltype&quot; = levels(as.factor(sce_TLSex$celltype)))
+cytokine_colnames &lt;- paste0(cytokine_channels, &quot;_expression&quot;)
+for (i in cytokine_colnames) {
+  cytokine_prop[[i]] &lt;- prop.table(table(sce_TLSex$celltype, colData(sce_TLSex)[,i]), margin = 1)[,2]
+}
+
+cytokine_prop_g &lt;- gather(cytokine_prop, key = &quot;cytokine&quot;, value = &quot;proportion_expressing&quot;, 2:11)
+
+ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~celltype)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-nonTLS-1.png" width="768" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(cytokine_prop_g, aes(celltype, proportion_expressing, fill = celltype))+
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~cytokine)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/chemokine-celltype-proportion-nonTLS-2.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="compare-cytokine-expression-in-tigs" class="section level1">
+<h1>Compare cytokine expression in TIGs</h1>
+<p>In non-TLS images only.</p>
+<pre class="r"><code># Compare total proportion of expressing cells
+tab &lt;- as.data.frame(prop.table(table(sce_TLSex$cytokine, sce_TLSex$TIG), margin = 2))
+colnames(tab) &lt;- c(&quot;Cytokine_expressing&quot;, &quot;TIG&quot;, &quot;proportion&quot;)
+
+ggplot(tab, aes(TIG, proportion))+
+  geom_col(aes(fill=Cytokine_expressing))+
+  scale_fill_manual(values = c(&quot;#E69F00&quot;, &quot;#56B4E9&quot;))+
+  theme(axis.title.x = element_blank())</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-all-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># For each celltype individually
+celltypes &lt;- levels(as.factor(sce_TLSex$celltype))
+tab &lt;- data.frame( TIG2 = double(), TIG3 = double())
+
+for (i in celltypes) {
+  sce_i &lt;- sce_TLSex[,which(sce_TLSex$celltype == i)]
+  tab[i,] &lt;- prop.table(table(sce_i$cytokine, sce_i$TIG), margin = 2)[2,]
+}
+
+tab$celltype &lt;- row.names(tab)
+tab &lt;- pivot_longer(tab, 1:2, names_to = &quot;TIG&quot;, values_to = &quot;proportion&quot;)
+ggplot(tab, aes(celltype, proportion, fill = TIG))+
+  geom_bar(stat = &quot;identity&quot;, positio = &quot;dodge&quot;)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.25),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab(&quot;Proportion expressing at least one cytokine&quot;)</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-byCelltype-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div id="correlation-of-myeloid-cells-that-express-t-attracting-chemokines-with-t-cells" class="section level2">
+<h2>Correlation of myeloid cells that express T-attracting chemokines with T cells</h2>
+<p>(per ROI, excluding TLS)</p>
+<pre class="r"><code>library(Hmisc)</code></pre>
+<pre><code>Loading required package: lattice</code></pre>
+<pre><code>Loading required package: survival</code></pre>
+<pre><code>Loading required package: Formula</code></pre>
+<pre><code>
+Attaching package: &#39;Hmisc&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
+
+    src, summarize</code></pre>
+<pre><code>The following object is masked from &#39;package:Biobase&#39;:
+
+    contents</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    format.pval, units</code></pre>
+<pre class="r"><code># T-attracting chemokine producer tag for every myeloid cell (logical binary)
+sce_myeloid &lt;- sce_TLSex[,which(sce_TLSex$celltype == &quot;myeloid&quot;)]
+sce_myeloid$Tattr_chemokine &lt;- ifelse(rowSums(data.frame(colData(sce_myeloid)[,c(&quot;CCL2_expression&quot;, &quot;CCL17_expression&quot;, &quot;CCL4_expression&quot;, &quot;CCL5_expression&quot;, &quot;CXCL10_expression&quot;, &quot;CXCL9_expression&quot;)])) &gt; 0, TRUE, FALSE)
+
+Tattr_chemokine_img &lt;- prop.table(table(sce_myeloid$ImageNumber, sce_myeloid$Tattr_chemokine), margin = 1)[,2]
+celltype_img &lt;- as.data.frame(table(sce_TLSex$ImageNumber, sce_TLSex$celltype))
+celltype_img &lt;- pivot_wider(celltype_img, names_from = &quot;Var2&quot;, values_from = &quot;Freq&quot;)
+Tattr_chemokine_comb &lt;- cbind(Tattr_chemokine_img, celltype_img[,-1])
+
+img_TIG &lt;- as.data.frame(table(sce_TLSex$ImageNumber, sce_TLSex$TIG)) %&gt;% filter(Freq &gt; 0)
+rownames(img_TIG) &lt;- img_TIG$Var1
+Tattr_chemokine_comb &lt;- cbind(Tattr_chemokine_comb, img_TIG[,&quot;Var2&quot;][match(rownames(Tattr_chemokine_comb), rownames(img_TIG))])
+colnames(Tattr_chemokine_comb)[13] &lt;- &quot;TIG&quot;
+
+corrs &lt;- rcorr(as.matrix(Tattr_chemokine_comb[,1:12]), type = &quot;spearman&quot;)
+r_cor &lt;- corrs$r[1, 2:12]
+p_cor &lt;- corrs$P[1, 2:12]
+
+# Scatterplot
+ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD8))+
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  xlab(&quot;Proportion of myeloid cells expressing\nat least one T-cell attracting chemokine&quot;)+
+  ylab(&quot;Number of CD8+ T cells&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4))+
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  xlab(&quot;Proportion of myeloid cells expressing\nat least one T-cell attracting chemokine&quot;)+
+  ylab(&quot;Number of CD4+ T cells&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4+T_CD8))+
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  xlab(&quot;Proportion of myeloid cells expressing\nat least one T-cell attracting chemokine&quot;)+
+  ylab(&quot;Number of T cells&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/macrophage-cytokines-CD8-3.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.2 (2020-06-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 20.04 LTS
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-openmp/libopenblasp-r0.3.8.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=C             
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+ [1] grid      parallel  stats4    stats     graphics  grDevices utils    
+ [8] datasets  methods   base     
+
+other attached packages:
+ [1] Hmisc_4.4-1                 Formula_1.2-4              
+ [3] survival_3.2-3              lattice_0.20-41            
+ [5] cowplot_1.0.0               ggpubr_0.4.0               
+ [7] tidyr_1.1.1                 gridExtra_2.3              
+ [9] pheatmap_1.0.12             corrplot_0.84              
+[11] ComplexHeatmap_2.4.3        data.table_1.13.0          
+[13] reshape2_1.4.4              scater_1.16.2              
+[15] ggplot2_3.3.2               dplyr_1.0.1                
+[17] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
+[19] DelayedArray_0.14.1         matrixStats_0.56.0         
+[21] Biobase_2.48.0              GenomicRanges_1.40.0       
+[23] GenomeInfoDb_1.24.2         IRanges_2.22.2             
+[25] S4Vectors_0.26.1            BiocGenerics_0.34.0        
+[27] workflowr_1.6.2            
+
+loaded via a namespace (and not attached):
+ [1] ggbeeswarm_0.6.0          colorspace_1.4-1         
+ [3] ggsignif_0.6.0            rjson_0.2.20             
+ [5] ellipsis_0.3.1            rio_0.5.16               
+ [7] rprojroot_1.3-2           htmlTable_2.1.0          
+ [9] circlize_0.4.10           XVector_0.28.0           
+[11] base64enc_0.1-3           GlobalOptions_0.1.2      
+[13] BiocNeighbors_1.6.0       fs_1.5.0                 
+[15] clue_0.3-57               rstudioapi_0.11          
+[17] farver_2.0.3              splines_4.0.2            
+[19] mnormt_2.0.1              knitr_1.29               
+[21] broom_0.7.0               cluster_2.1.0            
+[23] png_0.1-7                 compiler_4.0.2           
+[25] backports_1.1.8           Matrix_1.2-18            
+[27] later_1.1.0.1             BiocSingular_1.4.0       
+[29] htmltools_0.5.0           tools_4.0.2              
+[31] rsvd_1.0.3                gtable_0.3.0             
+[33] glue_1.4.1                GenomeInfoDbData_1.2.3   
+[35] Rcpp_1.0.5                carData_3.0-4            
+[37] cellranger_1.1.0          vctrs_0.3.2              
+[39] nlme_3.1-148              DelayedMatrixStats_1.10.1
+[41] psych_2.0.9               xfun_0.16                
+[43] stringr_1.4.0             openxlsx_4.1.5           
+[45] lifecycle_0.2.0           irlba_2.3.3              
+[47] rstatix_0.6.0             zlibbioc_1.34.0          
+[49] scales_1.1.1              hms_0.5.3                
+[51] promises_1.1.1            RColorBrewer_1.1-2       
+[53] yaml_2.2.1                curl_4.3                 
+[55] rpart_4.1-15              latticeExtra_0.6-29      
+[57] stringi_1.4.6             checkmate_2.0.0          
+[59] zip_2.0.4                 BiocParallel_1.22.0      
+[61] shape_1.4.4               rlang_0.4.7              
+[63] pkgconfig_2.0.3           bitops_1.0-6             
+[65] evaluate_0.14             purrr_0.3.4              
+[67] htmlwidgets_1.5.1         labeling_0.3             
+[69] tidyselect_1.1.0          plyr_1.8.6               
+[71] magrittr_1.5              R6_2.4.1                 
+[73] generics_0.0.2            mgcv_1.8-31              
+[75] pillar_1.4.6              haven_2.3.1              
+[77] whisker_0.4               foreign_0.8-80           
+[79] withr_2.2.0               nnet_7.3-14              
+[81] abind_1.4-5               RCurl_1.98-1.2           
+[83] tibble_3.0.3              crayon_1.3.4             
+[85] car_3.0-8                 tmvnsim_1.0-2            
+[87] rmarkdown_2.3             jpeg_0.1-8.1             
+[89] viridis_0.5.1             GetoptLong_1.0.2         
+[91] readxl_1.3.1              git2r_0.27.1             
+[93] forcats_0.5.0             digest_0.6.25            
+[95] httpuv_1.5.4              munsell_0.5.0            
+[97] beeswarm_0.2.3            viridisLite_0.3.0        
+[99] vipor_0.4.5              </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
