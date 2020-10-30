@@ -1,0 +1,436 @@
+---
+title: "10_RNApanel_TNK_cytokines"
+author: "SandraTietscher"
+date: "2020-10-30"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+This script defines CXCL13-expressing T cells and CSF1-expressing T/NK cells and looks into them in more detail.
+
+
+# Load libraries and data
+
+```{r load-libraries-and-data, message=FALSE}
+library(SingleCellExperiment)
+library(dplyr)
+library(ggplot2)
+library(scater)
+library(tidyr)
+library(ggpubr)
+library(dittoSeq)
+library(Seurat)
+
+sce_RNA <- readRDS(file = "output/RNApanel/sce_RNApanel_celltypes_cytokines.rds")
+TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
+```
+
+# Assign new subtypes to CXCL13-expressing CD4 and CD8 T cells
+
+```{r}
+sce_RNA$subtype <- sce_RNA$celltype
+sce_RNA$subtype <- ifelse(sce_RNA$celltype == "T_CD4" & sce_RNA$CXCL13_mRNA_expression == 1, "T_CD4_CXCL13", sce_RNA$subtype)
+sce_RNA$subtype <- ifelse(sce_RNA$celltype == "T_CD8" & sce_RNA$CXCL13_mRNA_expression == 1, "T_CD8_CXCL13", sce_RNA$subtype)
+```
+
+## CXCL13+ T cell proportions
+
+### Across TLS states
+
+```{r CXCL13-frequency-TLS}
+sce_CD8 <- sce_RNA[,which(sce_RNA$celltype == "T_CD8")]
+sce_CD4 <- sce_RNA[,which(sce_RNA$celltype == "T_CD4")]
+
+
+# Boxplots (individual ROIs as points)
+tab_CD8 <- as.data.frame(prop.table(table(sce_CD8$ImageNumber, sce_CD8$subtype), margin = 1)) %>% filter(Var2 == "T_CD8_CXCL13")
+frequency <- as.data.frame(table(sce_CD8$ImageNumber, sce_CD8$CXCL13_mRNA_expression)) %>% filter(Var2 == 1)
+tab_CD8$frequency <- frequency[,3]
+
+tab_CD4 <- as.data.frame(prop.table(table(sce_CD4$ImageNumber, sce_CD4$subtype), margin = 1)) %>% filter(Var2 == "T_CD4_CXCL13")
+frequency <- as.data.frame(table(sce_CD4$ImageNumber, sce_CD4$CXCL13_mRNA_expression)) %>% filter(Var2 == 1)
+tab_CD4$frequency <- frequency[,3]
+
+tab_comb <- rbind(tab_CD8, tab_CD4)
+colnames(tab_comb) <- c("ImageNumber", "subtype", "proportion", "frequency")
+
+
+tab <- as.data.frame(table(sce_CD8$ImageNumber, sce_CD8$TLS))
+colnames(tab) <- c("ImageNumber", "TLS", "cellnumber_image")
+tab <- tab %>% filter(cellnumber_image > 0)
+tab$cellnumber_image <- NULL
+tab_comb2 <- merge(tab_comb, tab, by = "ImageNumber")
+
+my_comparisons <- list( c("no", "pre"), c("no", "yes"), c("pre", "yes") )
+
+ggplot(tab_comb2, aes(TLS, frequency))+
+  geom_boxplot()+
+  geom_point()+
+  stat_compare_means(comparisons = my_comparisons, label = "p.format", method = "wilcox")+
+  facet_wrap(~subtype, scales = "fixed")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Frequency per ROI")
+```
+
+```{r CXCL13-proportion-TLS}
+ggplot(tab_comb2, aes(TLS, proportion))+
+  geom_boxplot()+
+  geom_point()+
+  stat_compare_means(comparisons = my_comparisons, label = "p.format", method = "wilcox")+
+  facet_wrap(~subtype, scales = "fixed")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Proportion of all CD8+/CD4+ T cells per ROI")
+```
+
+### Across samples/TIGs (for non-TLS only)
+
+```{r CXCL13-proportion-TIG}
+sce_CD8_TLSex <- sce_CD8[,which(sce_CD8$TLS == "no")]
+sce_CD4_TLSex <- sce_CD4[,which(sce_CD4$TLS == "no")]
+
+
+# Boxplots (individual ROIs as points)
+tab_CD8 <- as.data.frame(prop.table(table(sce_CD8_TLSex$sample, sce_CD8_TLSex$subtype), margin = 1)) %>% filter(Var2 == "T_CD8_CXCL13")
+frequency <- as.data.frame(table(sce_CD8_TLSex$sample, sce_CD8_TLSex$subtype)) %>% filter(Var2 == "T_CD8_CXCL13")
+tab_CD8$frequency <- frequency[,3]
+
+tab_CD4 <- as.data.frame(prop.table(table(sce_CD4_TLSex$sample, sce_CD4_TLSex$subtype), margin = 1)) %>% filter(Var2 == "T_CD4_CXCL13")
+frequency <- as.data.frame(table(sce_CD4_TLSex$sample, sce_CD4_TLSex$subtype)) %>% filter(Var2 == "T_CD4_CXCL13")
+tab_CD4$frequency <- frequency[,3]
+
+tab_comb <- rbind(tab_CD8, tab_CD4)
+colnames(tab_comb) <- c("sample", "subtype", "proportion", "frequency")
+tab_comb$TIG <- ifelse(tab_comb$sample %in% TIG2, "TIG2", "TIG3")
+
+
+ggplot(tab_comb, aes(TIG, proportion))+
+  geom_boxplot()+
+  geom_point()+
+  stat_compare_means(label = "p.format", method = "wilcox", label.x.npc = "middle")+
+  facet_wrap(~subtype, scales = "fixed")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Proportion out of all CD8+/CD4+ T cells")
+```
+
+## Check Ki-67 status
+
+Ki-67 expression cutoff was chosen at 0.3 mean counts per cell.
+
+```{r}
+# For CD8+ CXCL13+ T cells
+Ki67_exprs <- as.data.frame(assay(sce_CD8, "counts")["Ki-67",])
+colnames(Ki67_exprs) <- "Ki67_exprs"
+Ki67_exprs$Ki67_status <- ifelse(Ki67_exprs$Ki67_exprs > 0.3, "positive", "negative")
+tab <- cbind(Ki67_exprs, colData(sce_CD8))
+tab$CXCL13_status <- ifelse(tab$CXCL13_mRNA_expression == 1, "positive", "negative")
+
+# For CD4+ CXCL13+ T cells
+Ki67_exprs_CD4 <- as.data.frame(assay(sce_CD4, "counts")["Ki-67",])
+colnames(Ki67_exprs_CD4) <- "Ki67_exprs"
+Ki67_exprs_CD4$Ki67_status <- ifelse(Ki67_exprs_CD4$Ki67_exprs > 0.3, "positive", "negative")
+tab_CD4 <- cbind(Ki67_exprs_CD4, colData(sce_CD4))
+tab_CD4$CXCL13_status <- ifelse(tab_CD4$CXCL13_mRNA_expression == 1, "positive", "negative")
+
+tab_comb <- rbind(tab, tab_CD4)
+
+ggplot(tab_comb, aes(x = CXCL13_status, fill = Ki67_status))+
+  geom_bar(position="fill")+
+  scale_fill_manual(values = c("black", "deepskyblue1"))+
+  facet_wrap(~celltype)+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        panel.background = element_blank())+
+  ylab("Proportion [%]")
+```
+
+# Assign CSF1+ NKT cell subtype
+
+All CSF1-positive T and NK cells (except CXCL13+) will be classified as NKT cells. This is only an approximation, but as close as we can get to defining this cell type.
+
+```{r CSF1-assign-subtype}
+sce_RNA$subtype <- ifelse(sce_RNA$subtype %in% c("NK", "T_CD8", "T_CD4") & sce_RNA$CSF1_expression == 1, "CSF1_NKT", sce_RNA$subtype)
+```
+
+## Check CSF1_NKT proportions/frequency (out of all cells)
+
+### Across TLS states
+
+```{r CSF1-frequency-TLS, fig.width=3, fig.height=4}
+tab <- as.data.frame(prop.table(table(sce_RNA$ImageNumber, sce_RNA$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
+frequency <- as.data.frame(table(sce_RNA$ImageNumber, sce_RNA$subtype)) %>% filter(Var2 == "CSF1_NKT")
+tab$frequency <- frequency[,3]
+colnames(tab) <- c("ImageNumber", "subtype", "proportion", "frequency")
+
+
+tab2 <- as.data.frame(table(sce_RNA$ImageNumber, sce_RNA$TLS))
+colnames(tab2) <- c("ImageNumber", "TLS", "cellnumber_image")
+tab2 <- tab2 %>% filter(cellnumber_image > 0)
+tab2$cellnumber_image <- NULL
+tab_comb <- merge(tab2, tab, by = "ImageNumber")
+
+my_comparisons <- list( c("no", "pre"), c("no", "yes"), c("pre", "yes") )
+
+ggplot(tab_comb, aes(TLS, frequency))+
+  geom_boxplot()+
+  geom_point()+
+  stat_compare_means(comparisons = my_comparisons, label = "p.format", method = "wilcox")+
+  facet_wrap(~subtype, scales = "fixed")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Frequency per ROI")
+```
+
+```{r CSF1-proportion-TLS, fig.width=3, fig.height=4}
+ggplot(tab_comb, aes(TLS, proportion))+
+  geom_boxplot()+
+  geom_point()+
+  stat_compare_means(comparisons = my_comparisons, label = "p.format", method = "wilcox")+
+  facet_wrap(~subtype, scales = "fixed")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Proportion of all cells per ROI")
+```
+### Across samples/TIGs
+
+For non-TLS images only.
+
+```{r cSF1-proportion-TIG, fig.width=3, fig.height=4}
+sce_TLSex <- sce_RNA[,which(sce_RNA$TLS == "no")]
+
+# Boxplots (individual ROIs as points)
+tab <- as.data.frame(prop.table(table(sce_TLSex$sample, sce_TLSex$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
+frequency <- as.data.frame(table(sce_TLSex$sample, sce_TLSex$subtype)) %>% filter(Var2 == "CSF1_NKT")
+tab$frequency <- frequency[,3]
+
+colnames(tab) <- c("sample", "subtype", "proportion", "frequency")
+tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(tab, aes(TIG, proportion))+
+  geom_boxplot()+
+  geom_point()+
+  stat_compare_means(label = "p.format", method = "wilcox", label.x.npc = "middle")+
+  facet_wrap(~subtype, scales = "fixed")+
+    theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Proportion out of all cells")
+```
+
+# Compare to 10x proportions
+Exclude TLS and pre-TLS
+
+## Compare CSF1_NKT proportions (out of all T/NK cells)
+
+```{r CSF1-proportions-method-comparison}
+# Read in Seurat object and calculate NKT proportions per sample
+Tcells_10x <- readRDS("data/RNAseq_Tcells.rds")
+prop <- as.data.frame(prop.table(table(Tcells_10x$orig.ident, Tcells_10x$metacluster), margin = 1))
+colnames(prop) <- c("sample", "metacluster", "RNAseq_proportion")
+prop <- prop[prop$metacluster == "NKT",]
+
+# Remove samples that were not measured by IMC
+not.measured <- c("TBB011", "TBB330")
+prop <- prop[!(prop$sample %in% not.measured),]
+
+# Retrieve IMC proportions (of all T/NK cells)
+sce_TNK <- sce_RNA[, which(sce_RNA$celltype %in% c("NK", "T_CD4", "T_CD8"))]
+IMC_prop <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
+colnames(IMC_prop) <- c("sample", "subtype", "IMC_proportion")
+
+# Merge
+prop.comb <- merge(IMC_prop, prop, by = "sample")
+prop.comb$TIG <- ifelse(prop.comb$sample %in% TIG2, "TIG2", "TIG3")
+
+# Test correlation
+ggplot(prop.comb, aes(IMC_proportion, RNAseq_proportion)) +
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ggtitle("CSF1_NKT proportion out of all T/NK cells - method comparison")
+
+```
+
+## Compare CD4_CXCL13 proportions (out of all T/NK cells)
+
+```{r, CD4_CXCL13-proportions-method-comparison}
+# Read in Seurat object and calculate NKT proportions per sample
+prop <- as.data.frame(prop.table(table(Tcells_10x$orig.ident, Tcells_10x$metacluster), margin = 1))
+colnames(prop) <- c("sample", "metacluster", "RNAseq_proportion")
+prop <- prop[prop$metacluster == "CD4_exhausted",]
+
+# Remove samples that were not measured by IMC
+not.measured <- c("TBB011", "TBB330")
+prop <- prop[!(prop$sample %in% not.measured),]
+
+# Retrieve IMC proportions (of all T/NK cells)
+sce_TNK <- sce_RNA[, which(sce_RNA$celltype %in% c("NK", "T_CD4", "T_CD8"))]
+IMC_prop <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %>% filter(Var2 == "T_CD4_CXCL13")
+colnames(IMC_prop) <- c("sample", "subtype", "IMC_proportion")
+
+# Merge
+prop.comb <- merge(IMC_prop, prop, by = "sample")
+prop.comb$TIG <- ifelse(prop.comb$sample %in% TIG2, "TIG2", "TIG3")
+
+# Test correlation
+ggplot(prop.comb, aes(IMC_proportion, RNAseq_proportion)) +
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ggtitle("CD4_CXCL13+ proportion out of all T/NK cells - method comparison")
+
+```
+
+## Compare CD8_CXCL13 proportions (out of all T/NK cells)
+
+```{r CD8_CXCL13-proportions-method-comparison}
+# Read in Seurat object and calculate NKT proportions per sample
+prop <- as.data.frame(prop.table(table(Tcells_10x$orig.ident, Tcells_10x$metacluster), margin = 1))
+colnames(prop) <- c("sample", "metacluster", "RNAseq_proportion")
+prop <- prop[prop$metacluster == "CD8_exhausted",]
+
+# Remove samples that were not measured by IMC
+not.measured <- c("TBB011", "TBB330")
+prop <- prop[!(prop$sample %in% not.measured),]
+
+# Retrieve IMC proportions (of all T/NK cells)
+sce_TNK <- sce_RNA[, which(sce_RNA$celltype %in% c("NK", "T_CD4", "T_CD8"))]
+IMC_prop <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %>% filter(Var2 == "T_CD8_CXCL13")
+colnames(IMC_prop) <- c("sample", "subtype", "IMC_proportion")
+
+# Merge
+prop.comb <- merge(IMC_prop, prop, by = "sample")
+prop.comb$TIG <- ifelse(prop.comb$sample %in% TIG2, "TIG2", "TIG3")
+
+# Test correlation
+ggplot(prop.comb, aes(IMC_proportion, RNAseq_proportion)) +
+  geom_point(aes(color=TIG))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ggtitle("CD8_CXCL13+ proportion out of all T/NK cells - method comparison")
+
+```
+
+# Check correlation of CSF1_NKT cells with myeloid activation/differentiation status (across ROIs)
+
+## Use the cytokine-expression status as a proxy for cell activation
+
+```{r myeloid-activation-cytokines-CSF1}
+sce_myeloid <- sce_RNA[,which(sce_RNA$celltype == "myeloid")]
+
+cytokine_myeloid <- prop.table(table(sce_myeloid$ImageNumber, sce_myeloid$cytokine), margin = 1)[,2]
+CSF1_freq <- as.data.frame(table(sce_RNA$ImageNumber, sce_RNA$subtype)) %>% filter(Var2 == "CSF1_NKT")
+colnames(CSF1_freq) <- c("ImageNumber", "subtype", "CSF1_NKT frequency")
+CSF1_freq$myeloid_activation <- cytokine_myeloid
+
+ggplot(CSF1_freq, aes(`CSF1_NKT frequency`, cytokine_myeloid)) +
+  geom_point()+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion of myeloid cells that express at least one cytokine")
+```
+
+## Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation
+
+```{r myeloid-activation-score-CSF1}
+# Re-normalize counts
+norm_counts <- t(apply(assay(sce_myeloid, "counts"), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts <- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_myeloid, "normalized", withDimnames = FALSE) <- norm_counts
+
+# For each cells, average across the normalized counts for CD68, CD163, CD204 and CCL18
+count_matrix <- assay(sce_myeloid, "normalized")[c("CD68", "CD163", "CD204", "CCL18"),]
+sce_myeloid$activation_score <- colMeans(count_matrix)
+
+activation_score_mean <- aggregateAcrossCells(sce_myeloid, sce_myeloid$ImageNumber, coldata_merge = list(activation_score = mean))$activation_score
+CSF1_freq <- as.data.frame(table(sce_RNA$ImageNumber, sce_RNA$subtype)) %>% filter(Var2 == "CSF1_NKT")
+colnames(CSF1_freq) <- c("ImageNumber", "subtype", "CSF1_NKT frequency")
+CSF1_freq$myeloid_activation <- activation_score_mean
+
+ggplot(CSF1_freq, aes(`CSF1_NKT frequency`, myeloid_activation)) +
+  geom_point()+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Mean activation score for myeloid cells")
+```
+
+# Save updated SCE object
+
+```{r}
+saveRDS(sce_RNA, "output/RNApanel/sce_RNApanel_cytokines_subtypes.rds")
+```
+
+
+
+
