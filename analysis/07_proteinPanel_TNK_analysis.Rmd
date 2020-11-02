@@ -522,8 +522,7 @@ dittoPlot(sce_TNK.sub, "Ki-67", group.by = "subtype",
   theme(legend.position = "none")
 ```
 
-
-# Add subtypes to full SCE object
+# Add subtypes to full SCE object and perform
 
 ```{r update-main-SCE}
 sce_protein <- readRDS(file = "output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
@@ -537,7 +536,9 @@ sce_protein[,which(sce_protein$subtype == "T_NK")]$subtype <- "T_AllHigh"
 saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
 ```
 
-# Marker expression heatmap for all cell subtypes
+# Basic subtype-based analysis
+
+## Marker expression heatmap for all cell subtypes
 
 ```{r expression-heatmap-all-subtypes, fig.width=8, fig.height=8}
 sce_protein_woTAllHigh <- sce_protein[,which(sce_protein$subtype != "T_AllHigh")]
@@ -567,7 +568,7 @@ dittoHeatmap(subtypemean, assay = "normalized", scale = "none",
             cluster_cols = TRUE, show_colnames = TRUE)
 ```
 
-# Check cell type preference for TLS
+## Check cell type preference for TLS
 
 ```{r TLS-cellsubtype-preference-timeline}
 # Plot as simple timeline
@@ -632,7 +633,7 @@ ggplot(tab.comb, aes(TLS, cellnumber))+
 
 ```
 
-# TIG comparison of subtype frequency
+## TIG comparison of subtype frequency
 Excluding TLS and pre-TLS.
 
 ```{r subtype-frequency-TIG, fig.width=12, fig.height=10}
@@ -656,6 +657,65 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   ylab("Of total [%]")+
   stat_compare_means(method = "wilcox.test", aes(label=..p.format..))
 ```
+
+## Within sample variation of main celltypes
+
+Excluding TLS and pre-TLS.
+
+```{r subtype-proportions-sample-variation, fig.width=14, fig.height=25}
+#Plot subtype proportions per sample
+tab <- as.data.frame(prop.table(table(sce_protein$ImageNumber, sce_protein$celltype), margin = 1))
+colnames(tab) <- c("ImageNumber", "celltype", "proportion")
+
+tab.comb <- merge(tab, ROI_info, by = "ImageNumber")
+tab.comb<- tab.comb %>% filter(TLS == "no")
+
+## reorder patient levels
+tab.comb$sample <- as.factor(tab.comb$sample)
+old.levels <- levels(tab.comb$sample)
+tab.comb$sample <- factor(tab.comb$sample, levels =  old.levels[c(4:8, 12, 1:3, 9:11)])
+
+p.list <- list()
+for (i in unique(sce_protein$celltype)) {
+  tab.i <- tab.comb %>% filter(celltype == i)
+p.list[[i]]<- ggplot(tab.i, aes(ImageNumber, y = proportion, fill=TIG)) +
+  geom_bar(stat="identity")+
+  facet_wrap(~sample, scales="free_x", ncol = 12)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  ggtitle(i)
+}
+plot_grid(plotlist = p.list, ncol = 1)
+```
+
+For tumor subtypes only.
+
+```{r tumor-proportions-sample-variation, fig.width=14, fig.height=12}
+sce_tumor <- sce_protein[,which(sce_protein$celltype == "tumor")]
+tab <- as.data.frame(prop.table(table(sce_tumor$ImageNumber, sce_tumor$subtype), margin = 1))
+colnames(tab) <- c("ImageNumber", "subtype", "proportion")
+
+tab.comb <- merge(tab, ROI_info, by = "ImageNumber")
+tab.comb<- tab.comb %>% filter(TLS == "no")
+
+## reorder patient levels
+tab.comb$sample <- as.factor(tab.comb$sample)
+old.levels <- levels(tab.comb$sample)
+tab.comb$sample <- factor(tab.comb$sample, levels =  old.levels[c(4:8, 12, 1:3, 9:11)])
+
+p.list <- list()
+for (i in unique(sce_tumor$subtype)) {
+  tab.i <- tab.comb %>% filter(subtype == i)
+p.list[[i]]<- ggplot(tab.i, aes(ImageNumber, y = proportion, fill=TIG)) +
+  geom_bar(stat="identity")+
+  facet_wrap(~sample, scales="free_x", ncol = 12)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  ggtitle(i)
+}
+plot_grid(plotlist = p.list, ncol = 1)
+```
+
 
 
 
