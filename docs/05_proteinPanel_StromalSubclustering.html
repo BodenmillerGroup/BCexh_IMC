@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-29
+<strong>Last updated:</strong> 2020-11-02
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreecc3a5bc10a0537fb4ec7947fb631a17bab86ef08targetblankcc3a5bca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/cc3a5bc10a0537fb4ec7947fb631a17bab86ef08" target="_blank">cc3a5bc</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree05a9ffe6b01a015e7a471281f7d83941005cf015targetblank05a9ffea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreecc3a5bc10a0537fb4ec7947fb631a17bab86ef08targetblankcc3a5bca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/05a9ffe6b01a015e7a471281f7d83941005cf015" target="_blank">05a9ffe</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/cc3a5bc10a0537fb4ec7947fb631a17bab86ef08" target="_blank">cc3a5bc</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,7 +523,7 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
-    Untracked:  analysis/09_RNApanel_cytokine_expression.Rmd
+    Untracked:  analysis/11_RNApanel_neighbourhood.Rmd
     Untracked:  code/helper_functions/
     Untracked:  data/Ki67_IHC.csv
     Untracked:  data/ProteinPanel_TNK_clusters.csv
@@ -532,18 +532,30 @@ Untracked files:
     Untracked:  data/RNApanel_TNK_clusters.csv
     Untracked:  data/RNApanel_stromal_clusters.csv
     Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/ROI_info_HIER_TLSrevised.csv
+    Untracked:  data/ROI_info_RNAscope.csv
+    Untracked:  data/ROI_info_RNAscope_TLSrevised.csv
+    Untracked:  data/TLS_scores.csv
     Untracked:  data/cpout/
     Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
+    Untracked:  output/TLS_score_25samples.png
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_ProteinPanel_initial_TLSrevised.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
+    Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+
+Unstaged changes:
+    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
+    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
 
 </code></pre>
 <p>
@@ -582,6 +594,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/200dd71e282355c3da9148b056593e83fa1ae88e/docs/05_proteinPanel_StromalSubclustering.html" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1421,6 +1450,43 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   ylab(&quot;Of total [%]&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
 <p><img src="figure/05_proteinPanel_StromalSubclustering.Rmd/celltype-proportions-TIG-boxplot-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-celltype-proportions-TIG-boxplot-1">
+Past versions of celltype-proportions-TIG-boxplot-1.png
+</button>
+</p>
+<div id="fig-celltype-proportions-TIG-boxplot-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/200dd71e282355c3da9148b056593e83fa1ae88e/docs/figure/05_proteinPanel_StromalSubclustering.Rmd/celltype-proportions-TIG-boxplot-1.png" target="_blank">200dd71</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-29
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="save-object" class="section level1">
