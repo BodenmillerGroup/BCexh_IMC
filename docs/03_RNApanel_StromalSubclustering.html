@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-23
+<strong>Last updated:</strong> 2020-11-02
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeb75ae4d45ca478955ad85b21ef239a9810cc7ddctargetblankb75ae4da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/b75ae4d45ca478955ad85b21ef239a9810cc7ddc" target="_blank">b75ae4d</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree851b9d55efcfa351152d94557443dc2290fe199dtargetblank851b9d5a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/851b9d55efcfa351152d94557443dc2290fe199d" target="_blank">851b9d5</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeb75ae4d45ca478955ad85b21ef239a9810cc7ddctargetblankb75ae4da" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree851b9d55efcfa351152d94557443dc2290fe199dtargetblank851b9d5a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/b75ae4d45ca478955ad85b21ef239a9810cc7ddc" target="_blank">b75ae4d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/851b9d55efcfa351152d94557443dc2290fe199d" target="_blank">851b9d5</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,17 +523,40 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
-    Untracked:  analysis/05_proteinPanel_StromalSubclustering.Rmd
+    Untracked:  analysis/11_RNApanel_neighbourhood.Rmd
+    Untracked:  code/helper_functions/
+    Untracked:  data/Ki67_IHC.csv
+    Untracked:  data/ProteinPanel_TNK_clusters.csv
+    Untracked:  data/ProteinPanel_stromal_clusters.csv
     Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
     Untracked:  data/RNApanel_TNK_clusters.csv
     Untracked:  data/RNApanel_stromal_clusters.csv
     Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  data/RNAseq_Tcells.rds
+    Untracked:  data/RNAseq_celltype_prop.csv
+    Untracked:  data/RNAseq_epithelial.rds
+    Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/ROI_info_HIER_TLSrevised.csv
+    Untracked:  data/ROI_info_RNAscope.csv
+    Untracked:  data/ROI_info_RNAscope_TLSrevised.csv
+    Untracked:  data/TLS_scores.csv
+    Untracked:  data/cpout/
+    Untracked:  data/cytof_celltype_prop.csv
+    Untracked:  data/masks/
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
+    Untracked:  output/TLS_score_25samples.png
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_ProteinPanel_initial_TLSrevised.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
+    Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+
+Unstaged changes:
+    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
+    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
+    Modified:   analysis/10_RNApanel_TNK_cytokines.Rmd
 
 </code></pre>
 <p>
@@ -572,6 +595,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/851b9d55efcfa351152d94557443dc2290fe199d/analysis/03_RNApanel_StromalSubclustering.Rmd" target="_blank">851b9d5</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+<td>
+Update TLS information
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/03_RNApanel_StromalSubclustering.html" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -621,7 +678,7 @@ sce_stromal &lt;- readRDS(paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_st
 <h1>Stromal cell subclustering</h1>
 <div id="calculate-umap-on-all-stromal-cells" class="section level2">
 <h2>Calculate UMAP on all stromal cells</h2>
-<pre class="r"><code>markers_exclude_umap &lt;- c(&quot;DNA1&quot;, &quot;DNA2&quot;, &quot;HH3&quot;, &quot;CD206&quot;, &quot;PD1&quot;, &quot;Ki-67&quot;, &quot;DapB&quot;, &quot;GLUT1&quot;, &quot;panCK&quot;, &quot;E-Cadherin&quot;, &quot;CCL4&quot;, &quot;CXCL10&quot;, &quot;CXCL9&quot;, &quot;CCL5&quot;, &quot;CCL18&quot;, &quot;CXCL13_protein&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL22&quot;, &quot;CCL17&quot;, &quot;CSF1&quot;, &quot;CCL2&quot;, &quot;CD11b&quot;)
+<pre class="r"><code>markers_exclude_umap &lt;- c(&quot;DNA1&quot;, &quot;DNA2&quot;, &quot;HH3&quot;, &quot;Ki-67&quot;, &quot;DapB&quot;, &quot;GLUT1&quot;, &quot;panCK&quot;, &quot;E-Cadherin&quot;, &quot;CCL4&quot;, &quot;CXCL10&quot;, &quot;CXCL9&quot;, &quot;CCL5&quot;, &quot;CCL18&quot;, &quot;CXCL13_protein&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL22&quot;, &quot;CCL17&quot;, &quot;CSF1&quot;, &quot;CCL2&quot;, &quot;CD11b&quot;)
 markers_include_umap &lt;- rownames(assay(sce_stromal, &quot;counts&quot;))[! (rownames(assay(sce_stromal, &quot;counts&quot;)) %in% markers_exclude_umap)]
 
 sce_stromal &lt;- runUMAP(sce_stromal, exprs_values = &quot;exprs&quot;, 
@@ -631,15 +688,163 @@ sce_stromal &lt;- runUMAP(sce_stromal, exprs_values = &quot;exprs&quot;,
 <pre class="r"><code>dittoDimPlot(sce_stromal, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_stromal)$colour_vectors$sample, opacity = 0.2) </code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-umap-features-1">
+Past versions of stromal-umap-features-1.png
+</button>
+</p>
+<div id="fig-stromal-umap-features-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_stromal, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_stromal)$colour_vectors$sample, split.by = &quot;sample&quot;, opacity = 0.2) </code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-umap-features-2">
+Past versions of stromal-umap-features-2.png
+</button>
+</p>
+<div id="fig-stromal-umap-features-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-2.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_stromal, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_stromal)$colour_vectors$TIG)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-3.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-umap-features-3">
+Past versions of stromal-umap-features-3.png
+</button>
+</p>
+<div id="fig-stromal-umap-features-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-3.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_stromal, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_stromal)$colour_vectors$TLS)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-4.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-umap-features-4">
+Past versions of stromal-umap-features-4.png
+</button>
+</p>
+<div id="fig-stromal-umap-features-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-features-4.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="visualize-marker-expression-on-umap" class="section level3">
 <h3>Visualize marker expression on UMAP</h3>
@@ -651,6 +856,43 @@ for(i in rownames(sce_stromal)){
 }
 plot_grid(plotlist = p.list, ncol = 7)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-markerexpression-1.png" width="3360" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-umap-markerexpression-1">
+Past versions of stromal-umap-markerexpression-1.png
+</button>
+</p>
+<div id="fig-stromal-umap-markerexpression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-umap-markerexpression-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="run-graph-based-clustering-for-stromal-subset-phenograph" class="section level2">
@@ -674,8 +916,82 @@ sce_stromal$stromal_cluster &lt;- as.factor(clust)
 #plot on umap
 dittoDimPlot(sce_stromal, var = &quot;stromal_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, do.label = TRUE, opacity = 0.2)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clustering-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-clustering-umap-1">
+Past versions of stromal-clustering-umap-1.png
+</button>
+</p>
+<div id="fig-stromal-clustering-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clustering-umap-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_stromal, var = &quot;stromal_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, split.by = &quot;stromal_cluster&quot;, opacity = 0.2)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clustering-umap-2.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-clustering-umap-2">
+Past versions of stromal-clustering-umap-2.png
+</button>
+</p>
+<div id="fig-stromal-clustering-umap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clustering-umap-2.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="plot-mean-expression-for-each-cluster" class="section level3">
 <h3>Plot mean expression for each cluster</h3>
 <pre class="r"><code>clustermean &lt;- aggregateAcrossCells(sce_stromal, ids = DataFrame(cluster = sce_stromal$stromal_cluster), average = TRUE)
@@ -699,11 +1015,85 @@ dittoHeatmap(clustermean[include_plot,], assay = &quot;scaled&quot;, scale = &qu
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clusters-expression-heatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-clusters-expression-heatmap-1">
+Past versions of stromal-clusters-expression-heatmap-1.png
+</button>
+</p>
+<div id="fig-stromal-clusters-expression-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clusters-expression-heatmap-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Normalized (0-1)
 dittoHeatmap(clustermean[include_plot,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clusters-expression-heatmap-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-clusters-expression-heatmap-2">
+Past versions of stromal-clusters-expression-heatmap-2.png
+</button>
+</p>
+<div id="fig-stromal-clusters-expression-heatmap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-clusters-expression-heatmap-2.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="assign-cell-type-labels" class="section level3">
 <h3>Assign cell type labels</h3>
@@ -716,6 +1106,43 @@ sce_stromal$celltype &lt;- label_list
 # Plot on UMAP
 dittoDimPlot(sce_stromal, var = &quot;celltype&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, opacity = 0.5)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-labels-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-labels-1">
+Past versions of stromal-labels-1.png
+</button>
+</p>
+<div id="fig-stromal-labels-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-labels-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#Plot subtype proportions per sample
 tab &lt;- as.data.frame(prop.table(table(sce_stromal$sample, sce_stromal$celltype), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;celltype&quot;, &quot;proportion&quot;)
@@ -725,6 +1152,43 @@ ggplot(tab, aes(sample, y = proportion, fill=celltype)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/stromal-proportions-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-stromal-proportions-1">
+Past versions of stromal-proportions-1.png
+</button>
+</p>
+<div id="fig-stromal-proportions-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/stromal-proportions-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -750,7 +1214,7 @@ assay(sce_TNK, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts</
 <h2>Calculate UMAP on T/NK cells</h2>
 <p>Visualize features and marker expression</p>
 <pre class="r"><code>markers_include_TNK &lt;- c(&quot;CD3&quot;, &quot;CD4&quot;, &quot;CD8a&quot;, &quot;CD7&quot;)
-markers_extended &lt;- c(&quot;CD3&quot;, &quot;CD4&quot;, &quot;CD8a&quot;, &quot;CD7&quot;, &quot;PD1&quot;, &quot;Ki-67&quot;, &quot;CSF1&quot;, &quot;CXCL13_mRNA&quot;, &quot;CXCL13_protein&quot;)
+markers_extended &lt;- c(&quot;CD3&quot;, &quot;CD4&quot;, &quot;CD8a&quot;, &quot;CD7&quot;, &quot;Ki-67&quot;, &quot;CSF1&quot;, &quot;CXCL13_mRNA&quot;, &quot;CXCL13_protein&quot;)
 
 sce_TNK &lt;- runUMAP(sce_TNK, exprs_values = &quot;normalized&quot;, 
                      subset_row = rownames(assay(sce_TNK, &quot;normalized&quot;)) %in% markers_include_TNK)
@@ -758,15 +1222,163 @@ sce_TNK &lt;- runUMAP(sce_TNK, exprs_values = &quot;normalized&quot;,
 dittoDimPlot(sce_TNK, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_TNK)$colour_vectors$sample)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-sample-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-sample-1">
+Past versions of TNK-umap-sample-1.png
+</button>
+</p>
+<div id="fig-TNK-umap-sample-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-sample-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;sample&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_TNK)$colour_vectors$sample, split.by = &quot;sample&quot;)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-sample-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-sample-2">
+Past versions of TNK-umap-sample-2.png
+</button>
+</p>
+<div id="fig-TNK-umap-sample-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-sample-2.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TIG&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_TNK)$colour_vectors$TIG)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-features-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-features-1">
+Past versions of TNK-umap-features-1.png
+</button>
+</p>
+<div id="fig-TNK-umap-features-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-features-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TLS&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, 
                                color.panel = metadata(sce_TNK)$colour_vectors$TLS)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-features-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-features-2">
+Past versions of TNK-umap-features-2.png
+</button>
+</p>
+<div id="fig-TNK-umap-features-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-features-2.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Plot expression of included markers
 p.list &lt;- list()
 for(i in markers_extended){
@@ -775,6 +1387,43 @@ for(i in markers_extended){
 }
 plot_grid(plotlist = p.list, ncol = 3)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-markerexpression-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-umap-markerexpression-1">
+Past versions of TNK-umap-markerexpression-1.png
+</button>
+</p>
+<div id="fig-TNK-umap-markerexpression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-umap-markerexpression-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="tnk-subclustering" class="section level2">
 <h2>T/NK Subclustering</h2>
@@ -792,8 +1441,82 @@ sce_TNK$TNK_cluster &lt;- as.factor(clust)
 #plot on umap
 dittoDimPlot(sce_TNK, var = &quot;TNK_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, do.label = TRUE)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-subclusters-1">
+Past versions of TNK-subclusters-1.png
+</button>
+</p>
+<div id="fig-TNK-subclusters-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>dittoDimPlot(sce_TNK, var = &quot;TNK_cluster&quot;, reduction.use = &quot;UMAP&quot;, size = 0.2, split.by = &quot;TNK_cluster&quot;)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-subclusters-2">
+Past versions of TNK-subclusters-2.png
+</button>
+</p>
+<div id="fig-TNK-subclusters-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-2.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="mean-expression-for-each-tnk-subcluster" class="section level3">
 <h3>Mean expression for each T/NK subcluster</h3>
 <pre class="r"><code>clustermean &lt;- aggregateAcrossCells(sce_TNK, ids = DataFrame(cluster = sce_TNK$TNK_cluster), average = TRUE)
@@ -813,11 +1536,85 @@ dittoHeatmap(clustermean[markers_extended,], assay = &quot;scaled&quot;, scale =
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-expression-heatmap-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-subclusters-expression-heatmap-1">
+Past versions of TNK-subclusters-expression-heatmap-1.png
+</button>
+</p>
+<div id="fig-TNK-subclusters-expression-heatmap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-expression-heatmap-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Normalized (0-1)
 dittoHeatmap(clustermean[markers_extended,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-expression-heatmap-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-subclusters-expression-heatmap-2">
+Past versions of TNK-subclusters-expression-heatmap-2.png
+</button>
+</p>
+<div id="fig-TNK-subclusters-expression-heatmap-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subclusters-expression-heatmap-2.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="assign-subtype-labels" class="section level3">
 <h3>Assign subtype labels</h3>
@@ -829,6 +1626,43 @@ sce_TNK$T_subtype &lt;- label_list
 #plot on umap
 dittoDimPlot(sce_TNK, var = &quot;T_subtype&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subtype-umap-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-subtype-umap-1">
+Past versions of TNK-subtype-umap-1.png
+</button>
+</p>
+<div id="fig-TNK-subtype-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subtype-umap-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#Plot subtype proportions per sample
 tab &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$T_subtype), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;T_subtype&quot;, &quot;proportion&quot;)
@@ -838,6 +1672,43 @@ ggplot(tab, aes(sample, y = proportion, fill=T_subtype)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subtype-proportions-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TNK-subtype-proportions-1">
+Past versions of TNK-subtype-proportions-1.png
+</button>
+</p>
+<div id="fig-TNK-subtype-proportions-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/TNK-subtype-proportions-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -884,6 +1755,43 @@ sce_RNA_sub$celltype &lt;- celltype_sub
 #plot on umap
 dittoDimPlot(sce_RNA_sub, var = &quot;celltype&quot;, reduction.use = &quot;UMAP&quot;, size = 0.5, do.label = TRUE)</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/plot-celltype-umap-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-plot-celltype-umap-1">
+Past versions of plot-celltype-umap-1.png
+</button>
+</p>
+<div id="fig-plot-celltype-umap-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/plot-celltype-umap-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="plot-celltype-proportions-per-sample-and-per-image" class="section level2">
 <h2>Plot celltype proportions per sample and per image</h2>
@@ -897,6 +1805,43 @@ ggplot(tab, aes(sample, y = proportion, fill=celltype)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/celltype-proportion-sample-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-celltype-proportion-sample-1">
+Past versions of celltype-proportion-sample-1.png
+</button>
+</p>
+<div id="fig-celltype-proportion-sample-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/celltype-proportion-sample-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Plot cell type frequencies per image
 tab &lt;- as.data.frame(prop.table(table(sce_RNA$ImageNumber, sce_RNA$celltype), margin = 1))
 colnames(tab) &lt;- c(&quot;image&quot;, &quot;celltype&quot;, &quot;proportion&quot;)
@@ -906,6 +1851,43 @@ ggplot(tab, aes(image, y = proportion, fill=celltype)) +
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
 <p><img src="figure/03_RNApanel_StromalSubclustering.Rmd/celltype-proportion-image-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-celltype-proportion-image-1">
+Past versions of celltype-proportion-image-1.png
+</button>
+</p>
+<div id="fig-celltype-proportion-image-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fdb29f270a08ff54307f64c60bd26b97646b9ccd/docs/figure/03_RNApanel_StromalSubclustering.Rmd/celltype-proportion-image-1.png" target="_blank">fdb29f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="save-object" class="section level1">
