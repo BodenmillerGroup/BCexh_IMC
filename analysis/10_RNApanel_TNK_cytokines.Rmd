@@ -141,7 +141,7 @@ ggplot(tab_comb, aes(TIG, proportion))+
 
 Ki-67 expression cutoff was chosen at 0.3 mean counts per cell.
 
-```{r}
+```{r Ki67-status-CXCL13}
 # For CD8+ CXCL13+ T cells
 Ki67_exprs <- as.data.frame(assay(sce_CD8, "counts")["Ki-67",])
 colnames(Ki67_exprs) <- "Ki67_exprs"
