@@ -91,7 +91,7 @@ cell_meta <- data.frame(CellNumber = cells$ObjectNumber,
 Here, we will collect all relevant image-level metadata. These will be added to the cell-level metadata `DataFrame`.
 
 ```{r clean-meta}
-meta <- read.csv("~/home/Segmentation/BCexh_RNAscope/ROI_info_RNAscope.csv")
+meta <- read.csv("~/home/workflowr/BCexh_IMC/data/ROI_info_RNAscope_TLSrevised.csv")
 ```
 
 The `cells$ImageNumber` entry  refers to the individual entries of the `Image` metadata file.
@@ -238,5 +238,5 @@ metadata(sce)$colour_vectors <- colour_vectors
 The `SingleCellexperiment` can now be saved to disc and easily accessed using the `saveRDS` function.
 
 ```{r save-RDS}
-saveRDS(sce, "~/home/workflowr/BCexh_IMC/output/sce_RNApanel_initial.rds")
+saveRDS(sce, "~/home/workflowr/BCexh_IMC/output/sce_RNApanel_initial_TLSrevised.rds")
 ```
