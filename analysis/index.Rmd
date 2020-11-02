@@ -23,6 +23,8 @@ editor_options:
 
 [Cytokine expression](09_RNApanel_cytokine_expression.html) 
 
+[Focus on CXCL13+ T cells and CSF1+ NKT cells](10_RNApanel_TNK_cytokines.html) 
+
 
 
 ## Protein panel: 
