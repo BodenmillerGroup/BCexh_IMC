@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-30
+<strong>Last updated:</strong> 2020-11-02
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreebf85a5cb65466e08ba4acb7b0f0cec2d232e4164targetblankbf85a5ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/bf85a5cb65466e08ba4acb7b0f0cec2d232e4164" target="_blank">bf85a5c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree99f5fe83ae2716d8126f9bcdce60e14f575cb884targetblank99f5fe8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/99f5fe83ae2716d8126f9bcdce60e14f575cb884" target="_blank">99f5fe8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreebf85a5cb65466e08ba4acb7b0f0cec2d232e4164targetblankbf85a5ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree99f5fe83ae2716d8126f9bcdce60e14f575cb884targetblank99f5fe8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/bf85a5cb65466e08ba4acb7b0f0cec2d232e4164" target="_blank">bf85a5c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/99f5fe83ae2716d8126f9bcdce60e14f575cb884" target="_blank">99f5fe8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -536,20 +536,22 @@ Untracked files:
     Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/ROI_info_HIER_TLSrevised.csv
     Untracked:  data/ROI_info_RNAscope.csv
+    Untracked:  data/ROI_info_RNAscope_TLSrevised.csv
     Untracked:  data/TLS_scores.csv
     Untracked:  data/cpout/
     Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
-    Untracked:  neighbourhood_test.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/TLS_score_25samples.png
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_ProteinPanel_initial_TLSrevised.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
-    Untracked:  test.png
+    Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
 
 Unstaged changes:
     Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
@@ -592,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/99f5fe83ae2716d8126f9bcdce60e14f575cb884/analysis/10_RNApanel_TNK_cytokines.Rmd" target="_blank">99f5fe8</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+<td>
+Update TLS information
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/6e7b8f22bdd2fd1d78907b609760c18b906a2767/docs/10_RNApanel_TNK_cytokines.html" target="_blank">6e7b8f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -908,44 +944,7 @@ ggplot(tab_comb, aes(x = CXCL13_status, fill = Ki67_status))+
         panel.border = element_blank(),
         panel.background = element_blank())+
   ylab(&quot;Proportion [%]&quot;)</code></pre>
-<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-Past versions of unnamed-chunk-2-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f7a400af2af5531a033f46c7a347512ee8e0718f/docs/figure/10_RNApanel_TNK_cytokines.Rmd/unnamed-chunk-2-1.png" target="_blank">f7a400a</a>
-</td>
-<td>
-SandraTietscher
-</td>
-<td>
-2020-10-30
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/Ki67-status-CXCL13-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="assign-csf1-nkt-cell-subtype" class="section level1">
@@ -1413,6 +1412,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6e7b8f22bdd2fd1d78907b609760c18b906a2767/docs/figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-cytokines-CSF1-1.png" target="_blank">6e7b8f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f7a400af2af5531a033f46c7a347512ee8e0718f/docs/figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-cytokines-CSF1-1.png" target="_blank">f7a400a</a>
 </td>
 <td>
@@ -1479,6 +1489,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6e7b8f22bdd2fd1d78907b609760c18b906a2767/docs/figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-score-CSF1-1.png" target="_blank">6e7b8f2</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-30
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f7a400af2af5531a033f46c7a347512ee8e0718f/docs/figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-score-CSF1-1.png" target="_blank">f7a400a</a>
