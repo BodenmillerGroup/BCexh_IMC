@@ -488,11 +488,11 @@ heatmap.2(rmat.TIG3,
 
 ```
 
-## Visualize difference between TIG2 and TIG3
+# Visualize difference between TIG2 and TIG3
 
 Positive values indicate that TIG2 has higher enrichment/less avoidance, negative values indicate that TIG3 has higher enrichment/less avoidance.
 
-```{r TIG-comparison}
+```{r TIG-comparison, fig.width=8, fig.height=8}
 rmat.delta <- rmat.TIG2-rmat.TIG3
 
 hr <- hclust(dist(rmat.delta), method="ward.D")
