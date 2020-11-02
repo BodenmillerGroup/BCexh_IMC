@@ -35,8 +35,8 @@ library(tidyverse)
 library(ggpubr)
 
 # Read SingleCellExperiment object
-sce_RNA <- readRDS(paste0(getwd(), "/output/sce_RNApanel_initial.rds"))
-sce_protein <- readRDS(paste0(getwd(), "/output/sce_ProteinPanel_initial.rds"))
+sce_RNA <- readRDS(paste0(getwd(), "/output/sce_RNApanel_initial_TLSrevised.rds"))
+sce_protein <- readRDS(paste0(getwd(), "/output/sce_ProteinPanel_initial_TLSrevised.rds"))
 
 # Give the cells unique names across panels
 colnames(sce_RNA) <- paste0("R_", colnames(sce_RNA))
@@ -263,6 +263,12 @@ ggplot(colData_comb, aes(x = as.factor(panel_type), y = Area, fill = panel_type)
 # sample
 multi_dittoPlot(sce_RNA, vars = rownames(sce_RNA), group.by = "sample", plots = c("ridgeplot"), assay = "exprs", ncol = 22) +
   scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)
+```
+
+# Remove CD206 and PD-1 from RNA panel object (markers did not work properly)
+
+```{r remove-CD206-PD1}
+sce_RNA <- sce_RNA[!(rownames(sce_RNA) %in% c("CD206", "PD1")),]
 ```
 
 
