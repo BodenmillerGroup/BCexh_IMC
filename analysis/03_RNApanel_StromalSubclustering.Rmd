@@ -40,7 +40,7 @@ sce_stromal <- readRDS(paste0(getwd(), "/output/RNApanel/sce_RNApanel_stroma.rds
 ## Calculate UMAP on all stromal cells
 
 ```{r stromal-umap}
-markers_exclude_umap <- c("DNA1", "DNA2", "HH3", "CD206", "PD1", "Ki-67", "DapB", "GLUT1", "panCK", "E-Cadherin", "CCL4", "CXCL10", "CXCL9", "CCL5", "CCL18", "CXCL13_protein", "CXCL13_mRNA", "CCL22", "CCL17", "CSF1", "CCL2", "CD11b")
+markers_exclude_umap <- c("DNA1", "DNA2", "HH3", "Ki-67", "DapB", "GLUT1", "panCK", "E-Cadherin", "CCL4", "CXCL10", "CXCL9", "CCL5", "CCL18", "CXCL13_protein", "CXCL13_mRNA", "CCL22", "CCL17", "CSF1", "CCL2", "CD11b")
 markers_include_umap <- rownames(assay(sce_stromal, "counts"))[! (rownames(assay(sce_stromal, "counts")) %in% markers_exclude_umap)]
 
 sce_stromal <- runUMAP(sce_stromal, exprs_values = "exprs", 
@@ -180,7 +180,7 @@ Visualize features and marker expression
 
 ```{r TNK-umap-sample}
 markers_include_TNK <- c("CD3", "CD4", "CD8a", "CD7")
-markers_extended <- c("CD3", "CD4", "CD8a", "CD7", "PD1", "Ki-67", "CSF1", "CXCL13_mRNA", "CXCL13_protein")
+markers_extended <- c("CD3", "CD4", "CD8a", "CD7", "Ki-67", "CSF1", "CXCL13_mRNA", "CXCL13_protein")
 
 sce_TNK <- runUMAP(sce_TNK, exprs_values = "normalized", 
                      subset_row = rownames(assay(sce_TNK, "normalized")) %in% markers_include_TNK)
