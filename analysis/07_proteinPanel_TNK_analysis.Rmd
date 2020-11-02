@@ -635,7 +635,7 @@ ggplot(tab.comb, aes(TLS, cellnumber))+
 # TIG comparison of subtype frequency
 Excluding TLS and pre-TLS.
 
-```{r subtype-frequency-TIG, fig.width=10, fig.height=8}
+```{r subtype-frequency-TIG, fig.width=12, fig.height=10}
 sce_protein_woTLS <- sce_protein[,which(sce_protein$TLS == "no")]
 tab <- as.data.frame(prop.table(table(sce_protein_woTLS$sample, sce_protein_woTLS$subtype), margin = 1))
 colnames(tab) <- c("sample", "subtype", "proportion")
@@ -645,7 +645,7 @@ tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
 ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   geom_boxplot()+
   geom_point()+
-  facet_wrap(~subtype, scales="free", ncol=6, strip.position="top")+
+  facet_wrap(~subtype, scales="free", ncol=7, strip.position="top")+
   theme(axis.ticks.x = element_blank(),
         axis.text.x=element_text(angle = 90, hjust=1),
         axis.title.x = element_blank(),
