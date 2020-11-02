@@ -36,7 +36,7 @@ panel <- read.csv(file = "~/home/Segmentation/BCexh_HIER/panel_for_R.csv", strin
 ## Align image numbering with the image numbers in the RNA panel
 
 ```{r image-numbering}
-meta <- read.csv("~/home/Segmentation/BCexh_HIER/ROI_info_HIER.csv")
+meta <- read.csv("~/home/workflowr/BCexh_IMC/data/ROI_info_HIER_TLSrevised.csv")
 meta$HIER_ImageNumber <- c(1:77)
 
 # Check if image order is the same in image file and meta file
@@ -202,7 +202,7 @@ rowData(sce) <- panel
 
 At this point, it is critical to assign unique cell IDs to the `SingleCellExperiment` object.
 This will be important when merging `SingleCellExperiment` objects.
-In our case, the SampleId and ROI uniquely define an image for the RNA-panel:
+In our case, the SampleId and ROI uniquely define an image for the Protein-panel:
 
 ```{r set-rownames}
 colnames(sce) <- paste(sce$sample, sce$ROI, sce$CellNumber, sep = "_")
@@ -242,5 +242,5 @@ metadata(sce)$colour_vectors <- colour_vectors
 The `SingleCellexperiment` can now be saved to disc and easily accessed using the `saveRDS` function.
 
 ```{r save-RDS}
-saveRDS(sce,  "~/home/workflowr/BCexh_IMC/output/sce_ProteinPanel_initial.rds")
+saveRDS(sce,  "~/home/workflowr/BCexh_IMC/output/sce_ProteinPanel_initial_TLSrevised.rds")
 ```
