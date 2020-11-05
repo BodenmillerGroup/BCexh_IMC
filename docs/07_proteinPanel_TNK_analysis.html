@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-02
+<strong>Last updated:</strong> 2020-11-05
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree41c22e316b262e5e147dafac96a235b2550030f7targetblank41c22e3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/41c22e316b262e5e147dafac96a235b2550030f7" target="_blank">41c22e3</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree85b24f1cdbb0c0665747ed2b068dbc54e48e6446targetblank85b24f1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/85b24f1cdbb0c0665747ed2b068dbc54e48e6446" target="_blank">85b24f1</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree41c22e316b262e5e147dafac96a235b2550030f7targetblank41c22e3a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree85b24f1cdbb0c0665747ed2b068dbc54e48e6446targetblank85b24f1a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/41c22e316b262e5e147dafac96a235b2550030f7" target="_blank">41c22e3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/85b24f1cdbb0c0665747ed2b068dbc54e48e6446" target="_blank">85b24f1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,7 +523,8 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
-    Untracked:  analysis/11_RNApanel_neighbourhood.Rmd
+    Untracked:  analysis/11_RNAscope_cytokine_communities.Rmd
+    Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
     Untracked:  code/helper_functions/
     Untracked:  data/Ki67_IHC.csv
     Untracked:  data/ProteinPanel_TNK_clusters.csv
@@ -552,9 +553,11 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  test_CD4PD1_cv.png
+    Untracked:  test_CD8PD1_cv.png
 
 Unstaged changes:
-    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
+    Modified:   analysis/10_RNApanel_TNK_cytokines.Rmd
 
 </code></pre>
 <p>
@@ -593,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/85b24f1cdbb0c0665747ed2b068dbc54e48e6446/analysis/07_proteinPanel_TNK_analysis.Rmd" target="_blank">85b24f1</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-05
+</td>
+<td>
+Include CV for within-sample variation
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/a1d147b28f64504995624fedb98a44f8b00d8c4f/docs/07_proteinPanel_TNK_analysis.html" target="_blank">a1d147b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2268,6 +2305,15 @@ SandraTietscher
 </table>
 </div>
 </div>
+<pre class="r"><code># Calculate coefficient of variation
+cv_CD4PD1 &lt;- tab.comb %&gt;% filter(subtype == &quot;CD4_PD1&quot;) %&gt;% group_by(sample) %&gt;% summarize(cv = (sd(CD4_PD1_perc)/mean(CD4_PD1_perc))*100)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code># Mean CV including the samples with no CD4_PD1
+cv_CD4PD1[is.na(cv_CD4PD1)] &lt;- 0 
+meanCV_CD4PD1_incl &lt;- mean(cv_CD4PD1$cv)
+
+# Mean CV excluding the samples with no CD4_PD1
+meanCV_CD4PD1_excl &lt;- mean(cv_CD4PD1[cv_CD4PD1$cv != 0,]$cv)</code></pre>
 <pre class="r"><code>tab &lt;- as.matrix(prop.table(table(sce_TNK_woTLS$ImageNumber, sce_TNK_woTLS$subtype), margin = 1))
 CD8_PD1_perc &lt;- as.data.frame(tab[,&quot;CD8_PD1&quot;]/(tab[,&quot;CD8&quot;]+tab[,&quot;CD8_PD1&quot;]))
 colnames(CD8_PD1_perc) &lt;- &quot;CD8_PD1_perc&quot;
@@ -2344,6 +2390,10 @@ SandraTietscher
 </table>
 </div>
 </div>
+<pre class="r"><code># Calculate coefficient of variation
+cv_CD8PD1 &lt;- tab.comb %&gt;% filter(subtype == &quot;CD8_PD1&quot;) %&gt;% group_by(sample) %&gt;% summarize(cv = (sd(CD8_PD1_perc)/mean(CD8_PD1_perc))*100)</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>meanCV_CD8PD1 &lt;- mean(cv_CD8PD1$cv)</code></pre>
 </div>
 </div>
 <div id="average-marker-expression-tig2-vs-tig3" class="section level1">
@@ -3007,6 +3057,69 @@ p.list[[i]]&lt;- ggplot(tab.i, aes(ImageNumber, y = proportion, fill=TIG)) +
 }
 plot_grid(plotlist = p.list, ncol = 1)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-sample-variation-1.png" width="1344" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-subtype-proportions-sample-variation-1">
+Past versions of subtype-proportions-sample-variation-1.png
+</button>
+</p>
+<div id="fig-subtype-proportions-sample-variation-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/a1d147b28f64504995624fedb98a44f8b00d8c4f/docs/figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-sample-variation-1.png" target="_blank">a1d147b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># Calculate mean CVs
+cvs &lt;- data.frame(mean_cv = numeric())
+for (i in unique(sce_protein$celltype)) {
+cv_i &lt;- tab.comb %&gt;% filter(celltype == i) %&gt;% group_by(sample) %&gt;% summarize(cv = (sd(proportion)/mean(proportion))*100)
+meanCV_i&lt;- mean(cv_i$cv)
+cvs[i,] &lt;- meanCV_i
+}</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code># Sort by mean CV and plot
+cvs$celltype &lt;- as.character(rownames(cvs))
+ggplot(cvs[order(cvs$mean_cv),], aes(reorder(celltype, mean_cv), y = mean_cv)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle(&quot;Mean CV of cell type proportions (across ROIs of the same sample)&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/subtype-proportions-sample-variation-2.png" width="1344" style="display: block; margin: auto;" /></p>
 <p>For tumor subtypes only.</p>
 <pre class="r"><code>sce_tumor &lt;- sce_protein[,which(sce_protein$celltype == &quot;tumor&quot;)]
 tab &lt;- as.data.frame(prop.table(table(sce_tumor$ImageNumber, sce_tumor$subtype), margin = 1))
@@ -3032,6 +3145,62 @@ p.list[[i]]&lt;- ggplot(tab.i, aes(ImageNumber, y = proportion, fill=TIG)) +
 }
 plot_grid(plotlist = p.list, ncol = 1)</code></pre>
 <p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/tumor-proportions-sample-variation-1.png" width="1344" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-tumor-proportions-sample-variation-1">
+Past versions of tumor-proportions-sample-variation-1.png
+</button>
+</p>
+<div id="fig-tumor-proportions-sample-variation-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/a1d147b28f64504995624fedb98a44f8b00d8c4f/docs/figure/07_proteinPanel_TNK_analysis.Rmd/tumor-proportions-sample-variation-1.png" target="_blank">a1d147b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># Calculate mean CVs
+cvs &lt;- data.frame(mean_cv = numeric())
+for (i in unique(sce_tumor$subtype)) {
+cv_i &lt;- tab.comb %&gt;% filter(subtype == i) %&gt;% group_by(sample) %&gt;% summarize(cv = (sd(proportion)/mean(proportion))*100)
+meanCV_i&lt;- mean(cv_i$cv)
+cvs[i,] &lt;- meanCV_i
+}</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)
+`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code># Sort by mean CV and plot
+cvs$subtype &lt;- as.character(rownames(cvs))
+ggplot(cvs[order(cvs$mean_cv),], aes(reorder(subtype, mean_cv), y = mean_cv)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle(&quot;Mean CV of cell type proportions\n(across ROIs of the same sample)&quot;)</code></pre>
+<p><img src="figure/07_proteinPanel_TNK_analysis.Rmd/tumor-proportions-CV-1.png" width="384" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
