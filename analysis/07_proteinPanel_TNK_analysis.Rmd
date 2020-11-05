@@ -412,6 +412,16 @@ ggplot(tab.comb, aes(ImageNumber, y = CD4_PD1_perc/6)) +
         axis.ticks.x = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1))+
   ylab("Proportion CD4_PD1 of all CD4+")+
   ggtitle("CD4_PD1 proportion per ROI")
+
+# Calculate coefficient of variation
+cv_CD4PD1 <- tab.comb %>% filter(subtype == "CD4_PD1") %>% group_by(sample) %>% summarize(cv = (sd(CD4_PD1_perc)/mean(CD4_PD1_perc))*100)
+
+# Mean CV including the samples with no CD4_PD1
+cv_CD4PD1[is.na(cv_CD4PD1)] <- 0 
+meanCV_CD4PD1_incl <- mean(cv_CD4PD1$cv)
+
+# Mean CV excluding the samples with no CD4_PD1
+meanCV_CD4PD1_excl <- mean(cv_CD4PD1[cv_CD4PD1$cv != 0,]$cv)
 ```
 
 ```{r CD8PD1-proportions-sample-variation, fig.width=6, fig.height=4}
@@ -431,6 +441,10 @@ ggplot(tab.comb, aes(ImageNumber, y = CD8_PD1_perc/6)) +
         axis.ticks.x = element_blank(), panel.border = element_rect(colour = "black", fill=NA, size=1))+
   ylab("Proportion CD8_PD1 of all CD8+")+
   ggtitle("CD8_PD1 proportion per ROI")
+
+# Calculate coefficient of variation
+cv_CD8PD1 <- tab.comb %>% filter(subtype == "CD8_PD1") %>% group_by(sample) %>% summarize(cv = (sd(CD8_PD1_perc)/mean(CD8_PD1_perc))*100)
+meanCV_CD8PD1 <- mean(cv_CD8PD1$cv)
 ```
 
 
@@ -686,6 +700,23 @@ p.list[[i]]<- ggplot(tab.i, aes(ImageNumber, y = proportion, fill=TIG)) +
   ggtitle(i)
 }
 plot_grid(plotlist = p.list, ncol = 1)
+
+# Calculate mean CVs
+cvs <- data.frame(mean_cv = numeric())
+for (i in unique(sce_protein$celltype)) {
+cv_i <- tab.comb %>% filter(celltype == i) %>% group_by(sample) %>% summarize(cv = (sd(proportion)/mean(proportion))*100)
+meanCV_i<- mean(cv_i$cv)
+cvs[i,] <- meanCV_i
+}
+
+# Sort by mean CV and plot
+cvs$celltype <- as.character(rownames(cvs))
+ggplot(cvs[order(cvs$mean_cv),], aes(reorder(celltype, mean_cv), y = mean_cv)) +
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle("Mean CV of cell type proportions (across ROIs of the same sample)")
+
 ```
 
 For tumor subtypes only.
@@ -714,6 +745,23 @@ p.list[[i]]<- ggplot(tab.i, aes(ImageNumber, y = proportion, fill=TIG)) +
   ggtitle(i)
 }
 plot_grid(plotlist = p.list, ncol = 1)
+
+# Calculate mean CVs
+cvs <- data.frame(mean_cv = numeric())
+for (i in unique(sce_tumor$subtype)) {
+cv_i <- tab.comb %>% filter(subtype == i) %>% group_by(sample) %>% summarize(cv = (sd(proportion)/mean(proportion))*100)
+meanCV_i<- mean(cv_i$cv)
+cvs[i,] <- meanCV_i
+}
+```
+```{r tumor-proportions-CV, fig.width=4, fig.height=4}
+# Sort by mean CV and plot
+cvs$subtype <- as.character(rownames(cvs))
+ggplot(cvs[order(cvs$mean_cv),], aes(reorder(subtype, mean_cv), y = mean_cv)) +
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle("Mean CV of cell type proportions\n(across ROIs of the same sample)")
 ```
 
 
