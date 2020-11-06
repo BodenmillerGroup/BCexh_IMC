@@ -390,16 +390,16 @@ mcols(all_masks)$ImageNumber <- imagenr$V1
 all_masks <- scaleImages(all_masks, 2^16-1)
 head(unique(as.numeric(all_masks[[1]])))
 
-cur_img <- getImages(all_masks, "20200819_ST_BCexh_H_TBB226_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask")
+cur_img <- getImages(all_masks, "20200924_ST_BCexh_H_TBB129_s0_p3_r6_a6_ac_ilastik_s2_Probabilities_mask")
 
 # Plot cells
 plotCells(cur_img, object = sce_protein,
             img_id = "ImageNumber", cell_id = "CellNumber",
-            colour_by = "subtype")
+            colour_by = "celltype")
 
 plotCells(cur_img, object = sce_protein,
             img_id = "ImageNumber", cell_id = "CellNumber",
-            colour_by = c("Ki-67", "CAIX"), exprs_values = "exprs")
+            colour_by = c("CD11c", "LAMP3", "CD3"), exprs_values = "exprs")
 
 ```
 

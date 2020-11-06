@@ -187,7 +187,7 @@ label_list <- labels$class[match(sce_TNK$TNK_cluster, labels$cluster)]
 sce_TNK$subtype <- label_list
 
 # Plot on UMAP
-dittoDimPlot(sce_TNK, var = "subtype", reduction.use = "UMAP", size = 0.5, opacity = 0.5)
+dittoDimPlot(sce_TNK, var = "subtype", reduction.use = "UMAP", size = 0.5, opacity = 0.5, do.label = TRUE)
 ```
 
 ```{r TNK-proportions, fig.width=6, fig.height=4}
@@ -582,6 +582,16 @@ dittoHeatmap(subtypemean, assay = "normalized", scale = "none",
             cluster_cols = TRUE, show_colnames = TRUE)
 ```
 
+### Violinplots of marker expression
+
+```{r violinplots-marker-celltype}
+dittoPlot(sce_protein, "CD11c", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
+dittoPlot(sce_protein, "IDO1", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
+dittoPlot(sce_protein, "CD274", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
+
+```
+
+
 ## Check cell type preference for TLS
 
 ```{r TLS-cellsubtype-preference-timeline}
@@ -763,6 +773,8 @@ ggplot(cvs[order(cvs$mean_cv),], aes(reorder(subtype, mean_cv), y = mean_cv)) +
         panel.background = element_blank())+
   ggtitle("Mean CV of cell type proportions\n(across ROIs of the same sample)")
 ```
+
+
 
 
 
