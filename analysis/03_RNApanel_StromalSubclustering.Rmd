@@ -138,7 +138,7 @@ label_list <- labels$class[match(sce_stromal$stromal_cluster, labels$cluster)]
 sce_stromal$celltype <- label_list
 
 # Plot on UMAP
-dittoDimPlot(sce_stromal, var = "celltype", reduction.use = "UMAP", size = 0.5, opacity = 0.5)
+dittoDimPlot(sce_stromal, var = "celltype", reduction.use = "UMAP", size = 0.5, opacity = 0.5, do.label = TRUE)
 ```
 
 ```{r stromal-proportions, fig.width=8, fig.height=6}
