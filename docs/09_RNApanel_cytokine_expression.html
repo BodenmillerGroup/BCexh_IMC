@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6aa8baff8fb0c26f7017142748de07a435c62a1atargetblank6aa8bafa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6aa8baff8fb0c26f7017142748de07a435c62a1a" target="_blank">6aa8baf</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree196e575d7a220ca0e098a204f20f236098d138ebtargetblank196e575a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/196e575d7a220ca0e098a204f20f236098d138eb" target="_blank">196e575</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6aa8baff8fb0c26f7017142748de07a435c62a1atargetblank6aa8bafa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree196e575d7a220ca0e098a204f20f236098d138ebtargetblank196e575a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6aa8baff8fb0c26f7017142748de07a435c62a1a" target="_blank">6aa8baf</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/196e575d7a220ca0e098a204f20f236098d138eb" target="_blank">196e575</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -586,6 +586,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/196e575d7a220ca0e098a204f20f236098d138eb/analysis/09_RNApanel_cytokine_expression.Rmd" target="_blank">196e575</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+<td>
+Add boxplots for TIG comparison
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/2bce676c61029ffefcd364267e1518af0433402c/docs/09_RNApanel_cytokine_expression.html" target="_blank">2bce676</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -736,7 +770,8 @@ library(ggpubr)
 library(cowplot)
 library(Hmisc)
 
-sce_RNA &lt;- readRDS(&quot;output/RNApanel/sce_RNApanel_celltypes.rds&quot;)</code></pre>
+sce_RNA &lt;- readRDS(&quot;output/RNApanel/sce_RNApanel_celltypes.rds&quot;)
+TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)</code></pre>
 </div>
 <div id="detect-cytokine-expressing-cells" class="section level1">
 <h1>Detect Cytokine Expressing Cells</h1>
@@ -1277,6 +1312,26 @@ SandraTietscher
 </table>
 </div>
 </div>
+<pre class="r"><code># Per sample
+tab &lt;- as.data.frame(prop.table(table(sce_TLSex$cytokine, sce_TLSex$sample), margin = 2))
+colnames(tab) &lt;- c(&quot;Cytokine_expressing&quot;, &quot;sample&quot;, &quot;proportion&quot;)
+tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+tab&lt;- tab %&gt;% filter(tab$Cytokine_expressing == TRUE)
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;Of total [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5)+
+  ggtitle(&quot;Proportion of cells expressing at least one cytokine&quot;)</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-all-2.png" width="384" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># For each celltype individually
 celltypes &lt;- levels(as.factor(sce_TLSex$celltype))
 tab &lt;- data.frame( TIG2 = double(), TIG3 = double())
@@ -1343,6 +1398,34 @@ SandraTietscher
 </table>
 </div>
 </div>
+<pre class="r"><code># Per sample
+
+tab &lt;- data.frame(sample = names(prop.table(table(sce_RNA$sample))))
+for (i in celltypes) {
+  sce_i &lt;- sce_TLSex[,which(sce_TLSex$celltype == i)]
+  tab[,i] &lt;- prop.table(table(sce_i$cytokine, sce_i$sample), margin = 2)[2,]
+}
+tab &lt;- pivot_longer(tab, 2:12, names_to = &quot;celltype&quot;, values_to = &quot;proportion&quot;)
+tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~celltype, ncol=6)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;Of total [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5)+
+  ggtitle(&quot;Proportion of cells expressing at least one cytokine&quot;)</code></pre>
+<pre><code>Warning: Removed 1 rows containing non-finite values (stat_boxplot).</code></pre>
+<pre><code>Warning: Removed 1 rows containing non-finite values (stat_compare_means).</code></pre>
+<pre><code>Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-byCelltype-sample-1.png" width="864" style="display: block; margin: auto;" /></p>
 <div id="correlation-of-myeloid-cells-that-express-t-attracting-chemokines-with-t-cells" class="section level2">
 <h2>Correlation of myeloid cells that express T-attracting chemokines with T cells</h2>
 <p>(per ROI, excluding TLS)</p>
