@@ -53,14 +53,15 @@ n_perm = 1000
 # Number of cores used for multicore:
 ncores=10
 
+# ROI info
+ROI_info <- read.csv("data/ROI_info_HIER_TLSrevised.csv")
+ROI_info$ImageNumber <- c(1:77)
+
 #TLS image numbers
-TLS_nr <- c(4,7,8,14,16,18,37,42,43,71,17,21,54,60,68)
-nonTLS_nr <- c(1:77)
-nonTLS_nr <- setdiff(nonTLS_nr, TLS_nr)
+nonTLS_nr <- filter(ROI_info, TLS == "no")$ImageNumber
+TLS_nr <- filter(ROI_info, TLS %in% c("pre", "yes"))$ImageNumber
 
 #TIG image numbers
-ROI_info <- read.csv("data/ROI_info_HIER.csv")
-ROI_info$ImageNumber <- c(1:77)
 TIG2 <- ROI_info %>% filter(TIG == "TIG2" & TLS == "no")
 TIG2 <- TIG2$ImageNumber
 TIG3 <- ROI_info %>% filter(TIG == "TIG3" & TLS == "no")
