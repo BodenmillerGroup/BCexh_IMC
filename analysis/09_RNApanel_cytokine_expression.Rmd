@@ -37,6 +37,7 @@ library(cowplot)
 library(Hmisc)
 
 sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_celltypes.rds")
+TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
 ```
 
 # Detect Cytokine Expressing Cells
@@ -250,6 +251,27 @@ ggplot(tab, aes(TIG, proportion))+
   geom_col(aes(fill=Cytokine_expressing))+
   scale_fill_manual(values = c("#E69F00", "#56B4E9"))+
   theme(axis.title.x = element_blank())
+
+
+# Per sample
+tab <- as.data.frame(prop.table(table(sce_TLSex$cytokine, sce_TLSex$sample), margin = 2))
+colnames(tab) <- c("Cytokine_expressing", "sample", "proportion")
+tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
+tab<- tab %>% filter(tab$Cytokine_expressing == TRUE)
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Of total [%]")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = 0.5)+
+  ggtitle("Proportion of cells expressing at least one cytokine")
 ```
 
 ```{r TIG-comparison-byCelltype, fig.width=6, fig.height=5}
@@ -271,6 +293,33 @@ ggplot(tab, aes(celltype, proportion, fill = TIG))+
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         panel.background = element_blank())+
   ylab("Proportion expressing at least one cytokine")
+```
+
+```{r TIG-comparison-byCelltype-sample, fig.width=9, fig.height=7}
+# Per sample
+
+tab <- data.frame(sample = names(prop.table(table(sce_RNA$sample))))
+for (i in celltypes) {
+  sce_i <- sce_TLSex[,which(sce_TLSex$celltype == i)]
+  tab[,i] <- prop.table(table(sce_i$cytokine, sce_i$sample), margin = 2)[2,]
+}
+tab <- pivot_longer(tab, 2:12, names_to = "celltype", values_to = "proportion")
+tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  facet_wrap(~celltype, ncol=6)+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Of total [%]")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = 0.5)+
+  ggtitle("Proportion of cells expressing at least one cytokine")
 ```
 
 ## Correlation of myeloid cells that express T-attracting chemokines with T cells 
