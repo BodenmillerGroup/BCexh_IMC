@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-10
+<strong>Last updated:</strong> 2020-11-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree5878682c37da41067b3d83be07ccc3173cbc5009targetblank5878682a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/5878682c37da41067b3d83be07ccc3173cbc5009" target="_blank">5878682</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeb160181b620b47658d7bc6f432f69db5ef92e2a2targetblankb160181a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/b160181b620b47658d7bc6f432f69db5ef92e2a2" target="_blank">b160181</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree5878682c37da41067b3d83be07ccc3173cbc5009targetblank5878682a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeb160181b620b47658d7bc6f432f69db5ef92e2a2targetblankb160181a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/5878682c37da41067b3d83be07ccc3173cbc5009" target="_blank">5878682</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/b160181b620b47658d7bc6f432f69db5ef92e2a2" target="_blank">b160181</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,12 +521,16 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  CD11c_CD68_scatter.png
-    Untracked:  analysis/11_RNAscope_cytokine_communities.Rmd
+    Untracked:  Neighbourhood_TLS_relative.pdf
+    Untracked:  Neighbourhood_TLS_relative.png
+    Untracked:  Neighbourhood_all_relative.pdf
+    Untracked:  Neighbourhood_all_relative.png
+    Untracked:  analysis/12_RNApanel_CXCL13_protein.Rmd
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
@@ -544,10 +548,7 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
-
-Unstaged changes:
-    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
-    Modified:   analysis/index.Rmd
+    Untracked:  test_Treg_enrichment.png
 
 </code></pre>
 <p>
@@ -586,6 +587,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/b160181b620b47658d7bc6f432f69db5ef92e2a2/analysis/08_proteinPanel_neighbourhood.Rmd" target="_blank">b160181</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-11
+</td>
+<td>
+Minor changes
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/08_proteinPanel_neighbourhood.html" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -843,7 +878,7 @@ row.names(pmat) &lt;- rname
 pmat &lt;- pmat[rownames(pmat) != &quot;T_AllHigh&quot;, colnames(pmat) != &quot;T_AllHigh&quot;]
 
 # Plot the heatmap
-hr &lt;- hclust(dist(pmat), method=&quot;ward.D&quot;)
+hr &lt;- hclust(dist(pmat), method=&quot;complete&quot;)
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
           Rowv = as.dendrogram(hr),
@@ -874,6 +909,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-all-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-all-1.png" target="_blank">3f34fc2</a>
@@ -974,6 +1020,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-all-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-all-1.png" target="_blank">3f34fc2</a>
@@ -1100,6 +1157,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-TLS-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-TLS-1.png" target="_blank">3f34fc2</a>
 </td>
 <td>
@@ -1167,7 +1235,7 @@ nmat &lt;- nmat[rownames(nmat) != &quot;T_AllHigh&quot;, colnames(nmat) != &quot
 # Divide number of significant images by total number of images whith cell types present
 rmat &lt;- pmat/nmat
 
-hr &lt;- hclust(dist(rmat), method=&quot;ward.D&quot;)
+hr &lt;- hclust(dist(rmat), method = &quot;complete&quot;)
 heatmap.2(rmat,
           Colv = as.dendrogram(hr),
           Rowv = as.dendrogram(hr),
@@ -1198,6 +1266,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TLS-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TLS-1.png" target="_blank">3f34fc2</a>
@@ -1322,6 +1401,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-nonTLS-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-classic-nonTLS-1.png" target="_blank">3f34fc2</a>
 </td>
 <td>
@@ -1420,6 +1510,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-nonTLS-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-nonTLS-1.png" target="_blank">3f34fc2</a>
@@ -1562,6 +1663,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TIG2-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TIG2-1.png" target="_blank">3f34fc2</a>
 </td>
 <td>
@@ -1680,6 +1792,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TIG3-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/pairwise-relative-TIG3-1.png" target="_blank">3f34fc2</a>
 </td>
 <td>
@@ -1742,6 +1865,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6aa8baff8fb0c26f7017142748de07a435c62a1a/docs/figure/08_proteinPanel_neighbourhood.Rmd/TIG-comparison-1.png" target="_blank">6aa8baf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3f34fc2bc1abc6add1f9cd66e922ceaf36136bbb/docs/figure/08_proteinPanel_neighbourhood.Rmd/TIG-comparison-1.png" target="_blank">3f34fc2</a>
