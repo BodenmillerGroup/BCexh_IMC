@@ -333,7 +333,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-02
+<strong>Last updated:</strong> 2020-11-11
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -364,16 +364,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree957c57b10ebb3fee874297170a58f3c19646d013targetblank957c57ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/957c57b10ebb3fee874297170a58f3c19646d013" target="_blank">957c57b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreee814a995fbe8686cc73db289d3406990b37330aftargetblanke814a99a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/e814a995fbe8686cc73db289d3406990b37330af" target="_blank">e814a99</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree957c57b10ebb3fee874297170a58f3c19646d013targetblank957c57ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreee814a995fbe8686cc73db289d3406990b37330aftargetblanke814a99a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/957c57b10ebb3fee874297170a58f3c19646d013" target="_blank">957c57b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/e814a995fbe8686cc73db289d3406990b37330af" target="_blank">e814a99</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -381,39 +381,33 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
 
 Untracked files:
-    Untracked:  analysis/11_RNApanel_neighbourhood.Rmd
-    Untracked:  code/helper_functions/
-    Untracked:  data/Ki67_IHC.csv
-    Untracked:  data/ProteinPanel_TNK_clusters.csv
-    Untracked:  data/ProteinPanel_stromal_clusters.csv
-    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
-    Untracked:  data/RNApanel_TNK_clusters.csv
-    Untracked:  data/RNApanel_stromal_clusters.csv
-    Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  CD11c_CD68_scatter.png
+    Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
     Untracked:  data/RNAseq_Tcells.rds
-    Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
     Untracked:  data/ROI_info_RNAscope.csv
-    Untracked:  data/TLS_scores.csv
     Untracked:  data/cpout/
-    Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
-    Untracked:  neighbourhood_test.png
+    Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/TLS_score_25samples.png
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_ProteinPanel_initial_TLSrevised.rds
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
-    Untracked:  test.png
+    Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  test_Treg_enrichment.png
 
 Unstaged changes:
+    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
     Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
-    Modified:   analysis/10_RNApanel_TNK_cytokines.Rmd
 
 </code></pre>
 <p>
@@ -452,6 +446,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/e814a995fbe8686cc73db289d3406990b37330af/analysis/index.Rmd" target="_blank">e814a99</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-11
+</td>
+<td>
+Add script for cytokine cluster/community analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/1f0396637331972f83ff51b204c369c0f774ae08/docs/index.html" target="_blank">1f03966</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -757,6 +785,7 @@ Start workflowr project.
 <p><a href="03_RNApanel_StromalSubclustering.html">Stromal subclustering &amp; full celltype annotation</a></p>
 <p><a href="09_RNApanel_cytokine_expression.html">Cytokine expression</a></p>
 <p><a href="10_RNApanel_TNK_cytokines.html">Focus on CXCL13+ T cells and CSF1+ NKT cells</a></p>
+<p><a href="11_RNApanel_cytokine_communities.html">Cytokine clusters &amp; communities</a></p>
 </div>
 <div id="protein-panel" class="section level2">
 <h2>Protein panel:</h2>
