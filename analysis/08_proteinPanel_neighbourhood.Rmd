@@ -117,7 +117,7 @@ row.names(pmat) <- rname
 pmat <- pmat[rownames(pmat) != "T_AllHigh", colnames(pmat) != "T_AllHigh"]
 
 # Plot the heatmap
-hr <- hclust(dist(pmat), method="ward.D")
+hr <- hclust(dist(pmat), method="complete")
 heatmap.2(pmat,
           Colv = as.dendrogram(hr),
           Rowv = as.dendrogram(hr),
@@ -238,7 +238,7 @@ nmat <- nmat[rownames(nmat) != "T_AllHigh", colnames(nmat) != "T_AllHigh"]
 # Divide number of significant images by total number of images whith cell types present
 rmat <- pmat/nmat
 
-hr <- hclust(dist(rmat), method="ward.D")
+hr <- hclust(dist(rmat), method = "complete")
 heatmap.2(rmat,
           Colv = as.dendrogram(hr),
           Rowv = as.dendrogram(hr),

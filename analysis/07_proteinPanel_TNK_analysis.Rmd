@@ -536,7 +536,7 @@ dittoPlot(sce_TNK.sub, "Ki-67", group.by = "subtype",
   theme(legend.position = "none")
 ```
 
-# Add subtypes to full SCE object and perform
+# Add subtypes to full SCE object and save
 
 ```{r update-main-SCE}
 sce_protein <- readRDS(file = "output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
@@ -549,6 +549,29 @@ sce_protein[,which(sce_protein$subtype == "T_NK")]$subtype <- "T_AllHigh"
 
 saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
 ```
+
+# Myeloid subsetting
+
+Split myeloid cells up into CD11c-high and CD68-high subsets, based on the ratio between the two.
+
+```{r}
+# sce_myeloid <- sce_protein[, which(sce_protein$celltype == "myeloid")]
+# 
+# CD11c_counts <- subset(assay(sce_myeloid, "counts"), rownames(sce_myeloid) == "CD11c")
+# CD68_counts <- subset(assay(sce_myeloid, "counts"), rownames(sce_myeloid) == "CD68")
+# sce_myeloid$marker_ratio <- as.vector(CD68_counts/CD11c_counts)
+# sce_myeloid$subtype <- ifelse(sce_myeloid$marker_ratio >= 1, "myeloid_CD68-high", "myeloid_CD11c-high")
+# 
+# dittoScatterPlot(sce_myeloid, "CD11c", "CD68", opacity = 0.2, color.var = "subtype")
+# 
+# #Add subtype information to full object
+# myeloid_ids <- colnames(sce_myeloid)
+# sce_protein[,myeloid_ids]$subtype <- sce_myeloid$subtype
+# 
+# saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
+
+```
+
 
 # Basic subtype-based analysis
 
@@ -585,7 +608,7 @@ dittoHeatmap(subtypemean, assay = "normalized", scale = "none",
 ### Violinplots of marker expression
 
 ```{r violinplots-marker-celltype}
-dittoPlot(sce_protein, "CD11c", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
+dittoPlot(sce_protein, "CD11c", group.by = "subtype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
 dittoPlot(sce_protein, "IDO1", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
 dittoPlot(sce_protein, "CD274", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
 
