@@ -279,67 +279,83 @@ ggplot(celltype_comb, aes(type, celltype_proportion, fill = celltype))+
   ggtitle("Celltype proportions in cytokine clusters vs communities")
 ```
 
-# CCL18 - Treg association
+## CSF1 environments - myeloid cell activation
 
-```{r CCL18-Treg-correlation}
-# Simple frequencies
-sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
-sce_stromal <- sce_protein[, which(sce_protein$cell_class == "stroma")]
-prop_Treg <- prop.table(table(sce_stromal$ImageNumber, sce_stromal$subtype), margin = 1)[,"Treg"]
-CCL18_clust_cellnr <- rowSums(table(sce$ImageNumber, sce$ccl18only_clust)[, -1])
+Check whether myeloid cells in CSF1 environments show a higher degree of activation than in other environments/outside these environments.
 
-Treg_CCL18 <- as.data.frame(cbind(prop_Treg, CCL18_clust_cellnr))
+### Use cytokine expression as a proxy for myeloid cell activation
+```{r CSF1-myeloid-cytokine, fig.width=4, fig.height=3}
+sce_myeloid <- sce[,which(sce$celltype == "myeloid")]
+perc_total <- data.frame(total = prop.table(table(sce_myeloid$cytokine))[2])
+coldata_myeloid <- data.frame(colData(sce_myeloid))
 
-ggplot(Treg_CCL18, aes(prop_Treg, CCL18_clust_cellnr)) +
-  geom_point()+
-  geom_smooth(method = lm, color = "black", se=FALSE)+
-  stat_cor(method="spearman")+
-  theme(axis.line.x = element_line(colour = "black", size = 0.25),
-        axis.line.y = element_line(colour = "black", size = 0.25),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.background = element_blank())
+# only select cells that are in the community, but NOT in the corresponding cluster
+for (i in cytokine_channels) {
+  cur_sce_i <- coldata_myeloid[which(coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_comm"), ignore_case = TRUE))] != 0 & coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_clust"), ignore_case = TRUE))] == 0),]
+  perc_i <- prop.table(table(cur_sce_i$cytokine))[2]
+  perc_total[,i] <- perc_i
+}
 
-# See if the same holds true for general cytokine expression
-cytokine_cellnr <- table(sce$ImageNumber, sce$cytokine)[,2]
-cytokine_clust_cellnr <- rowSums(table(sce$ImageNumber, sce$cytokine_cluster)[, -1])
-Treg_cytokine <- as.data.frame(cbind(prop_Treg, cytokine_clust_cellnr))
+perc_total <- pivot_longer(perc_total, 1:11, names_to = "environment", values_to = "percent_cytokine_expressing")
 
-ggplot(Treg_cytokine, aes(prop_Treg, cytokine_clust_cellnr)) +
-  geom_point()+
-  geom_smooth(method = lm, color = "black", se=FALSE)+
-  stat_cor(method="spearman")+
-  theme(axis.line.x = element_line(colour = "black", size = 0.25),
-        axis.line.y = element_line(colour = "black", size = 0.25),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.background = element_blank())
+ggplot(perc_total, aes(environment, percent_cytokine_expressing, fill = environment))+
+  geom_bar(stat="identity")+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ggtitle("Cytokine-expressing myeloid percentage in the respective communities")
+
 ```
+
+### Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation
+
+```{r CSF1-myeloid-activation-score}
+# Re-normalize counts
+norm_counts <- t(apply(assay(sce_myeloid, "counts"), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts <- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_myeloid, "normalized", withDimnames = FALSE) <- norm_counts
+
+# For each cells, average across the normalized counts for CD68, CD163, CD204 and CCL18
+count_matrix <- assay(sce_myeloid, "normalized")[c("CD68", "CD163", "CD204", "CCL18"),]
+sce_myeloid$activation_score <- colMeans(count_matrix)
+
+activation_mean <- data.frame(total = mean(sce_myeloid$activation_score))
+coldata_myeloid <- data.frame(colData(sce_myeloid))
+
+# only select cells that are in the community, but NOT in the corresponding cluster
+for (i in cytokine_channels) {
+  cur_sce_i <- coldata_myeloid[which(coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_comm"), ignore_case = TRUE))] != 0 & coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_clust"), ignore_case = TRUE))] == 0),]
+  activation_mean[,i] <- mean(cur_sce_i$activation_score)
+}
+
+activation_mean <- pivot_longer(activation_mean, 1:11, names_to = "environment", values_to = "mean_activation_score")
+
+ggplot(activation_mean, aes(environment, mean_activation_score, fill = environment))+
+  geom_bar(stat="identity")+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())
+```
+
 
 # Cytokine environments -> apply to matched ROIs
 
 Define "cytokine environments" by extending the respective cytokine communities by 10um (concave hull), thus allowing for slight mismatches between the different ROIs.   
 Extract coordinates for these environments and lay them over the matched ROIs from the protein panel.   
-Check enrichment of celltypes and subtypes in the overlaid environments for different cytokines.
+Output: New protein panel SCE with added ColData about which cells belong to which cytokine environments.
 
 The goal is to investigate association of cytokine expression with celltypes that can only be defined in the Protein Panel (e.g. regulatory T cells).
   
 ```{r cytokine-environment-proteinpanel}
 # read in SCE from protein panel
 sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
-sce_TNK <- sce_protein[,which(sce_protein$celltype == "T_NK")]
 
 # ColData column names for cytokine communities
 comm_colnames <- c(colnames(colData(sce))[grep("only_comm", colnames(colData(sce)))],"cytokine_community")
-
-# Create empty cell type enrichment tables
-enrichment <- data.frame(matrix(ncol=length(levels(as.factor(sce_protein$subtype))), nrow = 0))
-colnames(enrichment) = levels(as.factor(sce_protein$subtype))
-
-enrichment_TNK <- data.frame(matrix(ncol=length(levels(as.factor(sce_TNK$subtype))), nrow = 0))
-colnames(enrichment_TNK) = levels(as.factor(sce_TNK$subtype))
 
 # Set distance parameter
 distance = 10
@@ -361,110 +377,194 @@ input_df_protein <- data.frame(cellID = sce_protein$cellID,
 k_env_cells <- data.frame(matrix(ncol=ncol(input_df_protein), nrow = 0))
 colnames(k_env_cells) = colnames(input_df_protein)
 
-for (j in unique(input_df_RNA$ImageNumber)) {
-  
-  # create multipoint object with all cells from one image (for RNA panel)
-    cell_coord = as.matrix(input_df_RNA[input_df_RNA$ImageNumber == j,2:3])
-    rownames(cell_coord) = input_df_RNA[input_df_RNA$ImageNumber == j,1]
-    cells = sf::st_multipoint(cell_coord)
-    cells_sfc = sf::st_cast(sf::st_sfc(cells), "POINT")
+  for (j in unique(input_df_RNA$ImageNumber)) {
     
-  # create multipoint object with all cells from one image (for Protein panel)
-    cell_coord_protein = as.matrix(input_df_protein[input_df_protein$ImageNumber == j,2:3])
-    rownames(cell_coord_protein) = input_df_protein[input_df_protein$ImageNumber == j,1]
-    cells_protein = sf::st_multipoint(cell_coord_protein)
-    cells_sfc_protein = sf::st_cast(sf::st_sfc(cells_protein), "POINT")
-    
-  # create data.frame for all environment cells for the respective image
-    environment_cells = data.frame(matrix(ncol=ncol(input_df_protein), nrow = 0))
-    colnames(environment_cells) = colnames(input_df_protein)
-
-  # create list for plots/polygon objects
-    polygon_plots = ggplot()
-    
-  # loop through all clusters of k in image j and extract coordinates of enlarged polygon
-    for(i in unique(input_df_RNA[input_df_RNA$ImageNumber == j & input_df_RNA$cluster != 0,]$cluster)){
+    # create multipoint object with all cells from one image (for RNA panel)
+      cell_coord = as.matrix(input_df_RNA[input_df_RNA$ImageNumber == j,2:3])
+      rownames(cell_coord) = input_df_RNA[input_df_RNA$ImageNumber == j,1]
+      cells = sf::st_multipoint(cell_coord)
+      cells_sfc = sf::st_cast(sf::st_sfc(cells), "POINT")
       
-      cur_df <- input_df_RNA[input_df_RNA$cluster == i & input_df_RNA$cluster != 0,]
-
-      ## Compute concave hull for each cluster
-      if (nrow(cur_df) > 2){
-          coords <- as.matrix(cbind(cur_df$X, cur_df$Y))
-          hull = data.table::as.data.table(concaveman::concaveman(coords, concavity = 1))
-          colnames(hull) <- c("X", "Y")
-
-          # return common rows between input and the hull
-          # first, we need to round the digits of cur_df since concaveman does not return full-length coordinates
-          # (see github issue https://github.com/joelgombin/concaveman/issues/13)
-          # is obsolete once the bug is fixed
-          cur_df_2 <- data.table::copy(cur_df)
-          cur_df_2$X <- round(cur_df_2$X, digits = 4)
-          cur_df_2$Y <- round(cur_df_2$Y, digits = 4)
-
-          # create polygon object
-          polygon = sf::st_polygon(list(as.matrix(hull)))
-        }
-
-      # buffer/enlarge polygon by "distance" pixels
-      polygon_buff = sf::st_buffer(polygon, distance)
-      polygon_buff_sfc = sf::st_sfc(polygon_buff)
-
-      polygon_plots <- polygon_plots +
-        geom_sf(data = polygon, fill = NA, size = 4, col = "deepskyblue2") +
-        geom_sf(data = polygon_buff_sfc, fill = NA, size=4, col = "blue")
-
-      # return coordinates of the enlarged polygon
-      enlarged_coordinates = as.data.frame(polygon_buff[1])
+    # create multipoint object with all cells from one image (for Protein panel)
+      cell_coord_protein = as.matrix(input_df_protein[input_df_protein$ImageNumber == j,2:3])
+      rownames(cell_coord_protein) = input_df_protein[input_df_protein$ImageNumber == j,1]
+      cells_protein = sf::st_multipoint(cell_coord_protein)
+      cells_sfc_protein = sf::st_cast(sf::st_sfc(cells_protein), "POINT")
       
-      # define cells within this enlarged polygon in the matched ROI from the protein panel
-      intersect = sf::st_intersects(polygon_buff_sfc, cells_sfc_protein)
-      intersect = rownames(as.data.frame(cells_protein[intersect[[1]],]))
-      environment_cells = rbind(environment_cells, input_df_protein[input_df_protein$cellID %in% intersect,])
-    }
+    # create data.frame for all environment cells for the respective image
+      environment_cells = data.frame(matrix(ncol=ncol(input_df_protein), nrow = 0))
+      colnames(environment_cells) = colnames(input_df_protein)
   
-  # Add cells to the data frame for k
-  k_env_cells = rbind(k_env_cells, environment_cells)
+    # create list for plots/polygon objects
+      polygon_plots = ggplot()
+      
+    # loop through all clusters of k in image j and extract coordinates of enlarged polygon
+      for(i in unique(input_df_RNA[input_df_RNA$ImageNumber == j & input_df_RNA$cluster != 0,]$cluster)){
+        
+        cur_df <- input_df_RNA[input_df_RNA$cluster == i & input_df_RNA$cluster != 0,]
+  
+        ## Compute concave hull for each cluster
+        if (nrow(cur_df) > 2){
+            coords <- as.matrix(cbind(cur_df$X, cur_df$Y))
+            hull = data.table::as.data.table(concaveman::concaveman(coords, concavity = 1))
+            colnames(hull) <- c("X", "Y")
+  
+            # return common rows between input and the hull
+            # first, we need to round the digits of cur_df since concaveman does not return full-length coordinates
+            # (see github issue https://github.com/joelgombin/concaveman/issues/13)
+            # is obsolete once the bug is fixed
+            cur_df_2 <- data.table::copy(cur_df)
+            cur_df_2$X <- round(cur_df_2$X, digits = 4)
+            cur_df_2$Y <- round(cur_df_2$Y, digits = 4)
+  
+            # create polygon object
+            polygon = sf::st_polygon(list(as.matrix(hull)))
+          }
+  
+        # buffer/enlarge polygon by "distance" pixels
+        polygon_buff = sf::st_buffer(polygon, distance)
+        polygon_buff_sfc = sf::st_sfc(polygon_buff)
+  
+        polygon_plots <- polygon_plots +
+          geom_sf(data = polygon, fill = NA, size = 4, col = "deepskyblue2") +
+          geom_sf(data = polygon_buff_sfc, fill = NA, size=4, col = "blue")
+  
+        # return coordinates of the enlarged polygon
+        enlarged_coordinates = as.data.frame(polygon_buff[1])
+        
+        # define cells within this enlarged polygon in the matched ROI from the protein panel
+        intersect = sf::st_intersects(polygon_buff_sfc, cells_sfc_protein)
+        intersect = rownames(as.data.frame(cells_protein[intersect[[1]],]))
+        environment_cells = rbind(environment_cells, input_df_protein[input_df_protein$cellID %in% intersect,])
+      }
+    
+    # Add cells to the data frame for k
+    k_env_cells = rbind(k_env_cells, environment_cells)
+  }
+
+# Add environment column for cytokine k to protein sce object
+sce_protein$environment <- ifelse(sce_protein$cellID %in% k_env_cells$cellID, 1, 0)
+names(colData(sce_protein))[length(names(colData(sce_protein)))] <- paste0(k, "_environment")
+
 }
 
-#Calculate enrichment of celltypes in environment k
-sce_k_env <- sce_protein[,unique(k_env_cells$cellID)]
-enrichment[k,] <- prop.table(table(sce_k_env$subtype)) / prop.table(table(sce_protein$subtype))
-
-sce_k_env_TNK <- sce_k_env[,which(sce_k_env$celltype == "T_NK")]
-enrichment_TNK[k,] <- prop.table(table(sce_k_env_TNK$subtype)) / prop.table(table(sce_TNK$subtype))
-}
 ```
 
-### Plot celltype enrichments in cytokine environments
+## Save protein SCE object with cytokine environment information
 
-```{r cytokine-environment-enrichment}
+```{r save-protein-sce}
+saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_cytokine_environments.rds")
+```
+
+## Calculate cell type enrichment in specific environments
+
+```{r cytokine-environment-celltype-enrichment, fig.width=10, fig.height=7}
+coldata_protein <- data.frame(colData(sce_protein))
+
+#Calculate enrichment of cell subtypes in environment k
+enrichment <- data.frame(matrix(ncol=length(levels(as.factor(sce_protein$subtype))), nrow = 0))
+colnames(enrichment) = levels(as.factor(sce_protein$subtype))
+
+for (k in colnames(coldata_protein)[24:33]) {
+  sce_sub_k <- coldata_protein[coldata_protein[,k] == 1,]
+  enrichment[k,] <- prop.table(table(sce_sub_k$subtype)) / prop.table(table(sce_protein$subtype))
+}
+
 # Plot general enrichment of cell subtypes
 enrichment$cluster <- rownames(enrichment)
 enrichment_long <- pivot_longer(enrichment, 1:20, names_to = "celltype", values_to = "enrichment")
-
-ggplot(enrichment_long, aes(celltype, enrichment, fill = celltype))+
-  geom_bar(stat="identity")+
-  facet_wrap(~cluster, scales = "free")+
-  theme(panel.background = element_blank(),
-        axis.text.x = element_blank(),
-        panel.border = element_rect(color = "black", fill = NA, size = 1),
-        strip.background = element_blank(),
-        legend.background = element_blank())
-
-
-# Plot enrichment of Tregs in CCL18 communities vs general cytokine communities
-enrichment_sub <- enrichment_long %>% filter(cluster %in% c("ccl18only_comm", "cytokine_community"))
-ggplot(enrichment_sub, aes(cluster, enrichment, fill = cluster))+
+ggplot(enrichment_long, aes(cluster, enrichment, fill = cluster))+
   geom_bar(stat="identity")+
   facet_wrap(~celltype, scales = "free")+
   theme(panel.background = element_blank(),
         axis.text.x = element_blank(),
         panel.border = element_rect(color = "black", fill = NA, size = 1),
         strip.background = element_blank(),
-        legend.background = element_blank())
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
+
+
+## Calculate individually for each sample (to prevent sample-bias)
+
+enrichment_sample <- data.frame(matrix(ncol=4, nrow = 0))
+
+for (k in colnames(coldata_protein)[24:33]) {
+  for(j in unique(as.character(coldata_protein$sample))) {
+    sce_sub_k <- coldata_protein[coldata_protein[,k] == 1,]
+    sce_sub_kj <- sce_sub_k[sce_sub_k[,"sample"] == j,]
+    prop_kj <- prop.table(table(sce_sub_kj$subtype))
+    prop_j <- prop.table(table(sce_protein[,which(sce_protein$sample == j)]$subtype))[names(prop_kj)]
+    enrichment_j <-  prop_kj/prop_j 
+    if(length(prop_kj > 0)) {
+          j_df <- data.frame(sample = j,
+                      cytokine = k,
+                      enrichment = enrichment_j)
+    enrichment_sample <- rbind(enrichment_sample, j_df)
+    }
+  }
+}
+
+colnames(enrichment_sample)[3:4] = c("subtype", "enrichment")
+
+ggplot(enrichment_sample, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~subtype, scales = "free", ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
+
 ```
 
+### Leaving out single samples
+
+```{r cytokine-environment-celltype-enrichment-leave-one-out, fig.width=10, fig.height=7}
+# leave_out <- "TBB184"
+# sce_protein_min1 <- sce_protein[,which(sce_protein$sample != leave_out)]
+# coldata_protein_min1 <- data.frame(colData(sce_protein_min1))
+# 
+# 
+# #Calculate enrichment of cell subtypes in environment k
+# enrichment <- data.frame(matrix(ncol=length(levels(as.factor(sce_protein_min1$subtype))), nrow = 0))
+# colnames(enrichment) = levels(as.factor(sce_protein_min1$subtype))
+# 
+# for (k in colnames(coldata_protein_min1)[24:33]) {
+#   sce_sub_k <- coldata_protein_min1[coldata_protein_min1[,k] == 1,]
+#   enrichment[k,] <- prop.table(table(sce_sub_k$subtype)) / prop.table(table(sce_protein_min1$subtype))
+# }
+# 
+# # Plot general enrichment of cell subtypes
+# enrichment$cluster <- rownames(enrichment)
+# enrichment_long <- pivot_longer(enrichment, 1:20, names_to = "celltype", values_to = "enrichment")
+# ggplot(enrichment_long, aes(cluster, enrichment, fill = cluster))+
+#   geom_bar(stat="identity")+
+#   facet_wrap(~celltype, scales = "free")+
+#   theme(panel.background = element_blank(),
+#         axis.text.x = element_blank(),
+#         panel.border = element_rect(color = "black", fill = NA, size = 1),
+#         strip.background = element_blank(),
+#         legend.background = element_blank())+
+#   geom_hline(yintercept = 1, linetype = "dashed")
+
+```
+
+### Enrichment of different T cell subtypes
+
 ```{r cytokine-environment-enrichment_TNK, fig.width=8.5, fig.height=6}
+#Calculate enrichment of T cell subtypes in environment k
+sce_TNK <- sce_protein[,which(sce_protein$celltype == "T_NK")]
+coldata_TNK <- data.frame(colData(sce_TNK))
+
+enrichment_TNK <- data.frame(matrix(ncol=length(levels(as.factor(sce_TNK$subtype))), nrow = 0))
+colnames(enrichment_TNK) = levels(as.factor(sce_TNK$subtype))
+  
+ for (k in colnames(coldata_TNK)[24:33]) { 
+  sce_TNK_sub_k <- coldata_TNK[coldata_TNK[,k] == 1,]
+  enrichment_TNK[k,] <- prop.table(table(sce_TNK_sub_k$subtype)) / prop.table(table(sce_TNK$subtype))
+}
+
 # Plot enrichment of T cell subtypes OUT OF ALL TNK CELLS in all cytokine communities
 enrichment_TNK$cluster <- rownames(enrichment_TNK)
 enrichment_long_TNK <- pivot_longer(enrichment_TNK, 1:7, names_to = "subtype", values_to = "enrichment")
@@ -479,7 +579,42 @@ ggplot(enrichment_long_TNK, aes(cluster, enrichment, fill = cluster))+
         legend.background = element_blank())+
   geom_hline(yintercept = 1, linetype = "dashed")
 
+
+## Calculate individually for each sample (to prevent sample-bias)
+
+enrichment_TNK <- data.frame(matrix(ncol=4, nrow = 0))
+
+for (k in colnames(coldata_TNK)[24:33]) {
+  for(j in unique(as.character(coldata_TNK$sample))) {
+    sce_TNK_sub_k <- coldata_TNK[coldata_TNK[,k] == 1,]
+    sce_TNK_sub_kj <- sce_TNK_sub_k[sce_TNK_sub_k[,"sample"] == j,]
+    prop_kj <- prop.table(table(sce_TNK_sub_kj$subtype))
+    prop_j <- prop.table(table(sce_TNK[,which(sce_TNK$sample == j)]$subtype))[names(prop_kj)]
+    enrichment_j <-  prop_kj/prop_j 
+    if(length(prop_kj > 0)) {
+          j_df <- data.frame(sample = j,
+                      cytokine = k,
+                      enrichment = enrichment_j)
+    enrichment_TNK <- rbind(enrichment_TNK, j_df)
+    }
+  }
+}
+
+colnames(enrichment_TNK)[3:4] = c("T_subtype", "enrichment")
+
+ggplot(enrichment_TNK, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~T_subtype, scales = "free", ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
+
 ```
+
+
 
 
 
