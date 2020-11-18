@@ -28,6 +28,7 @@ library(viridis)
 library(cowplot)
 library(ggpubr)
 library(scran)
+library(CValternatives)
 
 # Read SingleCellExperiment object 
 sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
@@ -560,15 +561,15 @@ Split myeloid cells up into CD11c-high and CD68-high subsets, based on the ratio
 # CD11c_counts <- subset(assay(sce_myeloid, "counts"), rownames(sce_myeloid) == "CD11c")
 # CD68_counts <- subset(assay(sce_myeloid, "counts"), rownames(sce_myeloid) == "CD68")
 # sce_myeloid$marker_ratio <- as.vector(CD68_counts/CD11c_counts)
-# sce_myeloid$subtype <- ifelse(sce_myeloid$marker_ratio >= 1, "myeloid_CD68-high", "myeloid_CD11c-high")
+# sce_myeloid$subtype <- ifelse(sce_myeloid$marker_ratio >= 1.7, "myeloid_CD68-high", "myeloid_CD11c-high")
 # 
 # dittoScatterPlot(sce_myeloid, "CD11c", "CD68", opacity = 0.2, color.var = "subtype")
 # 
 # #Add subtype information to full object
 # myeloid_ids <- colnames(sce_myeloid)
 # sce_protein[,myeloid_ids]$subtype <- sce_myeloid$subtype
-# 
-# saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
+# # 
+# # saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
 
 ```
 
@@ -709,6 +710,9 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
 
 Excluding TLS and pre-TLS.
 
+Use CV (coefficient of variation) and PV (proportional variability).
+PV is less susceptible to large outliers, and handles zeros better.
+
 ```{r subtype-proportions-sample-variation, fig.width=14, fig.height=25}
 #Plot subtype proportions per sample
 tab <- as.data.frame(prop.table(table(sce_protein$ImageNumber, sce_protein$celltype), margin = 1))
@@ -738,21 +742,39 @@ plot_grid(plotlist = p.list, ncol = 1)
 cvs <- data.frame(mean_cv = numeric())
 for (i in unique(sce_protein$celltype)) {
 cv_i <- tab.comb %>% filter(celltype == i) %>% group_by(sample) %>% summarize(cv = (sd(proportion)/mean(proportion))*100)
-meanCV_i<- mean(cv_i$cv)
+meanCV_i<- mean(cv_i$cv, na.rm = TRUE)
 cvs[i,] <- meanCV_i
 }
+```
 
+```{r subtype-proportions-CV, fig.width=5, fig.height=4}
 # Sort by mean CV and plot
 cvs$celltype <- as.character(rownames(cvs))
 ggplot(cvs[order(cvs$mean_cv),], aes(reorder(celltype, mean_cv), y = mean_cv)) +
   geom_bar(stat="identity")+
   theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
         panel.background = element_blank())+
-  ggtitle("Mean CV of cell type proportions (across ROIs of the same sample)")
+  ggtitle("Mean CV of cell type proportions\n(across ROIs of the same sample)")
+
+# Calculate mean PV (Proportional Variability)
+pv <- data.frame(mean_pv = numeric())
+for (i in unique(sce_protein$celltype)) {
+pv_i <- tab.comb %>% filter(celltype == i) %>% group_by(sample) %>% summarize(pv = PV(proportion))
+meanPV_i<- mean(pv_i$pv, na.rm = TRUE)
+pv[i,] <- meanPV_i
+}
+
+# Sort by mean PV and plot
+pv$celltype <- as.character(rownames(pv))
+ggplot(pv[order(pv$mean_pv),], aes(reorder(celltype, mean_pv), y = mean_pv)) +
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle("Mean PV of cell type proportions\n(across ROIs of the same sample)")
 
 ```
 
-For tumor subtypes only.
+### For tumor subtypes only.
 
 ```{r tumor-proportions-sample-variation, fig.width=14, fig.height=12}
 sce_tumor <- sce_protein[,which(sce_protein$celltype == "tumor")]
@@ -786,7 +808,16 @@ cv_i <- tab.comb %>% filter(subtype == i) %>% group_by(sample) %>% summarize(cv 
 meanCV_i<- mean(cv_i$cv)
 cvs[i,] <- meanCV_i
 }
+
+# Calculate mean PV (Proportional Variability)
+pv <- data.frame(mean_pv = numeric())
+for (i in unique(sce_tumor$subtype)) {
+pv_i <- tab.comb %>% filter(subtype == i) %>% group_by(sample) %>% summarize(pv = PV(proportion))
+meanPV_i<- mean(pv_i$pv, na.rm = TRUE)
+pv[i,] <- meanPV_i
+}
 ```
+
 ```{r tumor-proportions-CV, fig.width=4, fig.height=4}
 # Sort by mean CV and plot
 cvs$subtype <- as.character(rownames(cvs))
@@ -795,9 +826,77 @@ ggplot(cvs[order(cvs$mean_cv),], aes(reorder(subtype, mean_cv), y = mean_cv)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
         panel.background = element_blank())+
   ggtitle("Mean CV of cell type proportions\n(across ROIs of the same sample)")
+
+# Sort by mean PV and plot
+pv$subtype <- as.character(rownames(pv))
+ggplot(pv[order(pv$mean_pv),], aes(reorder(subtype, mean_pv), y = mean_pv)) +
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle("Mean PV of cell type proportions\n(across ROIs of the same sample)")
 ```
 
+### For T/NK subtypes only.
 
+```{r TNK-proportions-variation, fig.width=14, fig.height=12}
+sce_TNK <- sce_protein[,which(sce_protein$celltype == "T_NK")]
+tab <- as.data.frame(prop.table(table(sce_TNK$ImageNumber, sce_TNK$subtype), margin = 1))
+colnames(tab) <- c("ImageNumber", "subtype", "proportion")
+
+tab.comb <- merge(tab, ROI_info, by = "ImageNumber")
+tab.comb<- tab.comb %>% filter(TLS == "no")
+
+## reorder patient levels
+tab.comb$sample <- as.factor(tab.comb$sample)
+old.levels <- levels(tab.comb$sample)
+tab.comb$sample <- factor(tab.comb$sample, levels =  old.levels[c(4:8, 12, 1:3, 9:11)])
+
+p.list <- list()
+for (i in unique(sce_TNK$subtype)) {
+  tab.i <- tab.comb %>% filter(subtype == i)
+p.list[[i]]<- ggplot(tab.i, aes(ImageNumber, y = proportion, fill=TIG)) +
+  geom_bar(stat="identity")+
+  facet_wrap(~sample, scales="free_x", ncol = 12)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  ggtitle(i)
+}
+plot_grid(plotlist = p.list, ncol = 1)
+
+# Calculate mean CVs
+cvs <- data.frame(mean_cv = numeric())
+for (i in unique(sce_TNK$subtype)) {
+cv_i <- tab.comb %>% filter(subtype == i) %>% group_by(sample) %>% summarize(cv = (sd(proportion)/mean(proportion))*100)
+meanCV_i<- mean(cv_i$cv, na.rm = TRUE)
+cvs[i,] <- meanCV_i
+}
+
+# Calculate mean PV (Proportional Variability)
+pv <- data.frame(mean_pv = numeric())
+for (i in unique(sce_TNK$subtype)) {
+pv_i <- tab.comb %>% filter(subtype == i) %>% group_by(sample) %>% summarize(pv = PV(proportion))
+meanPV_i<- mean(pv_i$pv, na.rm = TRUE)
+pv[i,] <- meanPV_i
+}
+```
+
+```{r TNK-proportions-CV, fig.width=5, fig.height=4}
+# Sort by mean CV and plot
+cvs$subtype <- as.character(rownames(cvs))
+ggplot(cvs[order(cvs$mean_cv),], aes(reorder(subtype, mean_cv), y = mean_cv)) +
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle("Mean CV of cell type proportions\n(across ROIs of the same sample)")
+
+# Sort by mean PV and plot
+pv$subtype <- as.character(rownames(pv))
+ggplot(pv[order(pv$mean_pv),], aes(reorder(subtype, mean_pv), y = mean_pv)) +
+  geom_bar(stat="identity")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), axis.title.x = element_blank(),
+        panel.background = element_blank())+
+  ggtitle("Mean PV of cell type proportions\n(across ROIs of the same sample)")
+```
 
 
 
