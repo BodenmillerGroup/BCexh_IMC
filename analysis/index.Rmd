@@ -26,7 +26,8 @@ editor_options:
 [Focus on CXCL13+ T cells and CSF1+ NKT cells](10_RNApanel_TNK_cytokines.html) 
   
 [Cytokine clusters & communities](11_RNApanel_cytokine_communities.html)  
-
+  
+[CXCL13 protein vs mRNA](12_RNApanel_CXCL13_protein.html)  
 
 
 ## Protein panel: 

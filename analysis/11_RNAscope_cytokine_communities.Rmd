@@ -38,6 +38,7 @@ library(concaveman)
 library(ggpubr)
 
 sce = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_subtypes.rds")
+cytokine_channels = c("CCL4", "CCL18", "CSF1", "CXCL10", "CXCL13_mRNA", "CCL2", "CCL22", "CXCL9", "CCL17", "CCL5")
 ```
 
 # Clusters/Communities - General
@@ -82,7 +83,6 @@ length(unique(sce$cytokine_community))
 
 ```{r cluster-detection-single}
 start = Sys.time()
-cytokine_channels = c("CCL4", "CCL18", "CSF1", "CXCL10", "CXCL13_mRNA", "CCL2", "CCL22", "CXCL9", "CCL17", "CCL5")
 cur_sce <- data.frame(colData(sce))
 
 # loop through all cytokines
@@ -279,7 +279,7 @@ ggplot(celltype_comb, aes(type, celltype_proportion, fill = celltype))+
   ggtitle("Celltype proportions in cytokine clusters vs communities")
 ```
 
-## CSF1 environments - myeloid cell activation
+# CSF1 environments - myeloid cell activation
 
 Check whether myeloid cells in CSF1 environments show a higher degree of activation than in other environments/outside these environments.
 
@@ -373,9 +373,13 @@ input_df_protein <- data.frame(cellID = sce_protein$cellID,
                        Y = sce_protein$Center_Y,
                        ImageNumber = sce_protein$ImageNumber)
 
-# Create empty dataframe to collect all cells in the respective cytokine environment
+# Create empty dataframe to collect all cells in the respective cytokine environment (for protein panel)
 k_env_cells <- data.frame(matrix(ncol=ncol(input_df_protein), nrow = 0))
 colnames(k_env_cells) = colnames(input_df_protein)
+
+# Create empty dataframe to collect all cells in the respective cytokine environment (for protein panel)
+k_env_cells_RNA <- data.frame(matrix(ncol=ncol(input_df_RNA), nrow = 0))
+colnames(k_env_cells_RNA) = colnames(input_df_RNA)
 
   for (j in unique(input_df_RNA$ImageNumber)) {
     
@@ -391,9 +395,13 @@ colnames(k_env_cells) = colnames(input_df_protein)
       cells_protein = sf::st_multipoint(cell_coord_protein)
       cells_sfc_protein = sf::st_cast(sf::st_sfc(cells_protein), "POINT")
       
-    # create data.frame for all environment cells for the respective image
+    # create data.frame for all environment cells for the respective image (for protein panel)
       environment_cells = data.frame(matrix(ncol=ncol(input_df_protein), nrow = 0))
       colnames(environment_cells) = colnames(input_df_protein)
+      
+    # create data.frame for all environment cells for the respective image (for RNA panel)
+      environment_cells_RNA = data.frame(matrix(ncol=ncol(input_df_RNA), nrow = 0))
+      colnames(environment_cells_RNA) = colnames(input_df_RNA)
   
     # create list for plots/polygon objects
       polygon_plots = ggplot()
@@ -436,15 +444,25 @@ colnames(k_env_cells) = colnames(input_df_protein)
         intersect = sf::st_intersects(polygon_buff_sfc, cells_sfc_protein)
         intersect = rownames(as.data.frame(cells_protein[intersect[[1]],]))
         environment_cells = rbind(environment_cells, input_df_protein[input_df_protein$cellID %in% intersect,])
+        
+        # define cells within this enlarged polygon in the matched ROI from the RNA panel
+        intersect_RNA = sf::st_intersects(polygon_buff_sfc, cells_sfc)
+        intersect_RNA = rownames(as.data.frame(cells[intersect_RNA[[1]],]))
+        environment_cells_RNA = rbind(environment_cells_RNA, input_df_RNA[input_df_RNA$cellID %in% intersect_RNA,])
       }
     
     # Add cells to the data frame for k
     k_env_cells = rbind(k_env_cells, environment_cells)
+    k_env_cells_RNA = rbind(k_env_cells_RNA, environment_cells_RNA)
   }
 
 # Add environment column for cytokine k to protein sce object
 sce_protein$environment <- ifelse(sce_protein$cellID %in% k_env_cells$cellID, 1, 0)
 names(colData(sce_protein))[length(names(colData(sce_protein)))] <- paste0(k, "_environment")
+
+# Add environment column for cytokine k to RNA sce object
+sce$environment <- ifelse(sce$cellID %in% k_env_cells_RNA$cellID, 1, 0)
+names(colData(sce))[length(names(colData(sce)))] <- paste0(k, "_environment")
 
 }
 
@@ -454,7 +472,52 @@ names(colData(sce_protein))[length(names(colData(sce_protein)))] <- paste0(k, "_
 
 ```{r save-protein-sce}
 saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_cytokine_environments.rds")
+saveRDS(sce, "output/RNApanel/sce_RNApanel_cytokines_communities.rds")
 ```
+
+## Compare cell type proportions in cytokine communities: RNA vs protein panel
+
+```{r}
+# Rename and match celltypes for the two panels
+sce_RNA_simple <- sce
+sce_RNA_simple[,which(sce_RNA_simple$celltype %in% c("stromal_SMA+", "stromal_undefined"))]$celltype <- "stromal"
+sce_RNA_simple[,which(sce_RNA_simple$celltype == "Bcell")]$celltype <- "B_cell"
+sce_RNA_simple[,which(sce_RNA_simple$celltype %in% c("NK", "T_CD4", "T_CD8"))]$celltype <- "T_NK"
+sce_protein_simple <- sce_protein
+sce_protein_simple[,which(sce_protein_simple$celltype %in% c("fibroblast", "stromal_undefined", "plasma_cell", "pDC"))]$celltype <- "stromal"
+
+# Get celltype proportions
+coldata_RNA <- data.frame(colData(sce_RNA_simple))
+coldata_protein <- data.frame(colData(sce_protein_simple))
+tab_RNA <- data.frame(matrix(ncol = 8, nrow = 0))
+colnames(tab_RNA) <- levels(factor(sce_RNA_simple$celltype))
+tab_protein <- tab_RNA
+  
+for (k in (colnames(coldata_RNA)[55:64])) {
+  k_sub_RNA <- coldata_RNA[coldata_RNA[,k] == 1,]
+  tab_RNA[k,] <- prop.table(table(k_sub_RNA$celltype))
+  k_sub_protein <- coldata_protein[coldata_RNA[,k] == 1,]
+  tab_protein[k,] <- prop.table(table(k_sub_protein$celltype))  
+}
+
+tab_RNA$env <- rownames(tab_RNA)
+tab_RNA$panel <- "RNApanel"
+tab_RNA <- pivot_longer(tab_RNA, 1:8, names_to = "celltype", values_to = "frequency")
+
+tab_protein$env <- rownames(tab_protein)
+tab_protein$panel <- "ProteinPanel"
+tab_protein <- pivot_longer(tab_protein, 1:8, names_to = "celltype", values_to = "frequency")
+
+tab_comb <- rbind(tab_protein, tab_RNA)
+
+ggplot(tab_comb, aes(panel, y = frequency, fill=celltype)) +
+  geom_bar(stat="identity")+
+  #facet_wrap(~env, ncol=6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+
+```
+
 
 ## Calculate cell type enrichment in specific environments
 
@@ -554,7 +617,7 @@ ggplot(enrichment_sample, aes(cytokine, enrichment, fill = cytokine))+
 
 ```{r cytokine-environment-enrichment_TNK, fig.width=8.5, fig.height=6}
 #Calculate enrichment of T cell subtypes in environment k
-sce_TNK <- sce_protein[,which(sce_protein$celltype == "T_NK")]
+sce_TNK <- sce_protein[,which(sce_protein$celltype == "T_NK" & sce_protein$subtype != "T_AllHigh")]
 coldata_TNK <- data.frame(colData(sce_TNK))
 
 enrichment_TNK <- data.frame(matrix(ncol=length(levels(as.factor(sce_TNK$subtype))), nrow = 0))
@@ -567,7 +630,7 @@ colnames(enrichment_TNK) = levels(as.factor(sce_TNK$subtype))
 
 # Plot enrichment of T cell subtypes OUT OF ALL TNK CELLS in all cytokine communities
 enrichment_TNK$cluster <- rownames(enrichment_TNK)
-enrichment_long_TNK <- pivot_longer(enrichment_TNK, 1:7, names_to = "subtype", values_to = "enrichment")
+enrichment_long_TNK <- pivot_longer(enrichment_TNK, 1:6, names_to = "subtype", values_to = "enrichment")
 
 ggplot(enrichment_long_TNK, aes(cluster, enrichment, fill = cluster))+
   geom_bar(stat="identity")+
