@@ -333,7 +333,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-11
+<strong>Last updated:</strong> 2020-11-18
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -364,16 +364,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreee814a995fbe8686cc73db289d3406990b37330aftargetblanke814a99a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/e814a995fbe8686cc73db289d3406990b37330af" target="_blank">e814a99</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree2661f7c14836cf285712c5cb6adcc19b9129f71ctargetblank2661f7ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/2661f7c14836cf285712c5cb6adcc19b9129f71c" target="_blank">2661f7c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreee814a995fbe8686cc73db289d3406990b37330aftargetblanke814a99a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree2661f7c14836cf285712c5cb6adcc19b9129f71ctargetblank2661f7ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/e814a995fbe8686cc73db289d3406990b37330af" target="_blank">e814a99</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/2661f7c14836cf285712c5cb6adcc19b9129f71c" target="_blank">2661f7c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -381,11 +381,15 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  CD11c_CD68_scatter.png
+    Untracked:  Neighbourhood_TLS_relative.pdf
+    Untracked:  Neighbourhood_TLS_relative.png
+    Untracked:  Neighbourhood_all_relative.pdf
+    Untracked:  Neighbourhood_all_relative.png
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
@@ -393,6 +397,9 @@ Untracked files:
     Untracked:  data/cpout/
     Untracked:  data/masks/
     Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_TIGdifference.png
+    Untracked:  neighbourhood_myeloid_TLS_relative.png
+    Untracked:  neighbourhood_myeloid_all_relative.png
     Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
@@ -406,8 +413,7 @@ Untracked files:
     Untracked:  test_Treg_enrichment.png
 
 Unstaged changes:
-    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
-    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
+    Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
 
 </code></pre>
 <p>
@@ -446,6 +452,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/2661f7c14836cf285712c5cb6adcc19b9129f71c/analysis/index.Rmd" target="_blank">2661f7c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+<td>
+Compare cytokine environments between panels
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/bbbf3fc2dfc9723c61b556d33e941c810debd318/docs/index.html" target="_blank">bbbf3fc</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-11
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -786,6 +826,7 @@ Start workflowr project.
 <p><a href="09_RNApanel_cytokine_expression.html">Cytokine expression</a></p>
 <p><a href="10_RNApanel_TNK_cytokines.html">Focus on CXCL13+ T cells and CSF1+ NKT cells</a></p>
 <p><a href="11_RNApanel_cytokine_communities.html">Cytokine clusters &amp; communities</a></p>
+<p><a href="12_RNApanel_CXCL13_protein.html">CXCL13 protein vs mRNA</a></p>
 </div>
 <div id="protein-panel" class="section level2">
 <h2>Protein panel:</h2>

@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-16
+<strong>Last updated:</strong> 2020-11-18
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree31bf6a8424177cc7cee5f0c50f7b3d1a35924341targetblank31bf6a8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/31bf6a8424177cc7cee5f0c50f7b3d1a35924341" target="_blank">31bf6a8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree2661f7c14836cf285712c5cb6adcc19b9129f71ctargetblank2661f7ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/2661f7c14836cf285712c5cb6adcc19b9129f71c" target="_blank">2661f7c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree31bf6a8424177cc7cee5f0c50f7b3d1a35924341targetblank31bf6a8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree2661f7c14836cf285712c5cb6adcc19b9129f71ctargetblank2661f7ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/31bf6a8424177cc7cee5f0c50f7b3d1a35924341" target="_blank">31bf6a8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/2661f7c14836cf285712c5cb6adcc19b9129f71c" target="_blank">2661f7c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -528,7 +528,6 @@ Untracked files:
     Untracked:  Neighbourhood_TLS_relative.png
     Untracked:  Neighbourhood_all_relative.pdf
     Untracked:  Neighbourhood_all_relative.png
-    Untracked:  analysis/12_RNApanel_CXCL13_protein.Rmd
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
     Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
@@ -538,6 +537,9 @@ Untracked files:
     Untracked:  data/cpout/
     Untracked:  data/masks/
     Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_TIGdifference.png
+    Untracked:  neighbourhood_myeloid_TLS_relative.png
+    Untracked:  neighbourhood_myeloid_all_relative.png
     Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
@@ -590,6 +592,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/2661f7c14836cf285712c5cb6adcc19b9129f71c/analysis/11_RNAscope_cytokine_communities.Rmd" target="_blank">2661f7c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+<td>
+Compare cytokine environments between panels
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/11_RNAscope_cytokine_communities.html" target="_blank">3c1361c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -692,7 +728,8 @@ library(RANN)
 library(concaveman)
 library(ggpubr)
 
-sce = readRDS(file = &quot;output/RNApanel/sce_RNApanel_cytokines_subtypes.rds&quot;)</code></pre>
+sce = readRDS(file = &quot;output/RNApanel/sce_RNApanel_cytokines_subtypes.rds&quot;)
+cytokine_channels = c(&quot;CCL4&quot;, &quot;CCL18&quot;, &quot;CSF1&quot;, &quot;CXCL10&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL2&quot;, &quot;CCL22&quot;, &quot;CXCL9&quot;, &quot;CCL17&quot;, &quot;CCL5&quot;)</code></pre>
 </div>
 <div id="clusterscommunities---general" class="section level1">
 <h1>Clusters/Communities - General</h1>
@@ -715,7 +752,7 @@ sce &lt;- findClusters(sce, sce[,colData(sce)$cytokine == TRUE]$cellID ,
                     distance = 20, 
                     min_clust_size = 10,
                     output_colname = &quot;cytokine_cluster&quot;)</code></pre>
-<pre><code>Time difference of 2.266882 mins
+<pre><code>Time difference of 2.163133 mins
 [1] &quot;clusters successfully added to sce object&quot;</code></pre>
 <pre class="r"><code># number of cytokine clusters
 length(unique(sce$cytokine_cluster))</code></pre>
@@ -728,7 +765,7 @@ sce &lt;- findCommunity(sce,
                      &#39;cytokine_cluster&#39;, 
                      distance = 25,
                      output_colname = &quot;cytokine_community&quot;)</code></pre>
-<pre><code>Time difference of 1.242443 mins
+<pre><code>Time difference of 1.200169 mins
 [1] &quot;communities successfully added to sce object&quot;</code></pre>
 <pre class="r"><code># number of cytokine communities
 length(unique(sce$cytokine_community))</code></pre>
@@ -738,7 +775,6 @@ length(unique(sce$cytokine_community))</code></pre>
 <div id="detect-clusters-and-commmunities-for-single-cytokines" class="section level1">
 <h1>Detect Clusters and Commmunities for Single cytokines</h1>
 <pre class="r"><code>start = Sys.time()
-cytokine_channels = c(&quot;CCL4&quot;, &quot;CCL18&quot;, &quot;CSF1&quot;, &quot;CXCL10&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL2&quot;, &quot;CCL22&quot;, &quot;CXCL9&quot;, &quot;CCL17&quot;, &quot;CCL5&quot;)
 cur_sce &lt;- data.frame(colData(sce))
 
 # loop through all cytokines
@@ -765,49 +801,49 @@ for(i in cytokine_channels) {
                      distance = 30,
                      output_colname = paste(tolower(i), &quot;only_comm&quot;, sep = &quot;&quot;))
 } </code></pre>
-<pre><code>Time difference of 4.353971 secs
+<pre><code>Time difference of 4.307558 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 33.18626 secs
+Time difference of 31.44937 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 4.602981 secs
+Time difference of 5.087258 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 51.43625 secs
+Time difference of 50.72134 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 7.851553 secs
+Time difference of 6.923634 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 44.51333 secs
+Time difference of 42.9716 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 11.77805 secs
+Time difference of 11.68957 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.641842 mins
+Time difference of 1.574725 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 5.718806 secs
+Time difference of 5.798332 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 48.94195 secs
+Time difference of 47.86234 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 11.09754 secs
+Time difference of 9.76435 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.47333 mins
+Time difference of 1.379579 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 2.756845 secs
+Time difference of 2.677733 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 33.88575 secs
+Time difference of 32.82233 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 12.22341 secs
+Time difference of 12.3509 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.331152 mins
+Time difference of 1.272069 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 1.78508 secs
+Time difference of 1.742112 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 14.93391 secs
+Time difference of 14.58746 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 7.32555 secs
+Time difference of 7.075517 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.080425 mins
+Time difference of 1.05866 mins
 [1] &quot;communities successfully added to sce object&quot;</code></pre>
 <pre class="r"><code>end = Sys.time()
 print(end-start)</code></pre>
-<pre><code>Time difference of 10.4751 mins</code></pre>
+<pre><code>Time difference of 10.09006 mins</code></pre>
 </div>
 <div id="save-sce-object" class="section level1">
 <h1>Save SCE object</h1>
@@ -1335,8 +1371,9 @@ SandraTietscher
 </div>
 </div>
 </div>
-<div id="csf1-environments---myeloid-cell-activation" class="section level2">
-<h2>CSF1 environments - myeloid cell activation</h2>
+</div>
+<div id="csf1-environments---myeloid-cell-activation" class="section level1">
+<h1>CSF1 environments - myeloid cell activation</h1>
 <p>Check whether myeloid cells in CSF1 environments show a higher degree of activation than in other environments/outside these environments.</p>
 <div id="use-cytokine-expression-as-a-proxy-for-myeloid-cell-activation" class="section level3">
 <h3>Use cytokine expression as a proxy for myeloid cell activation</h3>
@@ -1362,6 +1399,43 @@ ggplot(perc_total, aes(environment, percent_cytokine_expressing, fill = environm
         legend.background = element_blank())+
   ggtitle(&quot;Cytokine-expressing myeloid percentage in the respective communities&quot;)</code></pre>
 <p><img src="figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-cytokine-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CSF1-myeloid-cytokine-1">
+Past versions of CSF1-myeloid-cytokine-1.png
+</button>
+</p>
+<div id="fig-CSF1-myeloid-cytokine-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-cytokine-1.png" target="_blank">3c1361c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="use-the-expression-of-cd68-cd163-cd204-and-ccl18-as-a-proxy-for-cell-activation" class="section level3">
 <h3>Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation</h3>
@@ -1393,6 +1467,42 @@ ggplot(activation_mean, aes(environment, mean_activation_score, fill = environme
         strip.background = element_blank(),
         legend.background = element_blank())</code></pre>
 <p><img src="figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-activation-score-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-CSF1-myeloid-activation-score-1">
+Past versions of CSF1-myeloid-activation-score-1.png
+</button>
+</p>
+<div id="fig-CSF1-myeloid-activation-score-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-activation-score-1.png" target="_blank">3c1361c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 </div>
@@ -1424,9 +1534,13 @@ input_df_protein &lt;- data.frame(cellID = sce_protein$cellID,
                        Y = sce_protein$Center_Y,
                        ImageNumber = sce_protein$ImageNumber)
 
-# Create empty dataframe to collect all cells in the respective cytokine environment
+# Create empty dataframe to collect all cells in the respective cytokine environment (for protein panel)
 k_env_cells &lt;- data.frame(matrix(ncol=ncol(input_df_protein), nrow = 0))
 colnames(k_env_cells) = colnames(input_df_protein)
+
+# Create empty dataframe to collect all cells in the respective cytokine environment (for protein panel)
+k_env_cells_RNA &lt;- data.frame(matrix(ncol=ncol(input_df_RNA), nrow = 0))
+colnames(k_env_cells_RNA) = colnames(input_df_RNA)
 
   for (j in unique(input_df_RNA$ImageNumber)) {
     
@@ -1442,9 +1556,13 @@ colnames(k_env_cells) = colnames(input_df_protein)
       cells_protein = sf::st_multipoint(cell_coord_protein)
       cells_sfc_protein = sf::st_cast(sf::st_sfc(cells_protein), &quot;POINT&quot;)
       
-    # create data.frame for all environment cells for the respective image
+    # create data.frame for all environment cells for the respective image (for protein panel)
       environment_cells = data.frame(matrix(ncol=ncol(input_df_protein), nrow = 0))
       colnames(environment_cells) = colnames(input_df_protein)
+      
+    # create data.frame for all environment cells for the respective image (for RNA panel)
+      environment_cells_RNA = data.frame(matrix(ncol=ncol(input_df_RNA), nrow = 0))
+      colnames(environment_cells_RNA) = colnames(input_df_RNA)
   
     # create list for plots/polygon objects
       polygon_plots = ggplot()
@@ -1487,20 +1605,72 @@ colnames(k_env_cells) = colnames(input_df_protein)
         intersect = sf::st_intersects(polygon_buff_sfc, cells_sfc_protein)
         intersect = rownames(as.data.frame(cells_protein[intersect[[1]],]))
         environment_cells = rbind(environment_cells, input_df_protein[input_df_protein$cellID %in% intersect,])
+        
+        # define cells within this enlarged polygon in the matched ROI from the RNA panel
+        intersect_RNA = sf::st_intersects(polygon_buff_sfc, cells_sfc)
+        intersect_RNA = rownames(as.data.frame(cells[intersect_RNA[[1]],]))
+        environment_cells_RNA = rbind(environment_cells_RNA, input_df_RNA[input_df_RNA$cellID %in% intersect_RNA,])
       }
     
     # Add cells to the data frame for k
     k_env_cells = rbind(k_env_cells, environment_cells)
+    k_env_cells_RNA = rbind(k_env_cells_RNA, environment_cells_RNA)
   }
 
 # Add environment column for cytokine k to protein sce object
 sce_protein$environment &lt;- ifelse(sce_protein$cellID %in% k_env_cells$cellID, 1, 0)
 names(colData(sce_protein))[length(names(colData(sce_protein)))] &lt;- paste0(k, &quot;_environment&quot;)
 
+# Add environment column for cytokine k to RNA sce object
+sce$environment &lt;- ifelse(sce$cellID %in% k_env_cells_RNA$cellID, 1, 0)
+names(colData(sce))[length(names(colData(sce)))] &lt;- paste0(k, &quot;_environment&quot;)
+
 }</code></pre>
 <div id="save-protein-sce-object-with-cytokine-environment-information" class="section level2">
 <h2>Save protein SCE object with cytokine environment information</h2>
-<pre class="r"><code>saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_subtypes_cytokine_environments.rds&quot;)</code></pre>
+<pre class="r"><code>saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_subtypes_cytokine_environments.rds&quot;)
+saveRDS(sce, &quot;output/RNApanel/sce_RNApanel_cytokines_communities.rds&quot;)</code></pre>
+</div>
+<div id="compare-cell-type-proportions-in-cytokine-communities-rna-vs-protein-panel" class="section level2">
+<h2>Compare cell type proportions in cytokine communities: RNA vs protein panel</h2>
+<pre class="r"><code># Rename and match celltypes for the two panels
+sce_RNA_simple &lt;- sce
+sce_RNA_simple[,which(sce_RNA_simple$celltype %in% c(&quot;stromal_SMA+&quot;, &quot;stromal_undefined&quot;))]$celltype &lt;- &quot;stromal&quot;
+sce_RNA_simple[,which(sce_RNA_simple$celltype == &quot;Bcell&quot;)]$celltype &lt;- &quot;B_cell&quot;
+sce_RNA_simple[,which(sce_RNA_simple$celltype %in% c(&quot;NK&quot;, &quot;T_CD4&quot;, &quot;T_CD8&quot;))]$celltype &lt;- &quot;T_NK&quot;
+sce_protein_simple &lt;- sce_protein
+sce_protein_simple[,which(sce_protein_simple$celltype %in% c(&quot;fibroblast&quot;, &quot;stromal_undefined&quot;, &quot;plasma_cell&quot;, &quot;pDC&quot;))]$celltype &lt;- &quot;stromal&quot;
+
+# Get celltype proportions
+coldata_RNA &lt;- data.frame(colData(sce_RNA_simple))
+coldata_protein &lt;- data.frame(colData(sce_protein_simple))
+tab_RNA &lt;- data.frame(matrix(ncol = 8, nrow = 0))
+colnames(tab_RNA) &lt;- levels(factor(sce_RNA_simple$celltype))
+tab_protein &lt;- tab_RNA
+  
+for (k in (colnames(coldata_RNA)[55:64])) {
+  k_sub_RNA &lt;- coldata_RNA[coldata_RNA[,k] == 1,]
+  tab_RNA[k,] &lt;- prop.table(table(k_sub_RNA$celltype))
+  k_sub_protein &lt;- coldata_protein[coldata_RNA[,k] == 1,]
+  tab_protein[k,] &lt;- prop.table(table(k_sub_protein$celltype))  
+}
+
+tab_RNA$env &lt;- rownames(tab_RNA)
+tab_RNA$panel &lt;- &quot;RNApanel&quot;
+tab_RNA &lt;- pivot_longer(tab_RNA, 1:8, names_to = &quot;celltype&quot;, values_to = &quot;frequency&quot;)
+
+tab_protein$env &lt;- rownames(tab_protein)
+tab_protein$panel &lt;- &quot;ProteinPanel&quot;
+tab_protein &lt;- pivot_longer(tab_protein, 1:8, names_to = &quot;celltype&quot;, values_to = &quot;frequency&quot;)
+
+tab_comb &lt;- rbind(tab_protein, tab_RNA)
+
+ggplot(tab_comb, aes(panel, y = frequency, fill=celltype)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  #facet_wrap(~env, ncol=6)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="calculate-cell-type-enrichment-in-specific-environments" class="section level2">
 <h2>Calculate cell type enrichment in specific environments</h2>
@@ -1528,6 +1698,43 @@ ggplot(enrichment_long, aes(cluster, enrichment, fill = cluster))+
         legend.background = element_blank())+
   geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-celltype-enrichment-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cytokine-environment-celltype-enrichment-1">
+Past versions of cytokine-environment-celltype-enrichment-1.png
+</button>
+</p>
+<div id="fig-cytokine-environment-celltype-enrichment-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-celltype-enrichment-1.png" target="_blank">3c1361c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>## Calculate individually for each sample (to prevent sample-bias)
 
 enrichment_sample &lt;- data.frame(matrix(ncol=4, nrow = 0))
@@ -1560,6 +1767,43 @@ ggplot(enrichment_sample, aes(cytokine, enrichment, fill = cytokine))+
         legend.background = element_blank())+
   geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-celltype-enrichment-2.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cytokine-environment-celltype-enrichment-2">
+Past versions of cytokine-environment-celltype-enrichment-2.png
+</button>
+</p>
+<div id="fig-cytokine-environment-celltype-enrichment-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-celltype-enrichment-2.png" target="_blank">3c1361c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="leaving-out-single-samples" class="section level3">
 <h3>Leaving out single samples</h3>
 <pre class="r"><code># leave_out &lt;- &quot;TBB184&quot;
@@ -1592,7 +1836,7 @@ ggplot(enrichment_sample, aes(cytokine, enrichment, fill = cytokine))+
 <div id="enrichment-of-different-t-cell-subtypes" class="section level3">
 <h3>Enrichment of different T cell subtypes</h3>
 <pre class="r"><code>#Calculate enrichment of T cell subtypes in environment k
-sce_TNK &lt;- sce_protein[,which(sce_protein$celltype == &quot;T_NK&quot;)]
+sce_TNK &lt;- sce_protein[,which(sce_protein$celltype == &quot;T_NK&quot; &amp; sce_protein$subtype != &quot;T_AllHigh&quot;)]
 coldata_TNK &lt;- data.frame(colData(sce_TNK))
 
 enrichment_TNK &lt;- data.frame(matrix(ncol=length(levels(as.factor(sce_TNK$subtype))), nrow = 0))
@@ -1605,7 +1849,7 @@ colnames(enrichment_TNK) = levels(as.factor(sce_TNK$subtype))
 
 # Plot enrichment of T cell subtypes OUT OF ALL TNK CELLS in all cytokine communities
 enrichment_TNK$cluster &lt;- rownames(enrichment_TNK)
-enrichment_long_TNK &lt;- pivot_longer(enrichment_TNK, 1:7, names_to = &quot;subtype&quot;, values_to = &quot;enrichment&quot;)
+enrichment_long_TNK &lt;- pivot_longer(enrichment_TNK, 1:6, names_to = &quot;subtype&quot;, values_to = &quot;enrichment&quot;)
 
 ggplot(enrichment_long_TNK, aes(cluster, enrichment, fill = cluster))+
   geom_bar(stat=&quot;identity&quot;)+
@@ -1639,6 +1883,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-1.png" target="_blank">3c1361c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-16
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/bbbf3fc2dfc9723c61b556d33e941c810debd318/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-1.png" target="_blank">bbbf3fc</a>
@@ -1686,6 +1941,43 @@ ggplot(enrichment_TNK, aes(cytokine, enrichment, fill = cytokine))+
         legend.background = element_blank())+
   geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-2.png" width="816" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cytokine-environment-enrichment_TNK-2">
+Past versions of cytokine-environment-enrichment_TNK-2.png
+</button>
+</p>
+<div id="fig-cytokine-environment-enrichment_TNK-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-2.png" target="_blank">3c1361c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
