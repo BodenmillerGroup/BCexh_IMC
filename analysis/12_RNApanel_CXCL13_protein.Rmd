@@ -9,11 +9,12 @@ editor_options:
 
 ## Introduction
 
+This script adresses the question of how far away from the CXCL13 transcript-expressing cell CXCL13 protein can still be detected.
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message= FALSE)
 ```
 
-# Preparations
 
 # Load packages, helper functions and data
 
@@ -46,7 +47,6 @@ dat_relation$cellB <- paste0(dat_relation$`Second Image Number`, "_", dat_relati
 # Calculate distance to the next CXCL13_mRNA expressing cell (for each cell)
 
 For images in which there is no CXCL13_mRNA positive cell --> set distance parameter to NA and exclude for further analysis.
-Only search in a radius of 200 (otherwise give back maximu)
 
 ```{r calculate-distance}
 cur_sce <- data.frame(colData(sce))
