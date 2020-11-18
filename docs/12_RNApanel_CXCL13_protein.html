@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeedff58ef4f25567061ede685853d163ebbdd264etargetblankedff58ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/edff58ef4f25567061ede685853d163ebbdd264e" target="_blank">edff58e</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreebaf8e473c3664cb351173dfb5e25c4c9c3db386ctargetblankbaf8e47a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/baf8e473c3664cb351173dfb5e25c4c9c3db386c" target="_blank">baf8e47</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeedff58ef4f25567061ede685853d163ebbdd264etargetblankedff58ea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreebaf8e473c3664cb351173dfb5e25c4c9c3db386ctargetblankbaf8e47a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/edff58ef4f25567061ede685853d163ebbdd264e" target="_blank">edff58e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/baf8e473c3664cb351173dfb5e25c4c9c3db386c" target="_blank">baf8e47</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -595,6 +595,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/baf8e473c3664cb351173dfb5e25c4c9c3db386c/analysis/12_RNApanel_CXCL13_protein.Rmd" target="_blank">baf8e47</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+<td>
+Update introduction
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/e23002a503621f6a25d91511691e3c35cf6247df/docs/12_RNApanel_CXCL13_protein.html" target="_blank">e23002a</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/edff58ef4f25567061ede685853d163ebbdd264e/analysis/12_RNApanel_CXCL13_protein.Rmd" target="_blank">edff58e</a>
 </td>
 <td>
@@ -616,9 +650,7 @@ Script to analyse relation of CXCL13 protein to mRNA
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-</div>
-<div id="preparations" class="section level1">
-<h1>Preparations</h1>
+<p>This script adresses the question of how far away from the CXCL13 transcript-expressing cell CXCL13 protein can still be detected.</p>
 </div>
 <div id="load-packages-helper-functions-and-data" class="section level1">
 <h1>Load packages, helper functions and data</h1>
@@ -648,7 +680,7 @@ dat_relation$cellB &lt;- paste0(dat_relation$`Second Image Number`, &quot;_&quot
 </div>
 <div id="calculate-distance-to-the-next-cxcl13_mrna-expressing-cell-for-each-cell" class="section level1">
 <h1>Calculate distance to the next CXCL13_mRNA expressing cell (for each cell)</h1>
-<p>For images in which there is no CXCL13_mRNA positive cell –&gt; set distance parameter to NA and exclude for further analysis. Only search in a radius of 200 (otherwise give back maximu)</p>
+<p>For images in which there is no CXCL13_mRNA positive cell –&gt; set distance parameter to NA and exclude for further analysis.</p>
 <pre class="r"><code>cur_sce &lt;- data.frame(colData(sce))
 cellIDs_cxcl13 &lt;- cur_sce[cur_sce[,&quot;CXCL13_mRNA_expression&quot;] == 1,]
 new_sce &lt;- data.frame(matrix(ncol=length(colnames(cur_sce))+1, nrow = 0))
@@ -691,6 +723,43 @@ ggplot(new_sce_sub, aes(cxcl13_distance, CXCL13_protein)) +
         panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
         panel.background = element_blank())</code></pre>
 <p><img src="figure/12_RNApanel_CXCL13_protein.Rmd/distance-cxcl13-expression-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-distance-cxcl13-expression-1">
+Past versions of distance-cxcl13-expression-1.png
+</button>
+</p>
+<div id="fig-distance-cxcl13-expression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/e23002a503621f6a25d91511691e3c35cf6247df/docs/figure/12_RNApanel_CXCL13_protein.Rmd/distance-cxcl13-expression-1.png" target="_blank">e23002a</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="identify-direct-neighbours-of-cxcl13_rna-positive-cells" class="section level1">
 <h1>Identify direct neighbours of CXCL13_RNA positive cells</h1>
@@ -717,6 +786,43 @@ ggplot(cur_sce, aes(cxcl13_status, cxcl13_counts))+
         panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
         panel.background = element_blank())</code></pre>
 <p><img src="figure/12_RNApanel_CXCL13_protein.Rmd/neighbour-cxcl13-expression-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-neighbour-cxcl13-expression-1">
+Past versions of neighbour-cxcl13-expression-1.png
+</button>
+</p>
+<div id="fig-neighbour-cxcl13-expression-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/e23002a503621f6a25d91511691e3c35cf6247df/docs/figure/12_RNApanel_CXCL13_protein.Rmd/neighbour-cxcl13-expression-1.png" target="_blank">e23002a</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
