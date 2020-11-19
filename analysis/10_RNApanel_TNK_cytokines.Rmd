@@ -27,6 +27,7 @@ library(tidyr)
 library(ggpubr)
 library(dittoSeq)
 library(Seurat)
+library(RANN)
 
 sce_RNA <- readRDS(file = "output/RNApanel/sce_RNApanel_celltypes_cytokines.rds")
 TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
@@ -253,10 +254,11 @@ For non-TLS images only.
 
 ```{r cSF1-proportion-TIG, fig.width=3, fig.height=4}
 sce_TLSex <- sce_RNA[,which(sce_RNA$TLS == "no")]
+sce_TLSex_TNK <- sce_TLSex[,which(sce_TLSex$celltype %in% c("T_CD4", "T_CD8", "NK"))]
 
 # Boxplots (individual ROIs as points)
-tab <- as.data.frame(prop.table(table(sce_TLSex$sample, sce_TLSex$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
-frequency <- as.data.frame(table(sce_TLSex$sample, sce_TLSex$subtype)) %>% filter(Var2 == "CSF1_NKT")
+tab <- as.data.frame(prop.table(table(sce_TLSex_TNK$sample, sce_TLSex_TNK$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
+frequency <- as.data.frame(table(sce_TLSex_TNK$sample, sce_TLSex_TNK$subtype)) %>% filter(Var2 == "CSF1_NKT")
 tab$frequency <- frequency[,3]
 
 colnames(tab) <- c("sample", "subtype", "proportion", "frequency")
@@ -274,7 +276,7 @@ ggplot(tab, aes(TIG, proportion, color = TIG))+
         panel.border = element_rect(color = "black", fill = NA, size = 1),
         strip.background = element_blank(),
         legend.background = element_blank())+
-  ylab("Proportion out of all cells")
+  ylab("Proportion out of T/NK cells")
 ```
 
 # Compare to 10x proportions
@@ -389,9 +391,15 @@ ggplot(prop.comb, aes(IMC_proportion, RNAseq_proportion)) +
 
 ```
 
-# Check correlation of CSF1_NKT cells with myeloid activation/differentiation status (across ROIs)
+# CSF1_NKT cells: correlation with myeloid activation/differentiation status 
 
-## Use the cytokine-expression status as a proxy for cell activation
+To see whether myeloid activation occurs close to NKT cells.
+
+
+## With ROIs as the "spatial" entity
+Correlate NKT frequency with myeloid activation across ROIs
+
+### Use the cytokine-expression status as a proxy for cell activation
 
 ```{r myeloid-activation-cytokines-CSF1}
 sce_myeloid <- sce_RNA[,which(sce_RNA$celltype == "myeloid")]
@@ -418,7 +426,7 @@ ggplot(CSF1_freq, aes(`CSF1_NKT frequency`, myeloid_activation)) +
   ylab("Proportion of myeloid cells that express at least one cytokine")
 ```
 
-## Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation
+### Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation
 
 ```{r myeloid-activation-score-CSF1}
 # Re-normalize counts
@@ -448,6 +456,114 @@ ggplot(CSF1_freq, aes(`CSF1_NKT frequency`, myeloid_activation)) +
         panel.background = element_blank())+
   ylab("Mean activation score for myeloid cells")
 ```
+
+## With distance to the next NKT cells as spatial measure
+
+Set 800 as maximum distance.
+
+```{r calculate-distance-CSF1}
+max_dist <- 800
+cur_sce <- data.frame(colData(sce_RNA))
+cellIDs_NKT <- cur_sce[cur_sce[,"subtype"] == "CSF1_NKT",]
+new_sce <- data.frame(matrix(ncol=length(colnames(cur_sce))+1, nrow = 0))
+
+# For each image separately: nearest neighbour search
+
+for (j in unique(cur_sce$ImageNumber)) {
+  cur_sce_j <- filter(cur_sce, ImageNumber == j)
+  NKT_j <- filter(cellIDs_NKT, ImageNumber == j)[,c("Center_X", "Center_Y")]
+  
+  #For images in which there is no NKT cell --> set distance parameter to max
+  if (nrow(NKT_j) == 0) {
+    cur_sce_j$NKT_distance <- max_dist
+  } else {
+    j_coord <- cur_sce_j[,c("Center_X", "Center_Y")]
+    nn <- RANN::nn2(NKT_j, j_coord)
+    cur_sce_j$NKT_distance <- nn$nn.dists[,1]
+    
+    #Set distance parameter to max for all cells with distance > max
+    cur_sce_j$NKT_distance<- ifelse(cur_sce_j$NKT_distance > max_dist, max_dist, cur_sce_j$NKT_distance)
+  }
+  new_sce <- rbind(cur_sce_j, new_sce)
+}
+
+plot(density(new_sce$NKT_distance))
+
+# Add NKT_distances to colData of original object
+sce_RNA$NKT_distance <- new_sce[order(match(new_sce$cellID, sce_RNA$cellID)),]$NKT_distance
+plot(density(sce_RNA[,which(sce_RNA$subtype == "CSF1_NKT")]$NKT_distance))
+
+# Bin the distances
+breaks <- seq(from = 0, to = 800, by = 5)
+sce_RNA$NKT_distance_bin <- cut(sce_RNA$NKT_distance, breaks = breaks, include.lowest = TRUE, right = TRUE, ordered_result = TRUE)
+```
+
+### Use the cytokine-expression status as a proxy for cell activation
+
+```{r myeloid-activation-cytokines-CSF1-distance, fig.width=5, fig.height=5}
+sce_myeloid <- sce_RNA[,which(sce_RNA$celltype == "myeloid")]
+
+cytokine_myeloid <- as.data.frame(prop.table(table(sce_myeloid$NKT_distance_bin, sce_myeloid$cytokine), margin = 1)[,2])
+cytokine_myeloid$distance <- seq(from = 2.5, to = 800, by = 5)
+colnames(cytokine_myeloid)[1] <- "prop_cytokine_expressing"
+
+ggplot(cytokine_myeloid, aes(distance, prop_cytokine_expressing)) +
+  geom_point()+
+  #geom_smooth(method = "gam", color = "black", se=FALSE)+
+  #stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion of myeloid cells that express at least one cytokine")+
+  xlab("Distance to the next NKT cells (5um bins)")
+  
+```
+
+### Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation
+
+```{r myeloid-activation-score-CSF1-distance, fig.width=5, fig.height=5}
+# Re-normalize counts
+norm_counts <- t(apply(assay(sce_myeloid, "counts"), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts <- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_myeloid, "normalized", withDimnames = FALSE) <- norm_counts
+
+# For each cells, average across the normalized counts for CD68, CD163, CD204 and CCL18
+count_matrix <- assay(sce_myeloid, "normalized")[c("CD68", "CD163", "CD204", "CCL18"),]
+sce_myeloid$activation_score <- colMeans(count_matrix)
+
+coldata_myeloid <- data.frame(colData(sce_myeloid))
+myeloid_summarized <- coldata_myeloid %>% group_by(NKT_distance_bin) %>% summarize(mean_activation_score = mean(activation_score))
+myeloid_summarized$distance <- seq(from = 7.5, to = 800, by = 5)
+
+ggplot(coldata_myeloid, aes(NKT_distance_bin, activation_score)) +
+  geom_boxplot()+
+  coord_cartesian(ylim = c(0.11, 0.19))+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Mean myeloid cell activation score")
+  
+
+ggplot(myeloid_summarized, aes(distance, mean_activation_score)) +
+  geom_point()+
+  geom_smooth(method = lm, color = "red", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Mean myeloid cell activation score")+
+  xlab("Distance to the next NKT cells (5um bins)")
+```
+
 
 # Save updated SCE object
 
