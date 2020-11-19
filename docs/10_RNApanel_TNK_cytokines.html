@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-06
+<strong>Last updated:</strong> 2020-11-19
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreed0e1504c9150cbfb2a06d285aeb9becccf3b40eftargetblankd0e1504a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/d0e1504c9150cbfb2a06d285aeb9becccf3b40ef" target="_blank">d0e1504</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreee4eac2d2c2467ffcd607656b3024bb9c161268a3targetblanke4eac2da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/e4eac2d2c2467ffcd607656b3024bb9c161268a3" target="_blank">e4eac2d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreed0e1504c9150cbfb2a06d285aeb9becccf3b40eftargetblankd0e1504a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreee4eac2d2c2467ffcd607656b3024bb9c161268a3targetblanke4eac2da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/d0e1504c9150cbfb2a06d285aeb9becccf3b40ef" target="_blank">d0e1504</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/e4eac2d2c2467ffcd607656b3024bb9c161268a3" target="_blank">e4eac2d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,27 +523,24 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
-    Untracked:  analysis/11_RNAscope_cytokine_communities.Rmd
+    Untracked:  CD11c_CD68_scatter.png
+    Untracked:  Neighbourhood_TLS_relative.pdf
+    Untracked:  Neighbourhood_TLS_relative.png
+    Untracked:  Neighbourhood_all_relative.pdf
+    Untracked:  Neighbourhood_all_relative.png
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
-    Untracked:  code/helper_functions/
-    Untracked:  data/Ki67_IHC.csv
-    Untracked:  data/ProteinPanel_TNK_clusters.csv
-    Untracked:  data/ProteinPanel_stromal_clusters.csv
-    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
-    Untracked:  data/RNApanel_TNK_clusters.csv
-    Untracked:  data/RNApanel_stromal_clusters.csv
-    Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
-    Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
-    Untracked:  data/ROI_info_HIER_TLSrevised.csv
     Untracked:  data/ROI_info_RNAscope.csv
-    Untracked:  data/ROI_info_RNAscope_TLSrevised.csv
-    Untracked:  data/TLS_scores.csv
     Untracked:  data/cpout/
-    Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
+    Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_TIGdifference.png
+    Untracked:  neighbourhood_myeloid_TLS_relative.png
+    Untracked:  neighbourhood_myeloid_all_relative.png
+    Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/TLS_score_25samples.png
@@ -553,11 +550,10 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  test_Treg_enrichment.png
 
 Unstaged changes:
-    Modified:   analysis/05_proteinPanel_StromalSubclustering.Rmd
     Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
-    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
 
 </code></pre>
 <p>
@@ -596,6 +592,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/e4eac2d2c2467ffcd607656b3024bb9c161268a3/analysis/10_RNApanel_TNK_cytokines.Rmd" target="_blank">e4eac2d</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-19
+</td>
+<td>
+Correlate NKT-distance to myeloid activation status
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/1e7cdff9d9ccb7c3c365e038e3fb35b520cfae11/docs/10_RNApanel_TNK_cytokines.html" target="_blank">1e7cdff</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -736,6 +766,7 @@ library(tidyr)
 library(ggpubr)
 library(dittoSeq)
 library(Seurat)
+library(RANN)
 
 sce_RNA &lt;- readRDS(file = &quot;output/RNApanel/sce_RNApanel_celltypes_cytokines.rds&quot;)
 TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)</code></pre>
@@ -957,6 +988,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1e7cdff9d9ccb7c3c365e038e3fb35b520cfae11/docs/figure/10_RNApanel_TNK_cytokines.Rmd/CXCL13-proportion-TIG-1.png" target="_blank">1e7cdff</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/cc3a5bc10a0537fb4ec7947fb631a17bab86ef08/docs/figure/10_RNApanel_TNK_cytokines.Rmd/CXCL13-proportion-TIG-1.png" target="_blank">cc3a5bc</a>
 </td>
 <td>
@@ -1021,6 +1063,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1e7cdff9d9ccb7c3c365e038e3fb35b520cfae11/docs/figure/10_RNApanel_TNK_cytokines.Rmd/unnamed-chunk-2-1.png" target="_blank">1e7cdff</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/cc3a5bc10a0537fb4ec7947fb631a17bab86ef08/docs/figure/10_RNApanel_TNK_cytokines.Rmd/unnamed-chunk-2-1.png" target="_blank">cc3a5bc</a>
@@ -1269,10 +1322,11 @@ SandraTietscher
 <h3>Across samples/TIGs</h3>
 <p>For non-TLS images only.</p>
 <pre class="r"><code>sce_TLSex &lt;- sce_RNA[,which(sce_RNA$TLS == &quot;no&quot;)]
+sce_TLSex_TNK &lt;- sce_TLSex[,which(sce_TLSex$celltype %in% c(&quot;T_CD4&quot;, &quot;T_CD8&quot;, &quot;NK&quot;))]
 
 # Boxplots (individual ROIs as points)
-tab &lt;- as.data.frame(prop.table(table(sce_TLSex$sample, sce_TLSex$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
-frequency &lt;- as.data.frame(table(sce_TLSex$sample, sce_TLSex$subtype)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
+tab &lt;- as.data.frame(prop.table(table(sce_TLSex_TNK$sample, sce_TLSex_TNK$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
+frequency &lt;- as.data.frame(table(sce_TLSex_TNK$sample, sce_TLSex_TNK$subtype)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
 tab$frequency &lt;- frequency[,3]
 
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;proportion&quot;, &quot;frequency&quot;)
@@ -1290,7 +1344,7 @@ ggplot(tab, aes(TIG, proportion, color = TIG))+
         panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
         strip.background = element_blank(),
         legend.background = element_blank())+
-  ylab(&quot;Proportion out of all cells&quot;)</code></pre>
+  ylab(&quot;Proportion out of T/NK cells&quot;)</code></pre>
 <p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/cSF1-proportion-TIG-1.png" width="288" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cSF1-proportion-TIG-1">
@@ -1314,6 +1368,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1e7cdff9d9ccb7c3c365e038e3fb35b520cfae11/docs/figure/10_RNApanel_TNK_cytokines.Rmd/cSF1-proportion-TIG-1.png" target="_blank">1e7cdff</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/cc3a5bc10a0537fb4ec7947fb631a17bab86ef08/docs/figure/10_RNApanel_TNK_cytokines.Rmd/cSF1-proportion-TIG-1.png" target="_blank">cc3a5bc</a>
@@ -1564,10 +1629,14 @@ SandraTietscher
 </div>
 </div>
 </div>
-<div id="check-correlation-of-csf1_nkt-cells-with-myeloid-activationdifferentiation-status-across-rois" class="section level1">
-<h1>Check correlation of CSF1_NKT cells with myeloid activation/differentiation status (across ROIs)</h1>
-<div id="use-the-cytokine-expression-status-as-a-proxy-for-cell-activation" class="section level2">
-<h2>Use the cytokine-expression status as a proxy for cell activation</h2>
+<div id="csf1_nkt-cells-correlation-with-myeloid-activationdifferentiation-status" class="section level1">
+<h1>CSF1_NKT cells: correlation with myeloid activation/differentiation status</h1>
+<p>To see whether myeloid activation occurs close to NKT cells.</p>
+<div id="with-rois-as-the-spatial-entity" class="section level2">
+<h2>With ROIs as the “spatial” entity</h2>
+<p>Correlate NKT frequency with myeloid activation across ROIs</p>
+<div id="use-the-cytokine-expression-status-as-a-proxy-for-cell-activation" class="section level3">
+<h3>Use the cytokine-expression status as a proxy for cell activation</h3>
 <pre class="r"><code>sce_myeloid &lt;- sce_RNA[,which(sce_RNA$celltype == &quot;myeloid&quot;)]
 
 cytokine_myeloid &lt;- prop.table(table(sce_myeloid$ImageNumber, sce_myeloid$cytokine), margin = 1)[,2]
@@ -1641,8 +1710,8 @@ SandraTietscher
 </div>
 </div>
 </div>
-<div id="use-the-expression-of-cd68-cd163-cd204-and-ccl18-as-a-proxy-for-cell-activation" class="section level2">
-<h2>Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation</h2>
+<div id="use-the-expression-of-cd68-cd163-cd204-and-ccl18-as-a-proxy-for-cell-activation" class="section level3">
+<h3>Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation</h3>
 <pre class="r"><code># Re-normalize counts
 norm_counts &lt;- t(apply(assay(sce_myeloid, &quot;counts&quot;), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
 norm_counts &lt;- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
@@ -1721,6 +1790,109 @@ SandraTietscher
 </div>
 </div>
 </div>
+<div id="with-distance-to-the-next-nkt-cells-as-spatial-measure" class="section level2">
+<h2>With distance to the next NKT cells as spatial measure</h2>
+<p>Set 800 as maximum distance.</p>
+<pre class="r"><code>max_dist &lt;- 800
+cur_sce &lt;- data.frame(colData(sce_RNA))
+cellIDs_NKT &lt;- cur_sce[cur_sce[,&quot;subtype&quot;] == &quot;CSF1_NKT&quot;,]
+new_sce &lt;- data.frame(matrix(ncol=length(colnames(cur_sce))+1, nrow = 0))
+
+# For each image separately: nearest neighbour search
+
+for (j in unique(cur_sce$ImageNumber)) {
+  cur_sce_j &lt;- filter(cur_sce, ImageNumber == j)
+  NKT_j &lt;- filter(cellIDs_NKT, ImageNumber == j)[,c(&quot;Center_X&quot;, &quot;Center_Y&quot;)]
+  
+  #For images in which there is no NKT cell --&gt; set distance parameter to max
+  if (nrow(NKT_j) == 0) {
+    cur_sce_j$NKT_distance &lt;- max_dist
+  } else {
+    j_coord &lt;- cur_sce_j[,c(&quot;Center_X&quot;, &quot;Center_Y&quot;)]
+    nn &lt;- RANN::nn2(NKT_j, j_coord)
+    cur_sce_j$NKT_distance &lt;- nn$nn.dists[,1]
+    
+    #Set distance parameter to max for all cells with distance &gt; max
+    cur_sce_j$NKT_distance&lt;- ifelse(cur_sce_j$NKT_distance &gt; max_dist, max_dist, cur_sce_j$NKT_distance)
+  }
+  new_sce &lt;- rbind(cur_sce_j, new_sce)
+}
+
+plot(density(new_sce$NKT_distance))</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/calculate-distance-CSF1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Add NKT_distances to colData of original object
+sce_RNA$NKT_distance &lt;- new_sce[order(match(new_sce$cellID, sce_RNA$cellID)),]$NKT_distance
+plot(density(sce_RNA[,which(sce_RNA$subtype == &quot;CSF1_NKT&quot;)]$NKT_distance))</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/calculate-distance-CSF1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Bin the distances
+breaks &lt;- seq(from = 0, to = 800, by = 5)
+sce_RNA$NKT_distance_bin &lt;- cut(sce_RNA$NKT_distance, breaks = breaks, include.lowest = TRUE, right = TRUE, ordered_result = TRUE)</code></pre>
+<div id="use-the-cytokine-expression-status-as-a-proxy-for-cell-activation-1" class="section level3">
+<h3>Use the cytokine-expression status as a proxy for cell activation</h3>
+<pre class="r"><code>sce_myeloid &lt;- sce_RNA[,which(sce_RNA$celltype == &quot;myeloid&quot;)]
+
+cytokine_myeloid &lt;- as.data.frame(prop.table(table(sce_myeloid$NKT_distance_bin, sce_myeloid$cytokine), margin = 1)[,2])
+cytokine_myeloid$distance &lt;- seq(from = 2.5, to = 800, by = 5)
+colnames(cytokine_myeloid)[1] &lt;- &quot;prop_cytokine_expressing&quot;
+
+ggplot(cytokine_myeloid, aes(distance, prop_cytokine_expressing)) +
+  geom_point()+
+  #geom_smooth(method = &quot;gam&quot;, color = &quot;black&quot;, se=FALSE)+
+  #stat_cor(method=&quot;spearman&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab(&quot;Proportion of myeloid cells that express at least one cytokine&quot;)+
+  xlab(&quot;Distance to the next NKT cells (5um bins)&quot;)</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-cytokines-CSF1-distance-1.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="use-the-expression-of-cd68-cd163-cd204-and-ccl18-as-a-proxy-for-cell-activation-1" class="section level3">
+<h3>Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation</h3>
+<pre class="r"><code># Re-normalize counts
+norm_counts &lt;- t(apply(assay(sce_myeloid, &quot;counts&quot;), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+norm_counts &lt;- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+assay(sce_myeloid, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
+# For each cells, average across the normalized counts for CD68, CD163, CD204 and CCL18
+count_matrix &lt;- assay(sce_myeloid, &quot;normalized&quot;)[c(&quot;CD68&quot;, &quot;CD163&quot;, &quot;CD204&quot;, &quot;CCL18&quot;),]
+sce_myeloid$activation_score &lt;- colMeans(count_matrix)
+
+coldata_myeloid &lt;- data.frame(colData(sce_myeloid))
+myeloid_summarized &lt;- coldata_myeloid %&gt;% group_by(NKT_distance_bin) %&gt;% summarize(mean_activation_score = mean(activation_score))</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre class="r"><code>myeloid_summarized$distance &lt;- seq(from = 7.5, to = 800, by = 5)
+
+ggplot(coldata_myeloid, aes(NKT_distance_bin, activation_score)) +
+  geom_boxplot()+
+  coord_cartesian(ylim = c(0.11, 0.19))+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab(&quot;Mean myeloid cell activation score&quot;)</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-score-CSF1-distance-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(myeloid_summarized, aes(distance, mean_activation_score)) +
+  geom_point()+
+  geom_smooth(method = lm, color = &quot;red&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab(&quot;Mean myeloid cell activation score&quot;)+
+  xlab(&quot;Distance to the next NKT cells (5um bins)&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-score-CSF1-distance-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
 <div id="save-updated-sce-object" class="section level1">
 <h1>Save updated SCE object</h1>
 <pre class="r"><code>saveRDS(sce_RNA, &quot;output/RNApanel/sce_RNApanel_cytokines_subtypes.rds&quot;)</code></pre>
@@ -1751,6 +1923,43 @@ ggplot(prop, aes(T_CD4_CXCL13, CD4_PD1)) +
         panel.background = element_blank())</code></pre>
 <pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/PD1-CXCL13-correlation-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-CXCL13-correlation-1">
+Past versions of PD1-CXCL13-correlation-1.png
+</button>
+</p>
+<div id="fig-PD1-CXCL13-correlation-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1e7cdff9d9ccb7c3c365e038e3fb35b520cfae11/docs/figure/10_RNApanel_TNK_cytokines.Rmd/PD1-CXCL13-correlation-1.png" target="_blank">1e7cdff</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># CD8+ T cells
 ggplot(prop, aes(T_CD8_CXCL13, CD8_PD1)) +
   geom_point(aes(color=sample))+
@@ -1764,6 +1973,43 @@ ggplot(prop, aes(T_CD8_CXCL13, CD8_PD1)) +
         panel.background = element_blank())</code></pre>
 <pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/PD1-CXCL13-correlation-2.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-CXCL13-correlation-2">
+Past versions of PD1-CXCL13-correlation-2.png
+</button>
+</p>
+<div id="fig-PD1-CXCL13-correlation-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1e7cdff9d9ccb7c3c365e038e3fb35b520cfae11/docs/figure/10_RNApanel_TNK_cytokines.Rmd/PD1-CXCL13-correlation-2.png" target="_blank">1e7cdff</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1792,15 +2038,16 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] Seurat_3.2.2                dittoSeq_1.0.2             
- [3] ggpubr_0.4.0                tidyr_1.1.1                
- [5] scater_1.16.2               ggplot2_3.3.2              
- [7] dplyr_1.0.1                 SingleCellExperiment_1.10.1
- [9] SummarizedExperiment_1.18.2 DelayedArray_0.14.1        
-[11] matrixStats_0.56.0          Biobase_2.48.0             
-[13] GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
-[15] IRanges_2.22.2              S4Vectors_0.26.1           
-[17] BiocGenerics_0.34.0         workflowr_1.6.2            
+ [1] RANN_2.6.1                  Seurat_3.2.2               
+ [3] dittoSeq_1.0.2              ggpubr_0.4.0               
+ [5] tidyr_1.1.1                 scater_1.16.2              
+ [7] ggplot2_3.3.2               dplyr_1.0.1                
+ [9] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
+[11] DelayedArray_0.14.1         matrixStats_0.56.0         
+[13] Biobase_2.48.0              GenomicRanges_1.40.0       
+[15] GenomeInfoDb_1.24.2         IRanges_2.22.2             
+[17] S4Vectors_0.26.1            BiocGenerics_0.34.0        
+[19] workflowr_1.6.2            
 
 loaded via a namespace (and not attached):
   [1] readxl_1.3.1              backports_1.1.8          
@@ -1844,33 +2091,33 @@ loaded via a namespace (and not attached):
  [77] yaml_2.2.1                knitr_1.29               
  [79] fs_1.5.0                  fitdistrplus_1.1-1       
  [81] zip_2.0.4                 purrr_0.3.4              
- [83] RANN_2.6.1                nlme_3.1-148             
- [85] pbapply_1.4-3             future_1.19.1            
- [87] whisker_0.4               mime_0.9                 
- [89] compiler_4.0.2            rstudioapi_0.11          
- [91] png_0.1-7                 plotly_4.9.2.1           
- [93] beeswarm_0.2.3            curl_4.3                 
- [95] ggsignif_0.6.0            spatstat.utils_1.17-0    
- [97] tibble_3.0.3              stringi_1.4.6            
- [99] forcats_0.5.0             lattice_0.20-41          
-[101] Matrix_1.2-18             vctrs_0.3.2              
-[103] pillar_1.4.6              lifecycle_0.2.0          
-[105] lmtest_0.9-37             RcppAnnoy_0.0.16         
-[107] BiocNeighbors_1.6.0       data.table_1.13.0        
-[109] cowplot_1.0.0             bitops_1.0-6             
-[111] irlba_2.3.3               httpuv_1.5.4             
-[113] patchwork_1.0.1           R6_2.4.1                 
-[115] promises_1.1.1            KernSmooth_2.23-17       
-[117] gridExtra_2.3             rio_0.5.16               
-[119] vipor_0.4.5               codetools_0.2-16         
-[121] MASS_7.3-51.6             rprojroot_1.3-2          
-[123] withr_2.2.0               sctransform_0.3.1        
-[125] GenomeInfoDbData_1.2.3    mgcv_1.8-31              
-[127] hms_0.5.3                 rpart_4.1-15             
-[129] grid_4.0.2                rmarkdown_2.3            
-[131] DelayedMatrixStats_1.10.1 carData_3.0-4            
-[133] Rtsne_0.15                git2r_0.27.1             
-[135] shiny_1.5.0               ggbeeswarm_0.6.0         </code></pre>
+ [83] nlme_3.1-148              pbapply_1.4-3            
+ [85] future_1.19.1             whisker_0.4              
+ [87] mime_0.9                  compiler_4.0.2           
+ [89] rstudioapi_0.11           png_0.1-7                
+ [91] plotly_4.9.2.1            beeswarm_0.2.3           
+ [93] curl_4.3                  ggsignif_0.6.0           
+ [95] spatstat.utils_1.17-0     tibble_3.0.3             
+ [97] stringi_1.4.6             forcats_0.5.0            
+ [99] lattice_0.20-41           Matrix_1.2-18            
+[101] vctrs_0.3.2               pillar_1.4.6             
+[103] lifecycle_0.2.0           lmtest_0.9-37            
+[105] RcppAnnoy_0.0.16          BiocNeighbors_1.6.0      
+[107] data.table_1.13.0         cowplot_1.0.0            
+[109] bitops_1.0-6              irlba_2.3.3              
+[111] httpuv_1.5.4              patchwork_1.0.1          
+[113] R6_2.4.1                  promises_1.1.1           
+[115] KernSmooth_2.23-17        gridExtra_2.3            
+[117] rio_0.5.16                vipor_0.4.5              
+[119] codetools_0.2-16          MASS_7.3-51.6            
+[121] rprojroot_1.3-2           withr_2.2.0              
+[123] sctransform_0.3.1         GenomeInfoDbData_1.2.3   
+[125] mgcv_1.8-31               hms_0.5.3                
+[127] rpart_4.1-15              grid_4.0.2               
+[129] rmarkdown_2.3             DelayedMatrixStats_1.10.1
+[131] carData_3.0-4             Rtsne_0.15               
+[133] git2r_0.27.1              shiny_1.5.0              
+[135] ggbeeswarm_0.6.0         </code></pre>
 </div>
 </div>
 
