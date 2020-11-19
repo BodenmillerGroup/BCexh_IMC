@@ -35,6 +35,7 @@ library(RANN)
 library(concaveman)
 library(ggpubr)
 library(data.table)
+library(patchwork)
 
 sce = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_communities.rds")
 
@@ -42,6 +43,23 @@ sce = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_communities.rds")
 dat_relation <- fread("data/cpout/Object_relationships_RNApanel.csv")
 dat_relation$cellA <- paste0(dat_relation$`First Image Number`, "_", dat_relation$`First Object Number`)
 dat_relation$cellB <- paste0(dat_relation$`Second Image Number`, "_", dat_relation$`Second Object Number`)
+```
+
+# Compare CXCL13 protein status to CXCL13 mRNA status
+
+```{r-RNA-protein-boxplot, fig.width=3, fig.height=4}
+sce_T <- sce[,which(sce$celltype %in% c("T_CD8", "T_CD4"))]
+CXCL13_exp <- data.frame(mRNA = as.factor(sce_T$CXCL13_mRNA_expression),
+                         protein = assay(sce_T, "counts")["CXCL13_protein",])
+
+ggplot(CXCL13_exp, aes(x=mRNA, y = protein))+
+  #geom_violin(width=1, fill = "black")+
+  geom_boxplot()+
+  stat_compare_means(label = "p.format", method = "wilcox", label.x.npc = "middle")+
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1),
+        panel.background = element_blank())+
+  xlab("CXCL13 mRNA expression")+
+  ylab("CXCL13 protein counts")
 ```
 
 # Calculate distance to the next CXCL13_mRNA expressing cell (for each cell)
@@ -122,4 +140,33 @@ ggplot(cur_sce, aes(cxcl13_status, cxcl13_counts))+
         panel.background = element_blank())
 
 ```
+
+# CXCL13+ T cells: Single cells vs CXCL13-clusters
+
+```{r CXCL13-single-cluster}
+sce_T_CXCL13 <- sce[,which(sce$subtype %in% c("T_CD4_CXCL13", "T_CD8_CXCL13"))]
+sce_T_CXCL13$CXCL13_cluster <- ifelse(sce_T_CXCL13$cxcl13_mrnaonly_clust == 0, "single", "cluster")
+tab_subtype <- as.data.frame(prop.table(table(sce_T_CXCL13$subtype, sce_T_CXCL13$CXCL13_cluster), margin = 1))
+tab_TIG <- as.data.frame(prop.table(table(sce_T_CXCL13$TIG, sce_T_CXCL13$CXCL13_cluster), margin = 1))
+tab_TLS <- as.data.frame(prop.table(table(sce_T_CXCL13$TLS, sce_T_CXCL13$CXCL13_cluster), margin = 1))
+
+p_subtype <- ggplot(tab_subtype, aes(Var1, Freq, fill = Var2))+
+    geom_bar(stat = "identity")+
+    scale_fill_manual(values = c("#E69F00", "#006600"))+
+    theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
+
+p_TIG <- ggplot(tab_TIG, aes(Var1, Freq, fill = Var2))+
+    geom_bar(stat = "identity")+
+    scale_fill_manual(values = c("#E69F00", "#006600"))+
+    theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")
+
+p_TLS <- ggplot(tab_TLS, aes(Var1, Freq, fill = Var2))+
+    geom_bar(stat = "identity")+
+    scale_fill_manual(values = c("#E69F00", "#006600"))+
+    theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank())
+
+p <- (p_subtype + p_TIG) + p_TLS
+
+```
+
 
