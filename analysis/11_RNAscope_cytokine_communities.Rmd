@@ -38,7 +38,11 @@ library(concaveman)
 library(ggpubr)
 
 sce = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_subtypes.rds")
+
 cytokine_channels = c("CCL4", "CCL18", "CSF1", "CXCL10", "CXCL13_mRNA", "CCL2", "CCL22", "CXCL9", "CCL17", "CCL5")
+TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
+ROI_info <- read.csv("data/ROI_info_RNAscope.csv")
+ROI_info$ImageNumber <- 1:77 
 ```
 
 # Clusters/Communities - General
@@ -149,7 +153,7 @@ ggplot(cytokine_community, aes(x=Freq))+
   geom_histogram(binwidth = 10)
 
 #For individual single-cytokine clusters
-comm_colnames <- colnames(cur_sce)[grep("only_comm", colnames(cur_sce))]
+comm_colnames <- colnames(cur_sce)[grep("only_comm$", colnames(cur_sce))]
 
 p.list <- list()
 for (i in comm_colnames) {
@@ -191,7 +195,82 @@ plotCells(cur_img, object = sce,
 
 # Cell type proportions
 
-## Cell type proportions in clusters
+## Single vs Cluster: Proportion of cytokine-expressing cells
+
+Exclude TLS and pre-TLS images for TIG comparison.
+
+```{r single-vs-cluster, fig.width=7, fig.height=5}
+sce_cyt <- sce[,which(sce$cytokine == 1)]
+sce_cyt <- sce_cyt[,which(sce_cyt$TLS == "no")]
+sce_cyt$single <- ifelse(sce_cyt$cytokine_cluster == 0, "single", "cluster")
+
+tab_celltype <- data.frame(matrix(ncol=4, nrow = 0))
+
+for (i in unique(sce$sample)){
+  sce_i <- sce_cyt[,which(sce_cyt$sample == i)]
+  tab_celltype_i <- as.data.frame(prop.table(table(sce_i$celltype, sce_i$single), margin = 1))
+  tab_celltype_i$sample <- i
+  tab_celltype <- rbind(tab_celltype, tab_celltype_i)
+}
+
+tab_celltype <- filter(tab_celltype, Var2 == "cluster")
+tab_celltype$TIG <- ifelse(tab_celltype$sample %in% TIG2, "TIG2", "TIG3")
+colnames(tab_celltype)[1:2] <- c("celltype", "cluster_single")
+
+ggplot(tab_celltype, aes(TIG, Freq, color = TIG))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(width = 0.1)+
+  facet_wrap(~celltype, ncol = 6)+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = 0.5, label.y.npc = 0.95)+
+  theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank(), panel.border = element_rect(color = "black", fill = NA), strip.background = element_blank())+
+  ylab("Proportion of cytokine-expressing cells that are part of a cytokine cluster")
+```
+
+```{r single-vs-cluster-tumor-immune, fig.width=5, fig.height=4}
+sce_cyt$cell_class <- ifelse(sce_cyt$celltype == "tumor", "tumor", ifelse(sce_cyt$celltype %in% c("endothelial", "stromal_SMA+", "stromal_undefined"), "stromal", "immune"))
+
+tab_cellclass <- as.data.frame(prop.table(table(sce_cyt$cell_class, sce_cyt$single), margin = 1))
+colnames(tab_cellclass) <- c("cell_class", "single_cluster", "proportion")
+
+ggplot(tab_cellclass, aes(cell_class, proportion, fill = single_cluster))+
+  geom_bar(stat = "identity")+
+  scale_fill_manual(values = c("#E69F00", "#006600"))+
+  theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank(), panel.border = element_rect(color = "black", fill = NA))
+```
+
+```{r single-vs-cluster-TLS, fig.width=7, fig.height=5}
+sce_cyt <- sce[,which(sce$cytokine == 1)]
+sce_cyt$single <- ifelse(sce_cyt$cytokine_cluster == 0, "single", "cluster")
+
+tab_celltype <- data.frame(matrix(ncol=4, nrow = 0))
+
+for (i in unique(sce$ImageNumber)){
+  sce_i <- sce_cyt[,which(sce_cyt$ImageNumber == i)]
+  tab_celltype_i <- as.data.frame(prop.table(table(sce_i$celltype, sce_i$single), margin = 1))
+  tab_celltype_i$ImageNumber <- i
+  tab_celltype <- rbind(tab_celltype, tab_celltype_i)
+}
+
+tab_celltype <- filter(tab_celltype, Var2 == "single")
+
+colnames(tab_celltype)[1:2] <- c("celltype", "cluster_single")
+tab_celltype$inCluster_freq <- 1 - tab_celltype$Freq
+
+# Add TLS info
+tab_celltype$TLS <- ROI_info$TLS[match(tab_celltype$ImageNumber, ROI_info$ImageNumber)]
+my_comparisons <- list(c("no", "pre"), c("no", "yes"), c("pre", "yes"))
+
+ggplot(tab_celltype, aes(TLS, inCluster_freq))+
+  geom_boxplot()+
+  #geom_jitter(width = 0.1)+
+  facet_wrap(~celltype, ncol = 6)+
+  theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank(), panel.border = element_rect(color = "black", fill = NA), strip.background = element_blank())+
+  ylab("Proportion of cytokine-expressing cells that are part of a cytokine cluster")+
+  stat_compare_means(comparisons = my_comparisons, method = "wilcox.test", aes(label=..p.signif..))
+```
+
+
+## Cell type proportions in each cluster
 
 ```{r cytokine-cluster-celltypes}
 # For individual single-cytokine clusters
@@ -207,10 +286,10 @@ for (i in clust_colnames) {
 }
 
 celltype_prop[is.na(celltype_prop)] = 0
-celltype_prop <- pivot_longer(celltype_prop, 2:12, names_to = "cluster", values_to = "celltype_proportion")
+celltype_prop_simple <- pivot_longer(celltype_prop, 2:12, names_to = "cluster", values_to = "celltype_proportion")
 
 # Plot
-ggplot(celltype_prop, aes(cluster, celltype_proportion, fill = celltype))+
+ggplot(celltype_prop_simple, aes(cluster, celltype_proportion, fill = celltype))+
   geom_bar(stat = "identity")+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
   ggtitle("Cell type proportions per cytokine cluster")
@@ -218,7 +297,7 @@ ggplot(celltype_prop, aes(cluster, celltype_proportion, fill = celltype))+
 
 ## Cell type proportions in communities
 
-```{r cytokine-community-celltypes}
+```{r community-celltypes-all}
 # For individual single-cytokine communities: ALL CELLS IN THE COMMUNITY
 
 celltype_comm <- data.frame(celltype = names(prop.table(table(cur_sce[,"celltype"]))))
@@ -239,44 +318,149 @@ ggplot(celltype_comm, aes(cluster, celltype_proportion, fill = celltype))+
   geom_bar(stat = "identity")+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
   ggtitle("Cell type proportions per cytokine community")
+```
 
+```{r community-enrichment-all}
 
-# For individual single-cytokine communities: ONLY CELLS IN THE COMMUNITY THAT ARE NOT ALSO IN THE CLUSTER
+#Calculate enrichment individually for each community (to prevent bias from large communities)
+enrichment_comm <- data.frame(matrix(ncol=4, nrow = 0))
+
+for (i in cytokine_channels) {
+  comm_name_i <- tolower(paste0(i,"only_comm"))
+  cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0),]
+   
+    for(j in unique(cur_sce_i[,comm_name_i])) {
+      sce_sub_j <- cur_sce_i[cur_sce_i[,comm_name_i] == j,]
+      prop_j <- prop.table(table(sce_sub_j$celltype))
+      prop_all <- prop.table(table(cur_sce$celltype))[names(prop_j)]
+      enrichment_j <-  prop_j/prop_all 
+      if(length(prop_j > 0)) {
+            j_df <- data.frame(comm = j,
+                        cytokine = i,
+                        enrichment = enrichment_j)
+      enrichment_comm <- rbind(enrichment_comm, j_df)
+      }
+  }
+}
+
+colnames(enrichment_comm)[3:4] = c("celltype", "enrichment")
+
+ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~celltype, scales = "free", ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
+```
+
+### For individual single-cytokine communities: ONLY CELLS IN THE COMMUNITY THAT ARE NOT expressing the given cytokine
+
+```{r community-celltypes-nonexpressing}
 
 celltype_commonly <- data.frame(celltype = names(prop.table(table(cur_sce[,"celltype"]))))
 celltype_commonly[,"all"] <- as.numeric(prop.table(table(cur_sce[,"celltype"])))
 
 for (i in cytokine_channels) {
-  cur_sce_i <- cur_sce[which(cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,"only_clust"), ignore_case = TRUE))] == 0 & cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,"only_comm"), ignore_case = TRUE))] != 0),]
+  cur_sce_i <- cur_sce[which(cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,"only_comm"), ignore_case = TRUE))] != 0 & cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
   prop_i <- as.data.frame(prop.table(table(cur_sce_i[,"celltype"])))
   colnames(prop_i) <- c("celltype", i)
   celltype_commonly <- merge(celltype_commonly, prop_i, by="celltype", all.x = TRUE)
 }
 
 celltype_commonly[is.na(celltype_commonly)] = 0
-celltype_commonly <- pivot_longer(celltype_commonly, 2:12, names_to = "cluster", values_to = "celltype_proportion")
+celltype_commonly_long <- pivot_longer(celltype_commonly, 2:12, names_to = "cluster", values_to = "celltype_proportion")
 
 # Plot
-ggplot(celltype_commonly, aes(cluster, celltype_proportion, fill = celltype))+
+ggplot(celltype_commonly_long, aes(cluster, celltype_proportion, fill = celltype))+
   geom_bar(stat = "identity")+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
   ggtitle("Cells that are ONLY part of the respective cytokine community (not the cluster)")
+
+# Enrichment compared to overall proportion
+celltype_enrichment <- celltype_commonly
+for (i in 3:12) {
+  celltype_enrichment[i] <- celltype_commonly[i]/celltype_commonly[2]
+}
+celltype_enrichment_long <- pivot_longer(celltype_enrichment, 3:12, names_to = "cluster", values_to = "enrichment")
+
+# Plot
+ggplot(celltype_enrichment_long, aes(cluster, enrichment, fill = cluster))+
+  geom_bar(stat="identity")+
+  facet_wrap(~celltype, scales = "free")+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
+```
+
+```{r community-enrichment-nonexpressing}
+
+## Calculate enrichment individually for each community (to prevent bias from large communities)
+
+enrichment_comm <- data.frame(matrix(ncol=4, nrow = 0))
+
+for (i in cytokine_channels) {
+  comm_name_i <- tolower(paste0(i,"only_comm"))
+  cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0 & cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
+   
+    for(j in unique(cur_sce_i[,comm_name_i])) {
+      sce_sub_j <- cur_sce_i[cur_sce_i[,comm_name_i] == j,]
+      prop_j <- prop.table(table(sce_sub_j$celltype))
+      prop_all <- prop.table(table(cur_sce$celltype))[names(prop_j)]
+      enrichment_j <-  prop_j/prop_all 
+      if(length(prop_j > 0)) {
+            j_df <- data.frame(comm = j,
+                        cytokine = i,
+                        enrichment = enrichment_j)
+      enrichment_comm <- rbind(enrichment_comm, j_df)
+      }
+  }
+}
+
+colnames(enrichment_comm)[3:4] = c("celltype", "enrichment")
+
+ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~celltype, scales = "free", ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
 ```
 
 ## Compare cell type proportions in clusters and communities
 
-```{r cluster-community-celltype-comparison}
+```{r cluster-community-celltype-comparison, fig.width= 15, fig.height=8}
 # Compare
-celltype_prop$cluster <- celltype_commonly$cluster
-celltype_prop$type <- "cluster"
-celltype_commonly$type <- "community"
-celltype_comb <- rbind(celltype_prop, celltype_commonly)
+celltype_prop_simple$cluster <- celltype_commonly_long$cluster
+celltype_prop_simple$type <- "cluster_only"
+celltype_commonly_long$type <- "community_only"
+celltype_comb <- rbind(celltype_prop_simple, celltype_commonly_long)
+celltype_comb <- celltype_comb %>% filter(cluster != "all")
 
-ggplot(celltype_comb, aes(type, celltype_proportion, fill = celltype))+
-  geom_bar(stat = "identity")+
-  facet_wrap(~cluster, ncol = 6)+
-    theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
-  ggtitle("Celltype proportions in cytokine clusters vs communities")
+p.list <- list()
+for (i in unique(celltype_comb$cluster)) {
+celltype_comb_i <- filter(celltype_comb, cluster == i)
+p.list[[i]] <- ggplot(celltype_comb_i, aes(type, celltype_proportion, fill = celltype))+
+  geom_bar(stat = "identity", width = 0.6)+
+  geom_segment(data = tidyr::spread(celltype_comb_i, type, celltype_proportion),
+               colour = "grey",
+               aes(x = 1 + 0.6/2,
+                   xend = 2 - 0.6/2,
+                   y = 1 - cumsum(cluster_only),
+                   yend = 1 - cumsum(community_only))) +
+    theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.position = "none")+
+  ggtitle(i)
+}
+
+plot_grid(plotlist = p.list, ncol = 5)
 ```
 
 # CSF1 environments - myeloid cell activation
@@ -475,9 +659,9 @@ saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes_cytokine_env
 saveRDS(sce, "output/RNApanel/sce_RNApanel_cytokines_communities.rds")
 ```
 
-## Compare cell type proportions in cytokine communities: RNA vs protein panel
+## Compare cell type proportions in cytokine environments: RNA vs protein panel
 
-```{r}
+```{r environments-compare-panels}
 # Rename and match celltypes for the two panels
 sce_RNA_simple <- sce
 sce_RNA_simple[,which(sce_RNA_simple$celltype %in% c("stromal_SMA+", "stromal_undefined"))]$celltype <- "stromal"
@@ -493,7 +677,7 @@ tab_RNA <- data.frame(matrix(ncol = 8, nrow = 0))
 colnames(tab_RNA) <- levels(factor(sce_RNA_simple$celltype))
 tab_protein <- tab_RNA
   
-for (k in (colnames(coldata_RNA)[55:64])) {
+for (k in (colnames(coldata_RNA)[57:67])) {
   k_sub_RNA <- coldata_RNA[coldata_RNA[,k] == 1,]
   tab_RNA[k,] <- prop.table(table(k_sub_RNA$celltype))
   k_sub_protein <- coldata_protein[coldata_RNA[,k] == 1,]
@@ -547,29 +731,29 @@ ggplot(enrichment_long, aes(cluster, enrichment, fill = cluster))+
   geom_hline(yintercept = 1, linetype = "dashed")
 
 
-## Calculate individually for each sample (to prevent sample-bias)
+## Calculate individually for each image (to prevent bias from high-infiltration images)
 
-enrichment_sample <- data.frame(matrix(ncol=4, nrow = 0))
+enrichment_image <- data.frame(matrix(ncol=4, nrow = 0))
 
 for (k in colnames(coldata_protein)[24:33]) {
-  for(j in unique(as.character(coldata_protein$sample))) {
+  for(j in unique(as.character(coldata_protein$ImageNumber))) {
     sce_sub_k <- coldata_protein[coldata_protein[,k] == 1,]
-    sce_sub_kj <- sce_sub_k[sce_sub_k[,"sample"] == j,]
+    sce_sub_kj <- sce_sub_k[sce_sub_k[,"ImageNumber"] == j,]
     prop_kj <- prop.table(table(sce_sub_kj$subtype))
-    prop_j <- prop.table(table(sce_protein[,which(sce_protein$sample == j)]$subtype))[names(prop_kj)]
+    prop_j <- prop.table(table(sce_protein[,which(sce_protein$ImageNumber == j)]$subtype))[names(prop_kj)]
     enrichment_j <-  prop_kj/prop_j 
     if(length(prop_kj > 0)) {
-          j_df <- data.frame(sample = j,
+          j_df <- data.frame(ImageNumber = j,
                       cytokine = k,
                       enrichment = enrichment_j)
-    enrichment_sample <- rbind(enrichment_sample, j_df)
+    enrichment_image <- rbind(enrichment_image, j_df)
     }
   }
 }
 
-colnames(enrichment_sample)[3:4] = c("subtype", "enrichment")
+colnames(enrichment_image)[3:4] = c("subtype", "enrichment")
 
-ggplot(enrichment_sample, aes(cytokine, enrichment, fill = cytokine))+
+ggplot(enrichment_image, aes(cytokine, enrichment, fill = cytokine))+
   geom_boxplot()+
   facet_wrap(~subtype, scales = "free", ncol = 4)+
   theme(panel.background = element_blank(),
@@ -668,6 +852,39 @@ colnames(enrichment_TNK)[3:4] = c("T_subtype", "enrichment")
 ggplot(enrichment_TNK, aes(cytokine, enrichment, fill = cytokine))+
   geom_boxplot()+
   facet_wrap(~T_subtype, scales = "free", ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
+
+
+## Calculate individually for each image (to prevent bias from high-infiltration images)
+
+enrichment_image <- data.frame(matrix(ncol=4, nrow = 0))
+
+for (k in colnames(coldata_TNK)[24:33]) {
+  for(j in unique(as.character(coldata_TNK$ImageNumber))) {
+    sce_sub_k <- coldata_TNK[coldata_TNK[,k] == 1,]
+    sce_sub_kj <- sce_sub_k[sce_sub_k[,"ImageNumber"] == j,]
+    prop_kj <- prop.table(table(sce_sub_kj$subtype))
+    prop_j <- prop.table(table(sce_protein[,which(sce_protein$ImageNumber == j)]$subtype))[names(prop_kj)]
+    enrichment_j <-  prop_kj/prop_j 
+    if(length(prop_kj > 0)) {
+          j_df <- data.frame(ImageNumber = j,
+                      cytokine = k,
+                      enrichment = enrichment_j)
+    enrichment_image <- rbind(enrichment_image, j_df)
+    }
+  }
+}
+
+colnames(enrichment_image)[3:4] = c("subtype", "enrichment")
+
+ggplot(enrichment_image, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~subtype, scales = "free", ncol = 4)+
   theme(panel.background = element_blank(),
         axis.text.x = element_blank(),
         panel.border = element_rect(color = "black", fill = NA, size = 1),
