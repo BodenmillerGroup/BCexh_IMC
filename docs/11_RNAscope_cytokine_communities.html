@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-18
+<strong>Last updated:</strong> 2020-11-20
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree2661f7c14836cf285712c5cb6adcc19b9129f71ctargetblank2661f7ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/2661f7c14836cf285712c5cb6adcc19b9129f71c" target="_blank">2661f7c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree3481e9ff5d14eaa5e30e57f42f0a2046740bfc66targetblank3481e9fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/3481e9ff5d14eaa5e30e57f42f0a2046740bfc66" target="_blank">3481e9f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree2661f7c14836cf285712c5cb6adcc19b9129f71ctargetblank2661f7ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree3481e9ff5d14eaa5e30e57f42f0a2046740bfc66targetblank3481e9fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/2661f7c14836cf285712c5cb6adcc19b9129f71c" target="_blank">2661f7c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/3481e9ff5d14eaa5e30e57f42f0a2046740bfc66" target="_blank">3481e9f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,6 +521,7 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  CD11c_CD68_scatter.png
@@ -554,6 +555,7 @@ Untracked files:
 
 Unstaged changes:
     Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
+    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
 
 </code></pre>
 <p>
@@ -592,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3481e9ff5d14eaa5e30e57f42f0a2046740bfc66/analysis/11_RNAscope_cytokine_communities.Rmd" target="_blank">3481e9f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-20
+</td>
+<td>
+Add single vs inCluster analysis &amp; more celltype enrichment analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/8fa101bdec733f26874aae82a7ba1ba221e5f71b/docs/11_RNAscope_cytokine_communities.html" target="_blank">8fa101b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -729,7 +765,11 @@ library(concaveman)
 library(ggpubr)
 
 sce = readRDS(file = &quot;output/RNApanel/sce_RNApanel_cytokines_subtypes.rds&quot;)
-cytokine_channels = c(&quot;CCL4&quot;, &quot;CCL18&quot;, &quot;CSF1&quot;, &quot;CXCL10&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL2&quot;, &quot;CCL22&quot;, &quot;CXCL9&quot;, &quot;CCL17&quot;, &quot;CCL5&quot;)</code></pre>
+
+cytokine_channels = c(&quot;CCL4&quot;, &quot;CCL18&quot;, &quot;CSF1&quot;, &quot;CXCL10&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL2&quot;, &quot;CCL22&quot;, &quot;CXCL9&quot;, &quot;CCL17&quot;, &quot;CCL5&quot;)
+TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)
+ROI_info &lt;- read.csv(&quot;data/ROI_info_RNAscope.csv&quot;)
+ROI_info$ImageNumber &lt;- 1:77 </code></pre>
 </div>
 <div id="clusterscommunities---general" class="section level1">
 <h1>Clusters/Communities - General</h1>
@@ -752,7 +792,7 @@ sce &lt;- findClusters(sce, sce[,colData(sce)$cytokine == TRUE]$cellID ,
                     distance = 20, 
                     min_clust_size = 10,
                     output_colname = &quot;cytokine_cluster&quot;)</code></pre>
-<pre><code>Time difference of 2.163133 mins
+<pre><code>Time difference of 2.231354 mins
 [1] &quot;clusters successfully added to sce object&quot;</code></pre>
 <pre class="r"><code># number of cytokine clusters
 length(unique(sce$cytokine_cluster))</code></pre>
@@ -765,7 +805,7 @@ sce &lt;- findCommunity(sce,
                      &#39;cytokine_cluster&#39;, 
                      distance = 25,
                      output_colname = &quot;cytokine_community&quot;)</code></pre>
-<pre><code>Time difference of 1.200169 mins
+<pre><code>Time difference of 1.23744 mins
 [1] &quot;communities successfully added to sce object&quot;</code></pre>
 <pre class="r"><code># number of cytokine communities
 length(unique(sce$cytokine_community))</code></pre>
@@ -801,49 +841,49 @@ for(i in cytokine_channels) {
                      distance = 30,
                      output_colname = paste(tolower(i), &quot;only_comm&quot;, sep = &quot;&quot;))
 } </code></pre>
-<pre><code>Time difference of 4.307558 secs
+<pre><code>Time difference of 4.43363 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 31.44937 secs
+Time difference of 32.79559 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 5.087258 secs
+Time difference of 4.575084 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 50.72134 secs
+Time difference of 50.0748 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 6.923634 secs
+Time difference of 6.936906 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 42.9716 secs
+Time difference of 42.08033 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 11.68957 secs
+Time difference of 12.97833 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.574725 mins
+Time difference of 1.569315 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 5.798332 secs
+Time difference of 5.727941 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 47.86234 secs
+Time difference of 48.15623 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 9.76435 secs
+Time difference of 10.48406 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.379579 mins
+Time difference of 1.399046 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 2.677733 secs
+Time difference of 2.737728 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 32.82233 secs
+Time difference of 32.39015 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 12.3509 secs
+Time difference of 12.92354 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.272069 mins
+Time difference of 1.273886 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 1.742112 secs
+Time difference of 1.673155 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 14.58746 secs
+Time difference of 14.19017 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 7.075517 secs
+Time difference of 7.009208 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.05866 mins
+Time difference of 1.053596 mins
 [1] &quot;communities successfully added to sce object&quot;</code></pre>
 <pre class="r"><code>end = Sys.time()
 print(end-start)</code></pre>
-<pre><code>Time difference of 10.09006 mins</code></pre>
+<pre><code>Time difference of 10.12311 mins</code></pre>
 </div>
 <div id="save-sce-object" class="section level1">
 <h1>Save SCE object</h1>
@@ -988,7 +1028,7 @@ SandraTietscher
 </div>
 </div>
 <pre class="r"><code>#For individual single-cytokine clusters
-comm_colnames &lt;- colnames(cur_sce)[grep(&quot;only_comm&quot;, colnames(cur_sce))]
+comm_colnames &lt;- colnames(cur_sce)[grep(&quot;only_comm$&quot;, colnames(cur_sce))]
 
 p.list &lt;- list()
 for (i in comm_colnames) {
@@ -1139,8 +1179,115 @@ SandraTietscher
 </div>
 <div id="cell-type-proportions" class="section level1">
 <h1>Cell type proportions</h1>
-<div id="cell-type-proportions-in-clusters" class="section level2">
-<h2>Cell type proportions in clusters</h2>
+<div id="single-vs-cluster-proportion-of-cytokine-expressing-cells" class="section level2">
+<h2>Single vs Cluster: Proportion of cytokine-expressing cells</h2>
+<p>Exclude TLS and pre-TLS images for TIG comparison.</p>
+<pre class="r"><code>sce_cyt &lt;- sce[,which(sce$cytokine == 1)]
+sce_cyt &lt;- sce_cyt[,which(sce_cyt$TLS == &quot;no&quot;)]
+sce_cyt$single &lt;- ifelse(sce_cyt$cytokine_cluster == 0, &quot;single&quot;, &quot;cluster&quot;)
+
+tab_celltype &lt;- data.frame(matrix(ncol=4, nrow = 0))
+
+for (i in unique(sce$sample)){
+  sce_i &lt;- sce_cyt[,which(sce_cyt$sample == i)]
+  tab_celltype_i &lt;- as.data.frame(prop.table(table(sce_i$celltype, sce_i$single), margin = 1))
+  tab_celltype_i$sample &lt;- i
+  tab_celltype &lt;- rbind(tab_celltype, tab_celltype_i)
+}
+
+tab_celltype &lt;- filter(tab_celltype, Var2 == &quot;cluster&quot;)
+tab_celltype$TIG &lt;- ifelse(tab_celltype$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+colnames(tab_celltype)[1:2] &lt;- c(&quot;celltype&quot;, &quot;cluster_single&quot;)
+
+ggplot(tab_celltype, aes(TIG, Freq, color = TIG))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(width = 0.1)+
+  facet_wrap(~celltype, ncol = 6)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5, label.y.npc = 0.95)+
+  theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank(), panel.border = element_rect(color = &quot;black&quot;, fill = NA), strip.background = element_blank())+
+  ylab(&quot;Proportion of cytokine-expressing cells that are part of a cytokine cluster&quot;)</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/single-vs-cluster-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>sce_cyt$cell_class &lt;- ifelse(sce_cyt$celltype == &quot;tumor&quot;, &quot;tumor&quot;, ifelse(sce_cyt$celltype %in% c(&quot;endothelial&quot;, &quot;stromal_SMA+&quot;, &quot;stromal_undefined&quot;), &quot;stromal&quot;, &quot;immune&quot;))
+
+tab_cellclass &lt;- as.data.frame(prop.table(table(sce_cyt$cell_class, sce_cyt$single), margin = 1))
+colnames(tab_cellclass) &lt;- c(&quot;cell_class&quot;, &quot;single_cluster&quot;, &quot;proportion&quot;)
+
+ggplot(tab_cellclass, aes(cell_class, proportion, fill = single_cluster))+
+  geom_bar(stat = &quot;identity&quot;)+
+  scale_fill_manual(values = c(&quot;#E69F00&quot;, &quot;#006600&quot;))+
+  theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank(), panel.border = element_rect(color = &quot;black&quot;, fill = NA))</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/single-vs-cluster-tumor-immune-1.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>sce_cyt &lt;- sce[,which(sce$cytokine == 1)]
+sce_cyt$single &lt;- ifelse(sce_cyt$cytokine_cluster == 0, &quot;single&quot;, &quot;cluster&quot;)
+
+tab_celltype &lt;- data.frame(matrix(ncol=4, nrow = 0))
+
+for (i in unique(sce$ImageNumber)){
+  sce_i &lt;- sce_cyt[,which(sce_cyt$ImageNumber == i)]
+  tab_celltype_i &lt;- as.data.frame(prop.table(table(sce_i$celltype, sce_i$single), margin = 1))
+  tab_celltype_i$ImageNumber &lt;- i
+  tab_celltype &lt;- rbind(tab_celltype, tab_celltype_i)
+}
+
+tab_celltype &lt;- filter(tab_celltype, Var2 == &quot;single&quot;)
+
+colnames(tab_celltype)[1:2] &lt;- c(&quot;celltype&quot;, &quot;cluster_single&quot;)
+tab_celltype$inCluster_freq &lt;- 1 - tab_celltype$Freq
+
+# Add TLS info
+tab_celltype$TLS &lt;- ROI_info$TLS[match(tab_celltype$ImageNumber, ROI_info$ImageNumber)]
+my_comparisons &lt;- list(c(&quot;no&quot;, &quot;pre&quot;), c(&quot;no&quot;, &quot;yes&quot;), c(&quot;pre&quot;, &quot;yes&quot;))
+
+ggplot(tab_celltype, aes(TLS, inCluster_freq))+
+  geom_boxplot()+
+  #geom_jitter(width = 0.1)+
+  facet_wrap(~celltype, ncol = 6)+
+  theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank(), panel.border = element_rect(color = &quot;black&quot;, fill = NA), strip.background = element_blank())+
+  ylab(&quot;Proportion of cytokine-expressing cells that are part of a cytokine cluster&quot;)+
+  stat_compare_means(comparisons = my_comparisons, method = &quot;wilcox.test&quot;, aes(label=..p.signif..))</code></pre>
+<pre><code>Warning: Using `as.character()` on a quosure is deprecated as of rlang 0.3.0.
+Please use `as_label()` or `as_name()` instead.
+This warning is displayed once per session.</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0.8, 0.90625, 1, 0.666666666666667, : cannot
+compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0.8, 0.90625, 1, 0.666666666666667, : cannot
+compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(1, 0.833333333333333, 0.771428571428571, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0, 0.5, 0, 0), c(0.333333333333333, : cannot
+compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0.333333333333333, 0.45, 0.604651162790698, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0.92, 0, 0.793233082706767,
+0.0344827586206896, : cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0, 0.577777777777778, 0,
+0.694444444444444, : cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0, 0.577777777777778, 0,
+0.694444444444444, : cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0.081081081081081, 0, 0.666666666666667, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0, 0.8, 0, 1, 0.25, 0, 0.2, 0, 0, 0, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0, 0.8, 0, 1, 0.25, 0, 0.2, 0, 0, 0, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0.333333333333333, 0.666666666666667,
+0.666666666666667: cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0.568965517241379, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0, 0, 0, 1, 0, 0, 0, 0, 0.568965517241379, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0.5, 0), c(0, 0.5, 0, 0, 0, 0, 0), paired =
+FALSE): cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0.895604395604396, 0.80952380952381, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0, 0.895604395604396, 0.80952380952381, :
+cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(c(0.952380952380952, 0.5, 0.876923076923077, :
+cannot compute exact p-value with ties</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/single-vs-cluster-TLS-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cell-type-proportions-in-each-cluster" class="section level2">
+<h2>Cell type proportions in each cluster</h2>
 <pre class="r"><code># For individual single-cytokine clusters
 
 celltype_prop &lt;- data.frame(celltype = names(prop.table(table(cur_sce[,&quot;celltype&quot;]))))
@@ -1154,10 +1301,10 @@ for (i in clust_colnames) {
 }
 
 celltype_prop[is.na(celltype_prop)] = 0
-celltype_prop &lt;- pivot_longer(celltype_prop, 2:12, names_to = &quot;cluster&quot;, values_to = &quot;celltype_proportion&quot;)
+celltype_prop_simple &lt;- pivot_longer(celltype_prop, 2:12, names_to = &quot;cluster&quot;, values_to = &quot;celltype_proportion&quot;)
 
 # Plot
-ggplot(celltype_prop, aes(cluster, celltype_proportion, fill = celltype))+
+ggplot(celltype_prop_simple, aes(cluster, celltype_proportion, fill = celltype))+
   geom_bar(stat = &quot;identity&quot;)+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
   ggtitle(&quot;Cell type proportions per cytokine cluster&quot;)</code></pre>
@@ -1222,117 +1369,141 @@ ggplot(celltype_comm, aes(cluster, celltype_proportion, fill = celltype))+
   geom_bar(stat = &quot;identity&quot;)+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
   ggtitle(&quot;Cell type proportions per cytokine community&quot;)</code></pre>
-<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cytokine-community-celltypes-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cytokine-community-celltypes-1">
-Past versions of cytokine-community-celltypes-1.png
-</button>
-</p>
-<div id="fig-cytokine-community-celltypes-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/bbbf3fc2dfc9723c61b556d33e941c810debd318/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-community-celltypes-1.png" target="_blank">bbbf3fc</a>
-</td>
-<td>
-SandraTietscher
-</td>
-<td>
-2020-11-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># For individual single-cytokine communities: ONLY CELLS IN THE COMMUNITY THAT ARE NOT ALSO IN THE CLUSTER
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-celltypes-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Calculate enrichment individually for each community (to prevent bias from large communities)
+enrichment_comm &lt;- data.frame(matrix(ncol=4, nrow = 0))
 
-celltype_commonly &lt;- data.frame(celltype = names(prop.table(table(cur_sce[,&quot;celltype&quot;]))))
+for (i in cytokine_channels) {
+  comm_name_i &lt;- tolower(paste0(i,&quot;only_comm&quot;))
+  cur_sce_i &lt;- cur_sce[which(cur_sce[,comm_name_i] != 0),]
+   
+    for(j in unique(cur_sce_i[,comm_name_i])) {
+      sce_sub_j &lt;- cur_sce_i[cur_sce_i[,comm_name_i] == j,]
+      prop_j &lt;- prop.table(table(sce_sub_j$celltype))
+      prop_all &lt;- prop.table(table(cur_sce$celltype))[names(prop_j)]
+      enrichment_j &lt;-  prop_j/prop_all 
+      if(length(prop_j &gt; 0)) {
+            j_df &lt;- data.frame(comm = j,
+                        cytokine = i,
+                        enrichment = enrichment_j)
+      enrichment_comm &lt;- rbind(enrichment_comm, j_df)
+      }
+  }
+}
+
+colnames(enrichment_comm)[3:4] = c(&quot;celltype&quot;, &quot;enrichment&quot;)
+
+ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~celltype, scales = &quot;free&quot;, ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-all-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="for-individual-single-cytokine-communities-only-cells-in-the-community-that-are-not-expressing-the-given-cytokine" class="section level3">
+<h3>For individual single-cytokine communities: ONLY CELLS IN THE COMMUNITY THAT ARE NOT expressing the given cytokine</h3>
+<pre class="r"><code>celltype_commonly &lt;- data.frame(celltype = names(prop.table(table(cur_sce[,&quot;celltype&quot;]))))
 celltype_commonly[,&quot;all&quot;] &lt;- as.numeric(prop.table(table(cur_sce[,&quot;celltype&quot;])))
 
 for (i in cytokine_channels) {
-  cur_sce_i &lt;- cur_sce[which(cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,&quot;only_clust&quot;), ignore_case = TRUE))] == 0 &amp; cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,&quot;only_comm&quot;), ignore_case = TRUE))] != 0),]
+  cur_sce_i &lt;- cur_sce[which(cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,&quot;only_comm&quot;), ignore_case = TRUE))] != 0 &amp; cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,&quot;_expression&quot;), ignore_case = TRUE))] == 0),]
   prop_i &lt;- as.data.frame(prop.table(table(cur_sce_i[,&quot;celltype&quot;])))
   colnames(prop_i) &lt;- c(&quot;celltype&quot;, i)
   celltype_commonly &lt;- merge(celltype_commonly, prop_i, by=&quot;celltype&quot;, all.x = TRUE)
 }
 
 celltype_commonly[is.na(celltype_commonly)] = 0
-celltype_commonly &lt;- pivot_longer(celltype_commonly, 2:12, names_to = &quot;cluster&quot;, values_to = &quot;celltype_proportion&quot;)
+celltype_commonly_long &lt;- pivot_longer(celltype_commonly, 2:12, names_to = &quot;cluster&quot;, values_to = &quot;celltype_proportion&quot;)
 
 # Plot
-ggplot(celltype_commonly, aes(cluster, celltype_proportion, fill = celltype))+
+ggplot(celltype_commonly_long, aes(cluster, celltype_proportion, fill = celltype))+
   geom_bar(stat = &quot;identity&quot;)+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
   ggtitle(&quot;Cells that are ONLY part of the respective cytokine community (not the cluster)&quot;)</code></pre>
-<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cytokine-community-celltypes-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cytokine-community-celltypes-2">
-Past versions of cytokine-community-celltypes-2.png
-</button>
-</p>
-<div id="fig-cytokine-community-celltypes-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/bbbf3fc2dfc9723c61b556d33e941c810debd318/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-community-celltypes-2.png" target="_blank">bbbf3fc</a>
-</td>
-<td>
-SandraTietscher
-</td>
-<td>
-2020-11-11
-</td>
-</tr>
-</tbody>
-</table>
-</div>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-celltypes-nonexpressing-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Enrichment compared to overall proportion
+celltype_enrichment &lt;- celltype_commonly
+for (i in 3:12) {
+  celltype_enrichment[i] &lt;- celltype_commonly[i]/celltype_commonly[2]
+}
+celltype_enrichment_long &lt;- pivot_longer(celltype_enrichment, 3:12, names_to = &quot;cluster&quot;, values_to = &quot;enrichment&quot;)
+
+# Plot
+ggplot(celltype_enrichment_long, aes(cluster, enrichment, fill = cluster))+
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~celltype, scales = &quot;free&quot;)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-celltypes-nonexpressing-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Calculate enrichment individually for each community (to prevent bias from large communities)
+
+enrichment_comm &lt;- data.frame(matrix(ncol=4, nrow = 0))
+
+for (i in cytokine_channels) {
+  comm_name_i &lt;- tolower(paste0(i,&quot;only_comm&quot;))
+  cur_sce_i &lt;- cur_sce[which(cur_sce[,comm_name_i] != 0 &amp; cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,&quot;_expression&quot;), ignore_case = TRUE))] == 0),]
+   
+    for(j in unique(cur_sce_i[,comm_name_i])) {
+      sce_sub_j &lt;- cur_sce_i[cur_sce_i[,comm_name_i] == j,]
+      prop_j &lt;- prop.table(table(sce_sub_j$celltype))
+      prop_all &lt;- prop.table(table(cur_sce$celltype))[names(prop_j)]
+      enrichment_j &lt;-  prop_j/prop_all 
+      if(length(prop_j &gt; 0)) {
+            j_df &lt;- data.frame(comm = j,
+                        cytokine = i,
+                        enrichment = enrichment_j)
+      enrichment_comm &lt;- rbind(enrichment_comm, j_df)
+      }
+  }
+}
+
+colnames(enrichment_comm)[3:4] = c(&quot;celltype&quot;, &quot;enrichment&quot;)
+
+ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~celltype, scales = &quot;free&quot;, ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="compare-cell-type-proportions-in-clusters-and-communities" class="section level2">
 <h2>Compare cell type proportions in clusters and communities</h2>
 <pre class="r"><code># Compare
-celltype_prop$cluster &lt;- celltype_commonly$cluster
-celltype_prop$type &lt;- &quot;cluster&quot;
-celltype_commonly$type &lt;- &quot;community&quot;
-celltype_comb &lt;- rbind(celltype_prop, celltype_commonly)
+celltype_prop_simple$cluster &lt;- celltype_commonly_long$cluster
+celltype_prop_simple$type &lt;- &quot;cluster_only&quot;
+celltype_commonly_long$type &lt;- &quot;community_only&quot;
+celltype_comb &lt;- rbind(celltype_prop_simple, celltype_commonly_long)
+celltype_comb &lt;- celltype_comb %&gt;% filter(cluster != &quot;all&quot;)
 
-ggplot(celltype_comb, aes(type, celltype_proportion, fill = celltype))+
-  geom_bar(stat = &quot;identity&quot;)+
-  facet_wrap(~cluster, ncol = 6)+
-    theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1))+
-  ggtitle(&quot;Celltype proportions in cytokine clusters vs communities&quot;)</code></pre>
-<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cluster-community-celltype-comparison-1.png" width="672" style="display: block; margin: auto;" /></p>
+p.list &lt;- list()
+for (i in unique(celltype_comb$cluster)) {
+celltype_comb_i &lt;- filter(celltype_comb, cluster == i)
+p.list[[i]] &lt;- ggplot(celltype_comb_i, aes(type, celltype_proportion, fill = celltype))+
+  geom_bar(stat = &quot;identity&quot;, width = 0.6)+
+  geom_segment(data = tidyr::spread(celltype_comb_i, type, celltype_proportion),
+               colour = &quot;grey&quot;,
+               aes(x = 1 + 0.6/2,
+                   xend = 2 - 0.6/2,
+                   y = 1 - cumsum(cluster_only),
+                   yend = 1 - cumsum(community_only))) +
+    theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.position = &quot;none&quot;)+
+  ggtitle(i)
+}
+
+plot_grid(plotlist = p.list, ncol = 5)</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cluster-community-celltype-comparison-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-cluster-community-celltype-comparison-1">
 Past versions of cluster-community-celltype-comparison-1.png
@@ -1631,8 +1802,8 @@ names(colData(sce))[length(names(colData(sce)))] &lt;- paste0(k, &quot;_environm
 <pre class="r"><code>saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_subtypes_cytokine_environments.rds&quot;)
 saveRDS(sce, &quot;output/RNApanel/sce_RNApanel_cytokines_communities.rds&quot;)</code></pre>
 </div>
-<div id="compare-cell-type-proportions-in-cytokine-communities-rna-vs-protein-panel" class="section level2">
-<h2>Compare cell type proportions in cytokine communities: RNA vs protein panel</h2>
+<div id="compare-cell-type-proportions-in-cytokine-environments-rna-vs-protein-panel" class="section level2">
+<h2>Compare cell type proportions in cytokine environments: RNA vs protein panel</h2>
 <pre class="r"><code># Rename and match celltypes for the two panels
 sce_RNA_simple &lt;- sce
 sce_RNA_simple[,which(sce_RNA_simple$celltype %in% c(&quot;stromal_SMA+&quot;, &quot;stromal_undefined&quot;))]$celltype &lt;- &quot;stromal&quot;
@@ -1648,7 +1819,7 @@ tab_RNA &lt;- data.frame(matrix(ncol = 8, nrow = 0))
 colnames(tab_RNA) &lt;- levels(factor(sce_RNA_simple$celltype))
 tab_protein &lt;- tab_RNA
   
-for (k in (colnames(coldata_RNA)[55:64])) {
+for (k in (colnames(coldata_RNA)[57:67])) {
   k_sub_RNA &lt;- coldata_RNA[coldata_RNA[,k] == 1,]
   tab_RNA[k,] &lt;- prop.table(table(k_sub_RNA$celltype))
   k_sub_protein &lt;- coldata_protein[coldata_RNA[,k] == 1,]
@@ -1670,7 +1841,7 @@ ggplot(tab_comb, aes(panel, y = frequency, fill=celltype)) +
   #facet_wrap(~env, ncol=6)+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
-<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/environments-compare-panels-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="calculate-cell-type-enrichment-in-specific-environments" class="section level2">
 <h2>Calculate cell type enrichment in specific environments</h2>
@@ -1735,29 +1906,29 @@ SandraTietscher
 </table>
 </div>
 </div>
-<pre class="r"><code>## Calculate individually for each sample (to prevent sample-bias)
+<pre class="r"><code>## Calculate individually for each image (to prevent bias from high-infiltration images)
 
-enrichment_sample &lt;- data.frame(matrix(ncol=4, nrow = 0))
+enrichment_image &lt;- data.frame(matrix(ncol=4, nrow = 0))
 
 for (k in colnames(coldata_protein)[24:33]) {
-  for(j in unique(as.character(coldata_protein$sample))) {
+  for(j in unique(as.character(coldata_protein$ImageNumber))) {
     sce_sub_k &lt;- coldata_protein[coldata_protein[,k] == 1,]
-    sce_sub_kj &lt;- sce_sub_k[sce_sub_k[,&quot;sample&quot;] == j,]
+    sce_sub_kj &lt;- sce_sub_k[sce_sub_k[,&quot;ImageNumber&quot;] == j,]
     prop_kj &lt;- prop.table(table(sce_sub_kj$subtype))
-    prop_j &lt;- prop.table(table(sce_protein[,which(sce_protein$sample == j)]$subtype))[names(prop_kj)]
+    prop_j &lt;- prop.table(table(sce_protein[,which(sce_protein$ImageNumber == j)]$subtype))[names(prop_kj)]
     enrichment_j &lt;-  prop_kj/prop_j 
     if(length(prop_kj &gt; 0)) {
-          j_df &lt;- data.frame(sample = j,
+          j_df &lt;- data.frame(ImageNumber = j,
                       cytokine = k,
                       enrichment = enrichment_j)
-    enrichment_sample &lt;- rbind(enrichment_sample, j_df)
+    enrichment_image &lt;- rbind(enrichment_image, j_df)
     }
   }
 }
 
-colnames(enrichment_sample)[3:4] = c(&quot;subtype&quot;, &quot;enrichment&quot;)
+colnames(enrichment_image)[3:4] = c(&quot;subtype&quot;, &quot;enrichment&quot;)
 
-ggplot(enrichment_sample, aes(cytokine, enrichment, fill = cytokine))+
+ggplot(enrichment_image, aes(cytokine, enrichment, fill = cytokine))+
   geom_boxplot()+
   facet_wrap(~subtype, scales = &quot;free&quot;, ncol = 4)+
   theme(panel.background = element_blank(),
@@ -1885,6 +2056,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8fa101bdec733f26874aae82a7ba1ba221e5f71b/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-1.png" target="_blank">8fa101b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-1.png" target="_blank">3c1361c</a>
 </td>
 <td>
@@ -1965,6 +2147,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8fa101bdec733f26874aae82a7ba1ba221e5f71b/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-2.png" target="_blank">8fa101b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-18
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-2.png" target="_blank">3c1361c</a>
 </td>
 <td>
@@ -1978,6 +2171,38 @@ SandraTietscher
 </table>
 </div>
 </div>
+<pre class="r"><code>## Calculate individually for each image (to prevent bias from high-infiltration images)
+
+enrichment_image &lt;- data.frame(matrix(ncol=4, nrow = 0))
+
+for (k in colnames(coldata_TNK)[24:33]) {
+  for(j in unique(as.character(coldata_TNK$ImageNumber))) {
+    sce_sub_k &lt;- coldata_TNK[coldata_TNK[,k] == 1,]
+    sce_sub_kj &lt;- sce_sub_k[sce_sub_k[,&quot;ImageNumber&quot;] == j,]
+    prop_kj &lt;- prop.table(table(sce_sub_kj$subtype))
+    prop_j &lt;- prop.table(table(sce_protein[,which(sce_protein$ImageNumber == j)]$subtype))[names(prop_kj)]
+    enrichment_j &lt;-  prop_kj/prop_j 
+    if(length(prop_kj &gt; 0)) {
+          j_df &lt;- data.frame(ImageNumber = j,
+                      cytokine = k,
+                      enrichment = enrichment_j)
+    enrichment_image &lt;- rbind(enrichment_image, j_df)
+    }
+  }
+}
+
+colnames(enrichment_image)[3:4] = c(&quot;subtype&quot;, &quot;enrichment&quot;)
+
+ggplot(enrichment_image, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot()+
+  facet_wrap(~subtype, scales = &quot;free&quot;, ncol = 4)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/cytokine-environment-enrichment_TNK-3.png" width="816" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
