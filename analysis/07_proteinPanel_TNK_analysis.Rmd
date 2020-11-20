@@ -616,7 +616,7 @@ dittoPlot(sce_protein, "CD274", group.by = "celltype", plots = "vlnplot", assay 
 ```
 
 
-## Check cell type preference for TLS
+## TLS preference of celltypes
 
 ```{r TLS-cellsubtype-preference-timeline}
 # Plot as simple timeline

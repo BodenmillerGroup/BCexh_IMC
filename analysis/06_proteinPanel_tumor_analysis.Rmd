@@ -188,7 +188,7 @@ for (i in c("HLA_ABC", "CAIX", "Cleaved_CP", "Ki.67", "PD.L1", "MMP9")) {
   sample_means[,i] <- i.means$mean
 }
 
-sample_means$TIG <- c(rep("TIG2", 6), rep("TIG3", 6))
+sample_means$TIG <- ifelse(sample_means$sample %in% TIG2, "TIG2", "TIG3")
 sample_means <- pivot_longer(sample_means, 2:7, names_to = "marker", values_to = "counts")
 
 ggplot(sample_means, aes(TIG, counts, fill = TIG))+
