@@ -379,3 +379,90 @@ ggplot(Tattr_chemokine_comb, aes(Tattr_chemokine_img, T_CD4+T_CD8))+
   xlab("Proportion of myeloid cells expressing\nat least one T-cell attracting chemokine")+
   ylab("Number of T cells")
 ```
+
+### Distance to the next T cell
+
+Set 800 as maximum distance.
+For images in which there is no T cell --> set distance parameter to max
+
+```{r calculate-distance-myeloid-Tcell, fig.width=5, fig.height=3.5}
+max_dist <- 800
+cur_sce <- data.frame(colData(sce_TLSex))
+cellIDs_T <- cur_sce[cur_sce[,"celltype"] %in% c("T_CD4", "T_CD8"),]
+cellIDs_CD4 <- cur_sce[cur_sce[,"celltype"] == "T_CD4",]
+cellIDs_CD8 <- cur_sce[cur_sce[,"celltype"] == "T_CD8",]
+new_sce <- data.frame(matrix(ncol=length(colnames(cur_sce))+3, nrow = 0))
+
+# For each image separately: nearest neighbour search
+
+for (j in unique(cur_sce$ImageNumber)) {
+  cur_sce_j <- filter(cur_sce, ImageNumber == j)
+  T_j <- filter(cellIDs_T, ImageNumber == j)[,c("Center_X", "Center_Y")]
+  CD8_j <- filter(cellIDs_CD8, ImageNumber == j)[,c("Center_X", "Center_Y")]
+  CD4_j <- filter(cellIDs_CD4, ImageNumber == j)[,c("Center_X", "Center_Y")]
+  
+  # General T cell distance
+  if (nrow(T_j) == 0) {
+    cur_sce_j$T_distance <- max_dist
+  } else {
+    j_coord <- cur_sce_j[,c("Center_X", "Center_Y")]
+    nn <- RANN::nn2(T_j, j_coord)
+    cur_sce_j$T_distance <- nn$nn.dists[,1]
+    #Set distance parameter to max for all cells with distance > max
+    cur_sce_j$T_distance<- ifelse(cur_sce_j$T_distance > max_dist, max_dist, cur_sce_j$T_distance)
+  }
+  
+  # CD8 T cell distance
+    if (nrow(CD8_j) == 0) {
+    cur_sce_j$CD8_distance <- max_dist
+  } else {
+    j_coord <- cur_sce_j[,c("Center_X", "Center_Y")]
+    nn <- RANN::nn2(CD8_j, j_coord)
+    cur_sce_j$CD8_distance <- nn$nn.dists[,1]
+    #Set distance parameter to max for all cells with distance > max
+    cur_sce_j$CD8_distance<- ifelse(cur_sce_j$CD8_distance > max_dist, max_dist, cur_sce_j$CD8_distance)
+  }
+  
+    # CD4 T cell distance
+    if (nrow(CD4_j) == 0) {
+    cur_sce_j$CD4_distance <- max_dist
+  } else {
+    j_coord <- cur_sce_j[,c("Center_X", "Center_Y")]
+    nn <- RANN::nn2(CD4_j, j_coord)
+    cur_sce_j$CD4_distance <- nn$nn.dists[,1]
+    #Set distance parameter to max for all cells with distance > max
+    cur_sce_j$CD4_distance<- ifelse(cur_sce_j$CD4_distance > max_dist, max_dist, cur_sce_j$CD4_distance)
+  }
+  
+  new_sce <- rbind(cur_sce_j, new_sce)
+}
+
+plot(density(new_sce$T_distance))
+plot(density(new_sce$CD8_distance))
+plot(density(new_sce$CD4_distance))
+
+# Add T_distances to colData of original object
+sce_TLSex$T_distance <- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$T_distance
+sce_TLSex$CD8_distance <- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$CD8_distance
+sce_TLSex$CD4_distance <- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$CD4_distance
+
+# Subset myeloid cells
+sce_myeloid <- sce_TLSex[,which(sce_TLSex$celltype == "myeloid")]
+sce_myeloid$Tattr_chemokine <- ifelse(rowSums(data.frame(colData(sce_myeloid)[,c("CCL2_expression", "CCL17_expression", "CCL4_expression", "CCL5_expression", "CXCL10_expression", "CXCL9_expression")])) > 0, TRUE, FALSE)
+
+# Plot
+myeloid_coldata <- data.frame(colData(sce_myeloid))
+myeloid_coldata <- pivot_longer(myeloid_coldata, cols = c("T_distance", "CD8_distance", "CD4_distance"), names_to = "T_distance_type", values_to = "distance")
+
+ggplot(myeloid_coldata, aes(x= Tattr_chemokine, y = distance))+
+  geom_boxplot(outlier.shape = NA)+
+  coord_cartesian(ylim = c(0,220))+
+  facet_wrap(~T_distance_type)+
+  theme(axis.text.x=element_text(angle = 90, hjust=1),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank())+
+  ylab("Distance to next T cell")+
+  xlab("Myeloid cell expresses T-cell attracting chemokine")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = 0.5, label.y.npc = 0.25)
+```
