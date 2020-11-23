@@ -11,9 +11,13 @@ editor_options:
 
 This script uses the cytomapper packages to produce cell mask images colored by different features.
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message= FALSE, warning = FALSE)
+```
+
 # Load packages and SCE objects
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(SingleCellExperiment)
 library(cytomapper)
 
@@ -23,7 +27,7 @@ sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_cytokines_communities.rds")
 
 # Load cell masks
 
-```{r}
+```{r cell-mask-load}
 ## For protein panel
 
 path.to.images.protein <- "data/masks/ProteinPanel_masks"
