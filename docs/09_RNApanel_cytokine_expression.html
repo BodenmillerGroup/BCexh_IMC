@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-10
+<strong>Last updated:</strong> 2020-11-23
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree196e575d7a220ca0e098a204f20f236098d138ebtargetblank196e575a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/196e575d7a220ca0e098a204f20f236098d138eb" target="_blank">196e575</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6d7cc392bc03bf7d93e0286370bda1513b568282targetblank6d7cc39a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6d7cc392bc03bf7d93e0286370bda1513b568282" target="_blank">6d7cc39</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree196e575d7a220ca0e098a204f20f236098d138ebtargetblank196e575a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6d7cc392bc03bf7d93e0286370bda1513b568282targetblank6d7cc39a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/196e575d7a220ca0e098a204f20f236098d138eb" target="_blank">196e575</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6d7cc392bc03bf7d93e0286370bda1513b568282" target="_blank">6d7cc39</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -524,8 +524,12 @@ Ignored files:
 
 Untracked files:
     Untracked:  CD11c_CD68_scatter.png
-    Untracked:  analysis/11_RNAscope_cytokine_communities.Rmd
+    Untracked:  Neighbourhood_TLS_relative.pdf
+    Untracked:  Neighbourhood_TLS_relative.png
+    Untracked:  Neighbourhood_all_relative.pdf
+    Untracked:  Neighbourhood_all_relative.png
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
@@ -533,6 +537,9 @@ Untracked files:
     Untracked:  data/cpout/
     Untracked:  data/masks/
     Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_TIGdifference.png
+    Untracked:  neighbourhood_myeloid_TLS_relative.png
+    Untracked:  neighbourhood_myeloid_all_relative.png
     Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
@@ -543,11 +550,10 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  test_Treg_enrichment.png
 
 Unstaged changes:
-    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
-    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
 
 </code></pre>
 <p>
@@ -586,6 +592,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/557ad0ce6b33812c373892bc6c3941cad96b6588/docs/09_RNApanel_cytokine_expression.html" target="_blank">557ad0c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1332,6 +1355,43 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5)+
   ggtitle(&quot;Proportion of cells expressing at least one cytokine&quot;)</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-all-2.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-comparison-all-2">
+Past versions of TIG-comparison-all-2.png
+</button>
+</p>
+<div id="fig-TIG-comparison-all-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/557ad0ce6b33812c373892bc6c3941cad96b6588/docs/figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-all-2.png" target="_blank">557ad0c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># For each celltype individually
 celltypes &lt;- levels(as.factor(sce_TLSex$celltype))
 tab &lt;- data.frame( TIG2 = double(), TIG3 = double())
@@ -1426,6 +1486,43 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
 <pre><code>Warning: Removed 1 rows containing non-finite values (stat_compare_means).</code></pre>
 <pre><code>Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-byCelltype-sample-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-TIG-comparison-byCelltype-sample-1">
+Past versions of TIG-comparison-byCelltype-sample-1.png
+</button>
+</p>
+<div id="fig-TIG-comparison-byCelltype-sample-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/557ad0ce6b33812c373892bc6c3941cad96b6588/docs/figure/09_RNApanel_cytokine_expression.Rmd/TIG-comparison-byCelltype-sample-1.png" target="_blank">557ad0c</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <div id="correlation-of-myeloid-cells-that-express-t-attracting-chemokines-with-t-cells" class="section level2">
 <h2>Correlation of myeloid cells that express T-attracting chemokines with T cells</h2>
 <p>(per ROI, excluding TLS)</p>
