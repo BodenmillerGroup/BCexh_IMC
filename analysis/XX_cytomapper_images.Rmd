@@ -1,0 +1,83 @@
+---
+title: "XX_cytomapper_images"
+author: "SandraTietscher"
+date: "2020-11-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+This script uses the cytomapper packages to produce cell mask images colored by different features.
+
+# Load packages and SCE objects
+
+```{r}
+library(SingleCellExperiment)
+library(cytomapper)
+
+sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_subtypes_cytokine_environments.rds")
+sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_cytokines_communities.rds")
+```
+
+# Load cell masks
+
+```{r}
+## For protein panel
+
+path.to.images.protein <- "data/masks/ProteinPanel_masks"
+all_masks_protein <- loadImages(path.to.images.protein, pattern = "_mask.tiff")
+# Add image number
+imagenr <- read.csv("data/masks/ProteinPanel_masks/image_number_HIER.csv", header=FALSE)[1]
+mcols(all_masks_protein)$ImageNumber <- imagenr$V1
+# Scale images
+all_masks_protein <- scaleImages(all_masks_protein, 2^16-1)
+
+
+##  For RNA panel
+
+path.to.images.RNA <- "data/masks/RNApanel_masks"
+all_masks_RNA <- loadImages(path.to.images.RNA, pattern = "_mask.tiff")
+# Add image number
+mcols(all_masks_RNA)$ImageNumber <- c(1:77)
+# Scale images
+all_masks_RNA <- scaleImages(all_masks_RNA, 2^16-1)
+
+```
+
+# Fig 1: Example image
+
+```{r Fig1-example, fig.width=10, fig.height=10}
+cur_img <- getImages(all_masks_protein, "20200925_ST_BCexh_H_TBB184_s0_p3_r3_a3_ac_ilastik_s2_Probabilities_mask")
+
+plotCells(cur_img, object = sce_protein,
+            img_id = "ImageNumber", cell_id = "CellNumber",
+            colour_by = c("E-Cadherin", "CD68", "CD3", "CD140b"), exprs_values = "exprs", 
+            colour = list(`E-Cadherin` = c("black", "#00FFFF"), 
+                          CD68 = c("black", "#FF0000"), 
+                          CD3 = c("black", "#00FF00"), 
+                          CD140b = c("black", "#0000FF")))
+
+
+plotCells(cur_img, object = sce_protein,
+            img_id = "ImageNumber", cell_id = "CellNumber",
+            colour_by = "celltype",
+            colour = list(celltype = c(tumor = "#00FFFF",
+                          fibroblast = "#3333FF",
+                          plasma_cell = "#FF9933",
+                          endothelial = "#009900",
+                          myeloid = "#FF0000",
+                          T_NK = "#00FF00",
+                          stromal_undefined = "#C0C0C0",
+                          B_cell = "#FF3399",
+                          neutrophil = "#CC99FF",
+                          aDC = "#7F00FF",
+                          pDC = "#FFFF33")),
+          scale_bar = NULL,
+          image_title = NULL
+          )
+```
+
+
+
