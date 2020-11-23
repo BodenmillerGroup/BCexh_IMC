@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeae16a446b32821ba272c8c10ad5cc424a4edcfc0targetblankae16a44a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/ae16a446b32821ba272c8c10ad5cc424a4edcfc0" target="_blank">ae16a44</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreea2b2d7dd7f9cd3d4a87a712188559d285563d002targetblanka2b2d7da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/a2b2d7dd7f9cd3d4a87a712188559d285563d002" target="_blank">a2b2d7d</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeae16a446b32821ba272c8c10ad5cc424a4edcfc0targetblankae16a44a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreea2b2d7dd7f9cd3d4a87a712188559d285563d002targetblanka2b2d7da" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/ae16a446b32821ba272c8c10ad5cc424a4edcfc0" target="_blank">ae16a44</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/a2b2d7dd7f9cd3d4a87a712188559d285563d002" target="_blank">a2b2d7d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -592,6 +592,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/a2b2d7dd7f9cd3d4a87a712188559d285563d002/analysis/09_RNApanel_cytokine_expression.Rmd" target="_blank">a2b2d7d</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-23
+</td>
+<td>
+Add distance measurements for T cell attracting myeloid cells
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/54605dde41b700a83c20069b7754b8fbaf019142/docs/09_RNApanel_cytokine_expression.html" target="_blank">54605dd</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1813,13 +1847,7 @@ for (j in unique(cur_sce$ImageNumber)) {
   new_sce &lt;- rbind(cur_sce_j, new_sce)
 }
 
-plot(density(new_sce$T_distance))</code></pre>
-<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/calculate-distance-myeloid-Tcell-1.png" width="480" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plot(density(new_sce$CD8_distance))</code></pre>
-<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/calculate-distance-myeloid-Tcell-2.png" width="480" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plot(density(new_sce$CD4_distance))</code></pre>
-<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/calculate-distance-myeloid-Tcell-3.png" width="480" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># Add T_distances to colData of original object
+# Add T_distances to colData of original object
 sce_TLSex$T_distance &lt;- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$T_distance
 sce_TLSex$CD8_distance &lt;- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$CD8_distance
 sce_TLSex$CD4_distance &lt;- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$CD4_distance
@@ -1843,7 +1871,44 @@ ggplot(myeloid_coldata, aes(x= Tattr_chemokine, y = distance))+
   ylab(&quot;Distance to next T cell&quot;)+
   xlab(&quot;Myeloid cell expresses T-cell attracting chemokine&quot;)+
   stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5, label.y.npc = 0.25)</code></pre>
-<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/calculate-distance-myeloid-Tcell-4.png" width="480" style="display: block; margin: auto;" /></p>
+<p><img src="figure/09_RNApanel_cytokine_expression.Rmd/calculate-distance-myeloid-Tcell-1.png" width="480" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-calculate-distance-myeloid-Tcell-1">
+Past versions of calculate-distance-myeloid-Tcell-1.png
+</button>
+</p>
+<div id="fig-calculate-distance-myeloid-Tcell-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/54605dde41b700a83c20069b7754b8fbaf019142/docs/figure/09_RNApanel_cytokine_expression.Rmd/calculate-distance-myeloid-Tcell-1.png" target="_blank">54605dd</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
