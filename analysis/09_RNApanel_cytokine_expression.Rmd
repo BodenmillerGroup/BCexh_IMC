@@ -437,10 +437,6 @@ for (j in unique(cur_sce$ImageNumber)) {
   new_sce <- rbind(cur_sce_j, new_sce)
 }
 
-plot(density(new_sce$T_distance))
-plot(density(new_sce$CD8_distance))
-plot(density(new_sce$CD4_distance))
-
 # Add T_distances to colData of original object
 sce_TLSex$T_distance <- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$T_distance
 sce_TLSex$CD8_distance <- new_sce[order(match(new_sce$cellID, sce_TLSex$cellID)),]$CD8_distance
