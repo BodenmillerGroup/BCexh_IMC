@@ -109,6 +109,7 @@ protein_cellnumber <- table(sce_protein$ImageNumber, sce_protein$cellnumber) %>%
 df <- data.frame(ImageNumber = levels(sce_RNA$ImageNumber), RNA_panel = RNA_cellnumber, protein_panel = protein_cellnumber)
 df <- pivot_longer(df, 2:3, names_to = "panel", values_to = "cellnumber")
 
+df$ImageNumber <- factor(df$ImageNumber, levels = 1:77)
 ggplot(df, aes(panel, cellnumber))+
   geom_line(aes(group=ImageNumber, color = ImageNumber))+
     theme(axis.title.x = element_blank(),
@@ -275,8 +276,8 @@ sce_RNA <- sce_RNA[!(rownames(sce_RNA) %in% c("CD206", "PD1")),]
 #  Save updated objects
 
 ```{r}
-saveRDS(sce_RNA, paste0(getwd(), "/output/sce_RNApanel_afterQC.rds"))
-saveRDS(sce_protein, paste0(getwd(), "/output/sce_ProteinPanel_afterQC.rds"))
+saveRDS(sce_RNA, "output/sce_RNApanel_afterQC.rds")
+saveRDS(sce_protein, "output/sce_ProteinPanel_afterQC.rds")
 ```
 
 
