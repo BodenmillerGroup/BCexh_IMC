@@ -35,7 +35,7 @@ library(cowplot)
 library(scran)
 
 # Read SingleCellExperiment object
-sce_RNA <- readRDS(paste0(getwd(), "/output/sce_RNApanel_afterQC.rds"))
+sce_RNA <- readRDS("output/sce_RNApanel_afterQC.rds")
 ```
 
 # UMAP representation
@@ -67,7 +67,7 @@ sce_RNA_sub <- runUMAP(sce_RNA_sub, exprs_values = "exprs",
                      subset_row = rownames(assay(sce_RNA_sub, "exprs")) %in% markers_include_umap)
 
 # Save subset SCE object
-saveRDS(sce_RNA_sub, paste0(getwd(), "/output/RNApanel/sce_RNApanel_sub_UMAP.rds"))
+saveRDS(sce_RNA_sub, "output/RNApanel/sce_RNApanel_sub_UMAP.rds")
 ```
 
 ## Visualize features on UMAP
@@ -111,7 +111,7 @@ plot_grid(plotlist = p.list, ncol = 7)
 p.list <- list()
 for(i in rownames(sce_RNA_sub)){
   p.list[[i]] <- plotUMAP(sce_RNA_sub, colour_by = i, by_exprs_values = "scaled", 
-                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3), na.value = "#b2182b")
 }
 
 plot_grid(plotlist = p.list, ncol = 7)
@@ -132,7 +132,7 @@ cluster_counts_normalized <- subset(assay(sce_RNA, "normalized"), rownames(assay
 g <- buildSNNGraph(cluster_counts_normalized, k=8)
 clust<- igraph::cluster_louvain(g)$membership
 table(clust)
-write.csv(table(clust), paste0(getwd(), "/output/RNApanel/cluster_cellnumbers.csv"), row.names = FALSE)
+write.csv(table(clust), "output/RNApanel/cluster_cellnumbers.csv", row.names = FALSE)
 
 #add cluster information to sce object
 sce_RNA$phenograph_cluster <- as.factor(clust)
@@ -190,7 +190,7 @@ dittoDimPlot(sce_RNA_sub, var = "phenograph_cluster", reduction.use = "UMAP", si
 Look at tumor/stroma proportion per sample.
 
 ```{r assign-TS-labels, fig.width=5, fig.height=3}
-labels <- read.csv(paste0(getwd(), "/data/RNApanel_tumor_stroma_clusters.csv"))
+labels <- read.csv("data/RNApanel_tumor_stroma_clusters.csv")
 
 label_list <- labels$class[match(sce_RNA$phenograph_cluster, labels$cluster)]
 sce_RNA$cell_class <- label_list
@@ -224,12 +224,12 @@ sce_tumor <- sce_RNA[,cellid_tumor]
 sce_stroma <- sce_RNA[,cellid_stroma]
 
 # Save 
-saveRDS(sce_tumor, paste0(getwd(), "/output/RNApanel/sce_RNApanel_tumor.rds"))
-saveRDS(sce_stroma, paste0(getwd(), "/output/RNApanel/sce_RNApanel_stroma.rds"))
+saveRDS(sce_tumor, "output/RNApanel/sce_RNApanel_tumor.rds")
+saveRDS(sce_stroma, "output/RNApanel/sce_RNApanel_stroma.rds")
 
 # Save updated objects
-saveRDS(sce_RNA, paste0(getwd(), "/output/RNApanel/sce_RNApanel_TS_assigned.rds"))
-saveRDS(sce_RNA_sub, paste0(getwd(), "/output/RNApanel/sce_RNApanel_sub_UMAP.rds"))
+saveRDS(sce_RNA, "output/RNApanel/sce_RNApanel_TS_assigned.rds")
+saveRDS(sce_RNA_sub, "output/RNApanel/sce_RNApanel_sub_UMAP.rds")
 ```
 
 
