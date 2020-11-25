@@ -30,6 +30,7 @@ library(cowplot)
 library(ggpubr)
 library(scran)
 library(plyr)
+library(patchwork)
 
 # Read SingleCellExperiment object (with stromal cells only)
 sce_stromal <- readRDS(paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_stroma.rds"))
@@ -195,19 +196,45 @@ sce_Protein_sub$celltype <- celltype_sub
 dittoDimPlot(sce_Protein_sub, var = "celltype", reduction.use = "UMAP", size = 0.5, do.label = TRUE)
 ```
 
+## Plot expression heatmap with celltype labels
+
+```{r expression_heatmap_celltype_labels}
+
+# dittoHeatmap(clustermean[markers_include_umap,], assay = "normalized", scale = "none",
+#             heatmap.colors = viridis(100), 
+#             cluster_cols = TRUE, show_colnames = TRUE, annot.by = "celltype", annot.colors = 
+#               c("#7F00FF", "#FF3399", "#009900", "#3333FF", "#FF0000", "#CC99FF", "#FFFF33", "#FF9933", "#C0C0C0", "#00FF00"))    
+```
+
+
 ## Plot celltype proportions per sample and per image
 
 Include TLS and pre-TLS images.
 
 ```{r celltype-proportion-sample, fig.width=6, fig.height=4}
+celltype_colors = c(tumor = "#00FFFF",
+                          fibroblast = "#3333FF",
+                          endothelial = "#009900",
+                          T_NK = "#00FF00",
+                          pDC = "#FFFF33",
+                          plasma_cell = "#FF9933",
+                          myeloid = "#FF0000",
+                          aDC = "#7F00FF",
+                          B_cell = "#FF3399",
+                          neutrophil = "#CC99FF",
+                          stromal_undefined = "#C0C0C0"
+                          )
+
 # Plot cell type frequencies per sample
 tab <- as.data.frame(prop.table(table(sce_Protein$sample, sce_Protein$celltype), margin = 1))
 colnames(tab) <- c("sample", "celltype", "proportion")
+tab$celltype <- factor(tab$celltype, levels = rev(names(celltype_colors)))
 
 ggplot(tab, aes(sample, y = proportion, fill=celltype)) +
   geom_bar(stat="identity")+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
-  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  scale_fill_manual(values = celltype_colors)
 ```
 
 ```{r celltype-proportion-image, fig.width=8, fig.height=3}
@@ -215,16 +242,48 @@ ggplot(tab, aes(sample, y = proportion, fill=celltype)) +
 tab <- as.data.frame(prop.table(table(sce_Protein$ImageNumber, sce_Protein$celltype), margin = 1))
 colnames(tab) <- c("image", "celltype", "proportion")
 
-ggplot(tab, aes(image, y = proportion, fill=celltype)) +
+# Order images by tumor cell content
+tumor_tab <- filter(tab, celltype == "tumor")
+order <- tumor_tab[order(tumor_tab$proportion),]$image
+tab$image <- factor(tab$image, levels = order)
+tab$celltype <- factor(tab$celltype, levels = rev(names(celltype_colors)))
+
+p_proportion <- ggplot(tab, aes(image, y = proportion, fill=celltype)) +
   geom_bar(stat="identity")+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
-  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  scale_fill_manual(values = celltype_colors)
+
+# Plot image metadata
+ROI_info <- read.csv("data/ROI_info_HIER_TLSrevised.csv")
+ROI_info$RNApanel_ImageNumber <- factor(ROI_info$RNApanel_ImageNumber, levels = order)
+ROI_info$sample <- factor(ROI_info$sample, levels = levels(sce_stromal$sample))
+
+p_sample <- ggplot(ROI_info, aes(x = RNApanel_ImageNumber, y = "sample", fill = sample))+
+  geom_tile()+
+  scale_fill_manual(values = metadata(sce_stromal)$colour_vectors$sample)+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+p_TLS <- ggplot(ROI_info, aes(x = RNApanel_ImageNumber, y = "TLS", fill = TLS))+
+  geom_tile()+
+  scale_fill_manual(values = metadata(sce_stromal)$colour_vectors$TLS)+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+p_TIG <- ggplot(ROI_info, aes(x = RNApanel_ImageNumber, y = "TIG", fill = TIG))+
+  geom_tile()+
+  scale_fill_manual(values = metadata(sce_stromal)$colour_vectors$TIG)+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+p_TLS/p_TIG/p_sample/p_proportion + plot_layout(heights = c(1,1,1,20), guides = "collect")
 ```
 
 ## Compare celltype proportions per TIG
 
+Exclude TLS and pre-TLS.
+
 ```{r celltype-proportions-TIG-boxplot, fig.width=10, fig.height=8}
-tab <- as.data.frame(prop.table(table(sce_Protein$sample, sce_Protein$celltype), margin = 1))
+sce_TLSex <- sce_Protein[,which(sce_Protein$TLS == "no")]
+tab <- as.data.frame(prop.table(table(sce_TLSex$sample, sce_TLSex$celltype), margin = 1))
 colnames(tab) <- c("sample", "celltype", "proportion")
 TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
 tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
@@ -232,7 +291,7 @@ tab$TIG <- ifelse(tab$sample %in% TIG2, "TIG2", "TIG3")
 ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   geom_boxplot()+
   geom_point()+
-  facet_wrap(~celltype, scales="free", ncol=6, strip.position="top")+
+  facet_wrap(~celltype, scales="fixed", ncol=6, strip.position="top")+
   theme(axis.ticks.x = element_blank(),
         axis.text.x=element_text(angle = 90, hjust=1),
         axis.title.x = element_blank(),
@@ -241,7 +300,7 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
         strip.background = element_blank(),
         legend.background = element_blank())+
   ylab("Of total [%]")+
-  stat_compare_means(method = "wilcox.test", aes(label=..p.format..))
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = "middle", label.y.npc = 0.9)
 ```
 
 
@@ -250,6 +309,7 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
 ```{r save-objects}
 saveRDS(sce_Protein, "output/ProteinPanel/sce_ProteinPanel_celltypes.rds")
 ```
+
 
 # Compare cell type proportions from CyTOF, RNAseq and IMC
 
@@ -289,7 +349,7 @@ IMC_perc <- filter(IMC_perc, sample != "TBB338")
 
 ## Read in and adapt CyTOF celltypes ##
 cytof_perc <- read.csv(paste0(getwd(), "/data/cytof_celltype_prop.csv"), row.names = 1)
-cytof_perc["other",] <- cytof_perc["granulocyt",] + cytof_perc["other",]
+cytof_perc["other",] <- cytof_perc["granulocyte",] + cytof_perc["other",]
 cytof_perc["myeloid", ] <- cytof_perc["myeloid", ] + cytof_perc["dendritic cell", ]
 cytof_perc <- cytof_perc[!(rownames(cytof_perc) %in% c("dendritic cell", "granulocyte")),]
 rownames(cytof_perc) <- c("endothelial", "epithelial", "fibroblast", "B_cell", "plasma_cell", "myeloid", "other", "T_NK")
@@ -328,6 +388,7 @@ ggplot(celltype_perc, aes(method, y = proportion, fill=celltype)) +
 # Plot
 ggplot(celltype_perc, aes(x = method, y = proportion)) +
   geom_line(aes(group = sample, color = sample))+
+  scale_color_manual(values = sce_IMC@metadata$colour_vectors$sample)+
   facet_wrap(~celltype, scales = "free", ncol = 4)+
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 30),
@@ -357,6 +418,50 @@ ggplot(celltype_perc[which(celltype_perc$method != "RNAseq"),], aes(x = method, 
         strip.background = element_blank(),
         legend.background = element_blank(),
         panel.border = element_rect(color = "black", fill = NA, size = 1))
+```
+
+# Compare cell type proportions of the two panels
+
+```{r celltype-comparison-panels, fig.width=15, fig.height=10}
+sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_celltypes.rds")
+
+sce_RNA[,which(sce_RNA$celltype %in% c("stromal_SMA+", "stromal_undefined"))]$celltype <- "stromal"
+sce_RNA[,which(sce_RNA$celltype == "Bcell")]$celltype <- "B_cell"
+sce_RNA[,which(sce_RNA$celltype %in% c("NK", "T_CD4", "T_CD8"))]$celltype <- "T_NK"
+
+sce_Protein[,which(sce_Protein$celltype %in% c("fibroblast", "stromal_undefined", "plasma_cell", "pDC"))]$celltype <- "stromal"
+
+tab_protein <- as.data.frame(prop.table(table(sce_Protein$ImageNumber, sce_Protein$celltype), margin = 1))
+tab_protein$panel <- "protein_panel"
+tab_RNA <- as.data.frame(prop.table(table(sce_RNA$ImageNumber, sce_RNA$celltype), margin = 1))
+tab_RNA$panel <- "RNA_panel"
+
+tab_comb <- rbind(tab_protein, tab_RNA)
+colnames(tab_comb) <- c("ImageNumber", "celltype", "proportion", "panel")
+
+# Plot
+ggplot(tab_comb, aes(panel, y = proportion, fill=celltype)) +
+  geom_bar(stat="identity")+
+  facet_wrap(~ImageNumber, ncol = 20)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+```
+
+```{r celltype-comparison-panels-samplebased, fig.width=10, fig.height=7}
+tab_protein <- as.data.frame(prop.table(table(sce_Protein$sample, sce_Protein$celltype), margin = 1))
+tab_protein$panel <- "protein_panel"
+tab_RNA <- as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$celltype), margin = 1))
+tab_RNA$panel <- "RNA_panel"
+
+tab_comb <- rbind(tab_protein, tab_RNA)
+colnames(tab_comb) <- c("sample", "celltype", "proportion", "panel")
+
+# Plot
+ggplot(tab_comb, aes(panel, y = proportion, fill=celltype)) +
+  geom_bar(stat="identity")+
+  facet_wrap(~sample, ncol = 20)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
 ```
 
 
