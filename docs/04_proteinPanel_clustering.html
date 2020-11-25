@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-02
+<strong>Last updated:</strong> 2020-11-25
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreecc3a5bc10a0537fb4ec7947fb631a17bab86ef08targetblankcc3a5bca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/cc3a5bc10a0537fb4ec7947fb631a17bab86ef08" target="_blank">cc3a5bc</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree7bd896b096560629c6d08b67dee0a266e5789cd3targetblank7bd896ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/7bd896b096560629c6d08b67dee0a266e5789cd3" target="_blank">7bd896b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreecc3a5bc10a0537fb4ec7947fb631a17bab86ef08targetblankcc3a5bca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree7bd896b096560629c6d08b67dee0a266e5789cd3targetblank7bd896ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/cc3a5bc10a0537fb4ec7947fb631a17bab86ef08" target="_blank">cc3a5bc</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/7bd896b096560629c6d08b67dee0a266e5789cd3" target="_blank">7bd896b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,28 +521,28 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
 
 Untracked files:
-    Untracked:  analysis/11_RNApanel_neighbourhood.Rmd
-    Untracked:  code/helper_functions/
-    Untracked:  data/Ki67_IHC.csv
-    Untracked:  data/ProteinPanel_TNK_clusters.csv
-    Untracked:  data/ProteinPanel_stromal_clusters.csv
-    Untracked:  data/ProteinPanel_tumor_stroma_clusters.csv
-    Untracked:  data/RNApanel_TNK_clusters.csv
-    Untracked:  data/RNApanel_stromal_clusters.csv
-    Untracked:  data/RNApanel_tumor_stroma_clusters.csv
+    Untracked:  CD11c_CD68_scatter.png
+    Untracked:  Neighbourhood_TLS_relative.pdf
+    Untracked:  Neighbourhood_TLS_relative.png
+    Untracked:  Neighbourhood_all_relative.pdf
+    Untracked:  Neighbourhood_all_relative.png
+    Untracked:  analysis/13_proteinPanel_neighbourhood_extended.Rmd
+    Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
-    Untracked:  data/RNAseq_celltype_prop.csv
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
-    Untracked:  data/ROI_info_HIER_TLSrevised.csv
     Untracked:  data/ROI_info_RNAscope.csv
-    Untracked:  data/ROI_info_RNAscope_TLSrevised.csv
-    Untracked:  data/TLS_scores.csv
     Untracked:  data/cpout/
-    Untracked:  data/cytof_celltype_prop.csv
     Untracked:  data/masks/
+    Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_TIGdifference.png
+    Untracked:  neighbourhood_myeloid_TLS_relative.png
+    Untracked:  neighbourhood_myeloid_all_relative.png
+    Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/TLS_score_25samples.png
@@ -552,10 +552,13 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  test.pdf
+    Untracked:  test.png
+    Untracked:  test_Treg_enrichment.png
 
 Unstaged changes:
-    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
-    Modified:   analysis/08_proteinPanel_neighbourhood.Rmd
+    Modified:   analysis/05_proteinPanel_StromalSubclustering.Rmd
+    Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
 
 </code></pre>
 <p>
@@ -594,6 +597,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/7bd896b096560629c6d08b67dee0a266e5789cd3/analysis/04_proteinPanel_clustering.Rmd" target="_blank">7bd896b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-25
+</td>
+<td>
+Figure updates for Supplemental Fig. S2
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/2d8660b5d6f94cebc55c84582627e3f93c2de7a9/docs/04_proteinPanel_clustering.html" target="_blank">2d8660b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -690,7 +727,7 @@ library(cowplot)
 library(scran)
 
 # Read SingleCellExperiment object
-sce_protein &lt;- readRDS(paste0(getwd(), &quot;/output/sce_ProteinPanel_afterQC.rds&quot;))</code></pre>
+sce_protein &lt;- readRDS(&quot;output/sce_ProteinPanel_afterQC.rds&quot;)</code></pre>
 </div>
 <div id="umap-representation" class="section level1">
 <h1>UMAP representation</h1>
@@ -864,6 +901,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/2d8660b5d6f94cebc55c84582627e3f93c2de7a9/docs/figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-4.png" target="_blank">2d8660b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-02
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8a8ca8f014c4e10d67db61c79f42bad3494b31b7/docs/figure/04_proteinPanel_clustering.Rmd/visualize-features-umap-4.png" target="_blank">8a8ca8f</a>
@@ -1300,12 +1348,12 @@ sce_tumor &lt;- sce_protein[,cellid_tumor]
 sce_stroma &lt;- sce_protein[,cellid_stroma]
 
 # Save 
-saveRDS(sce_tumor, paste0(getwd(), &quot;/output/ProteinPanel/sce_ProteinPanel_tumor.rds&quot;))
-saveRDS(sce_stroma, paste0(getwd(), &quot;/output/ProteinPanel/sce_ProteinPanel_stroma.rds&quot;))
+saveRDS(sce_tumor, &quot;output/ProteinPanel/sce_ProteinPanel_tumor.rds&quot;)
+saveRDS(sce_stroma, &quot;output/ProteinPanel/sce_ProteinPanel_stroma.rds&quot;)
 
 # Save updated objects
-saveRDS(sce_protein, paste0(getwd(), &quot;/output/ProteinPanel/sce_ProteinPanel_TS_assigned.rds&quot;))
-saveRDS(sce_protein_sub, paste0(getwd(), &quot;/output/ProteinPanel/sce_ProteinPanel_sub_UMAP.rds&quot;))</code></pre>
+saveRDS(sce_protein, &quot;output/ProteinPanel/sce_ProteinPanel_TS_assigned.rds&quot;)
+saveRDS(sce_protein_sub, &quot;output/ProteinPanel/sce_ProteinPanel_sub_UMAP.rds&quot;)</code></pre>
 </div>
 <div id="compare-tumorstroma-proportions-for-the-two-panels" class="section level1">
 <h1>Compare tumor/stroma proportions for the two panels</h1>
