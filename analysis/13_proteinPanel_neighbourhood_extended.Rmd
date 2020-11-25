@@ -1,0 +1,145 @@
+---
+title: "13_proteinPanel_neighbourhood_extended"
+author: "SandraTietscher"
+date: "2020-11-23"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning = FALSE)
+```
+
+This script looks in detail at selected cell type interactions
+
+# Load libraries and data
+
+```{r read-libraries-and-data, message=FALSE, results="hide"}
+# Load libraries
+library(SingleCellExperiment)
+library(data.table)
+library(dplyr)
+library(magrittr)
+library(dtplyr)
+library(ggplot2)
+library(gplots)
+library(RColorBrewer)
+library(tidyr)
+library(ggpubr)
+
+# Read SingleCellExperiment object
+sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
+
+# Read object relationship file (output from Cellprofiler)
+dat_relation <- fread("data/cpout/Object_relationships_ProteinPanel.csv")
+dat_relation$cellA <- paste0(dat_relation$`First Image Number`, "_", dat_relation$`First Object Number`)
+dat_relation$cellB <- paste0(dat_relation$`Second Image Number`, "_", dat_relation$`Second Object Number`)
+
+# ROI info
+ROI_info <- read.csv("data/ROI_info_HIER_TLSrevised.csv")
+ROI_info$ImageNumber <- c(1:77)
+
+#TLS image numbers
+nonTLS_nr <- filter(ROI_info, TLS == "no")$ImageNumber
+TLS_nr <- filter(ROI_info, TLS %in% c("pre", "yes"))$ImageNumber
+
+TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
+```
+
+# Likelihood of PD1-high T cells neighbouring tumor cells
+
+For all images.
+
+```{r PD1-tumor-neighbourhood, fig.height=4, fig.width=4}
+cur_sce <- data.frame(colData(sce_protein))
+df <- data.frame(matrix(nrow=0, ncol =3))
+
+for (i in unique(cur_sce$sample)){
+  cur_sce_i <- cur_sce[cur_sce[,"sample"] == i,]
+  
+  # get T cell IDs
+  cellIDs_PD1 <- cur_sce[cur_sce_i[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
+  PD1_shortID <- paste0(cellIDs_PD1$ImageNumber, "_", cellIDs_PD1$CellNumber)
+  cellIDs_nonPD1 <- cur_sce[cur_sce_i[,"subtype"] %in% c("CD4", "CD8", "Treg"),]
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  
+  # get tumor cell IDs
+  cellIDs_tumor <- cur_sce[cur_sce_i[,"celltype"] == "tumor",]
+  tumor_shortID <- paste0(cellIDs_tumor$ImageNumber, "_", cellIDs_tumor$CellNumber)
+  
+  # subset neighbourhood list to include only `PD1-high T cell <-> tumor cell` interactions
+  dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% tumor_shortID) | (cellB %in% PD1_shortID & cellA %in% tumor_shortID))
+  # extract PD1 IDs that border tumor cells
+  PD1_tumor_bordering <- setdiff(unique(c(dat_relation_sub_PD1$cellA, dat_relation_sub_PD1$cellB)), tumor_shortID)
+  PD1_perc <- length(PD1_tumor_bordering)/length(PD1_shortID)
+  
+  # subset neighbourhood list to include only `PD1-low T cell <-> tumor cell` interactions
+  dat_relation_sub_nonPD1 <- dat_relation %>% filter((cellA %in% nonPD1_shortID & cellB %in% tumor_shortID) | (cellB %in% nonPD1_shortID & cellA %in% tumor_shortID))
+  # extract PD1 IDs that border tumor cells
+  nonPD1_tumor_bordering <- setdiff(unique(c(dat_relation_sub_nonPD1$cellA, dat_relation_sub_nonPD1$cellB)), tumor_shortID)
+  nonPD1_perc <- length(nonPD1_tumor_bordering)/length(nonPD1_shortID)
+  
+  new_row <- c(i, PD1_perc, nonPD1_perc)
+  df <- rbind(df, new_row)
+} 
+
+colnames(df) <- c("sample", "PD1_perc", "nonPD1_perc")
+df[,2:3] <- df[,2:3] %>% mutate_if(is.character,as.numeric)
+
+# Plot
+ggpaired(df, cond1 = "PD1_perc", cond2 = "nonPD1_perc", line.color = "gray", ylab = "Direct tumor neighbour (proportion)", xlab = FALSE)+
+  stat_compare_means(paired = TRUE)
+```
+
+# Likelihood of PD1-high T cells neighbouring aDCs
+
+For all images.
+
+```{r PD1-aDC-neighbourhood, fig.height=4, fig.width=4}
+cur_sce <- data.frame(colData(sce_protein))
+df <- data.frame(matrix(nrow=0, ncol =3))
+
+for (i in unique(cur_sce$sample)){
+  cur_sce_i <- cur_sce[cur_sce[,"sample"] == i,]
+  
+  # get T cell IDs
+  cellIDs_PD1 <- cur_sce[cur_sce_i[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
+  PD1_shortID <- paste0(cellIDs_PD1$ImageNumber, "_", cellIDs_PD1$CellNumber)
+  cellIDs_nonPD1 <- cur_sce[cur_sce_i[,"subtype"] %in% c("CD4", "CD8", "Treg"),]
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  
+  # get aDC IDs
+  cellIDs_aDC <- cur_sce[cur_sce_i[,"celltype"] == "aDC",]
+  aDC_shortID <- paste0(cellIDs_aDC$ImageNumber, "_", cellIDs_aDC$CellNumber)
+  
+  # subset neighbourhood list to include only `PD1-high T cell <-> aDC` interactions
+  dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% aDC_shortID) | (cellB %in% PD1_shortID & cellA %in% aDC_shortID))
+  # extract PD1 IDs that border aDCs
+  PD1_aDC_bordering <- setdiff(unique(c(dat_relation_sub_PD1$cellA, dat_relation_sub_PD1$cellB)), aDC_shortID)
+  PD1_perc <- length(PD1_aDC_bordering)/length(PD1_shortID)
+  
+  # subset neighbourhood list to include only `PD1-low T cell <-> aDC` interactions
+  dat_relation_sub_nonPD1 <- dat_relation %>% filter((cellA %in% nonPD1_shortID & cellB %in% aDC_shortID) | (cellB %in% nonPD1_shortID & cellA %in% aDC_shortID))
+  # extract PD1 IDs that border aDCs
+  nonPD1_aDC_bordering <- setdiff(unique(c(dat_relation_sub_nonPD1$cellA, dat_relation_sub_nonPD1$cellB)), aDC_shortID)
+  nonPD1_perc <- length(nonPD1_aDC_bordering)/length(nonPD1_shortID)
+  
+  new_row <- c(i, PD1_perc, nonPD1_perc)
+  df <- rbind(df, new_row)
+} 
+
+colnames(df) <- c("sample", "PD1_perc", "nonPD1_perc")
+df[,2:3] <- df[,2:3] %>% mutate_if(is.character,as.numeric)
+df$TIG <- ifelse(df$sample %in% TIG2, "TIG2", "TIG3")
+
+# Plot
+ggpaired(df, cond1 = "PD1_perc", cond2 = "nonPD1_perc", line.color = "gray", ylab = "Direct aDC neighbour (proportion)", xlab = FALSE)+
+  stat_compare_means(paired = TRUE)
+
+
+```
+
+
