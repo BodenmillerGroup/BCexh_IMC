@@ -32,7 +32,7 @@ library(scran)
 library(plyr)
 
 # Read SingleCellExperiment object (with stromal cells only)
-sce_stromal <- readRDS(paste0(getwd(), "/output/RNApanel/sce_RNApanel_stroma.rds"))
+sce_stromal <- readRDS("output/RNApanel/sce_RNApanel_stroma.rds")
 ```
 
 # Stromal cell subclustering
@@ -72,7 +72,7 @@ dittoDimPlot(sce_stromal, var = "TLS", reduction.use = "UMAP", size = 0.5,
 p.list <- list()
 for(i in rownames(sce_stromal)){
   p.list[[i]] <- plotUMAP(sce_stromal, colour_by = i, by_exprs_values = "scaled", 
-                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3), na.value = "#b2182b")
 }
 plot_grid(plotlist = p.list, ncol = 7)
 ```
@@ -87,7 +87,7 @@ cluster_counts_stromal <- subset(assay(sce_stromal, "normalized"), rownames(assa
 g <- buildSNNGraph(cluster_counts_stromal, k=10)
 clust <- igraph::cluster_louvain(g)$membership
 table(clust)
-write.csv(table(clust), paste0(getwd(), "/output/RNApanel/stromal_cluster_cellnumbers.csv"), row.names = FALSE)
+write.csv(table(clust), "output/RNApanel/stromal_cluster_cellnumbers.csv", row.names = FALSE)
 
 #add cluster information to sce object
 sce_stromal$stromal_cluster <- as.factor(clust)
@@ -132,7 +132,7 @@ dittoHeatmap(clustermean[include_plot,], assay = "normalized", scale = "none",
 Manual cell type assignment based on canonical marker expression.
 
 ```{r stromal-labels, fig.width=8, fig.height=8}
-labels <- read.csv(paste0(getwd(), "/data/RNApanel_stromal_clusters.csv"))
+labels <- read.csv("data/RNApanel_stromal_clusters.csv")
 
 label_list <- labels$class[match(sce_stromal$stromal_cluster, labels$cluster)]
 sce_stromal$celltype <- label_list
@@ -150,6 +150,28 @@ ggplot(tab, aes(sample, y = proportion, fill=celltype)) +
   geom_bar(stat="identity")+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+```
+
+## Plot expression heatmap with celltype labels
+
+```{r expression_heatmap_celltype_labels}
+clustermean <- aggregateAcrossCells(sce_stromal, ids = DataFrame(cluster = sce_stromal$stromal_cluster), average = TRUE)
+colnames(clustermean) <- clustermean$cluster
+
+# Center and scale raw counts
+assay(clustermean, "scaled") <- t(scale(t(assay(clustermean, "counts"))))
+
+# Normalize raw counts
+norm_counts <- t(apply(assay(clustermean, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean, "normalized", withDimnames = FALSE) <- norm_counts
+
+markers_include <- markers_include_umap[markers_include_umap != "CD274"]
+
+dittoHeatmap(clustermean[markers_include,], assay = "normalized", scale = "none",
+            heatmap.colors = viridis(100),
+            cluster_cols = TRUE, show_colnames = TRUE, annot.by = "celltype", annot.colors =
+              c("#7F00FF", "#FF3399", "#009900", "#FF0000", "#CC99FF", "#3333FF", "#C0C0C0", "#00FF00"))
+
 ```
 
 # T/NK cell subclustering
@@ -205,7 +227,7 @@ dittoDimPlot(sce_TNK, var = "TLS", reduction.use = "UMAP", size = 0.5,
 p.list <- list()
 for(i in markers_extended){
   p.list[[i]] <- plotUMAP(sce_TNK, colour_by = i, by_exprs_values = "scaled", 
-                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3), na.value = "#b2182b")
 }
 plot_grid(plotlist = p.list, ncol = 3)
 
@@ -257,7 +279,7 @@ dittoHeatmap(clustermean[markers_extended,], assay = "normalized", scale = "none
 ### Assign subtype labels
 
 ```{r TNK-subtype-umap, fig.width=4, fig.height=4}
-labels <- read.csv(paste0(getwd(), "/data/RNApanel_TNK_clusters.csv"))
+labels <- read.csv("data/RNApanel_TNK_clusters.csv")
 
 label_list <- labels$class[match(sce_TNK$TNK_cluster, labels$cluster)]
 sce_TNK$T_subtype <- label_list
@@ -281,8 +303,8 @@ ggplot(tab, aes(sample, y = proportion, fill=T_subtype)) +
 
 ```{r combine-celltype-labels}
 # read in objects
-sce_RNA <- readRDS(paste0(getwd(), "/output/RNApanel/sce_RNApanel_TS_assigned.rds"))
-sce_RNA_sub <- readRDS(paste0(getwd(), "/output/RNApanel/sce_RNApanel_sub_UMAP.rds"))
+sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_TS_assigned.rds")
+sce_RNA_sub <- readRDS("output/RNApanel/sce_RNApanel_sub_UMAP.rds")
 
 
 ## Prepare dataframe with cell IDs and celltype labels ##
@@ -356,7 +378,7 @@ ggplot(tab, aes(image, y = proportion, fill=celltype)) +
 # Save object
 
 ```{r save-objects}
-saveRDS(sce_RNA, paste0(getwd(), "/output/RNApanel/sce_RNApanel_celltypes.rds"))
+saveRDS(sce_RNA, "output/RNApanel/sce_RNApanel_celltypes.rds")
 ```
 
 
