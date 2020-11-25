@@ -73,7 +73,7 @@ dittoDimPlot(sce_stromal, var = "TLS", reduction.use = "UMAP", size = 0.5,
 p.list <- list()
 for(i in rownames(sce_stromal)){
   p.list[[i]] <- plotUMAP(sce_stromal, colour_by = i, by_exprs_values = "scaled", 
-                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3), na.value = "#b2182b")
 }
 plot_grid(plotlist = p.list, ncol = 7)
 ```
@@ -200,10 +200,17 @@ dittoDimPlot(sce_Protein_sub, var = "celltype", reduction.use = "UMAP", size = 0
 
 ```{r expression_heatmap_celltype_labels}
 
-# dittoHeatmap(clustermean[markers_include_umap,], assay = "normalized", scale = "none",
-#             heatmap.colors = viridis(100), 
-#             cluster_cols = TRUE, show_colnames = TRUE, annot.by = "celltype", annot.colors = 
-#               c("#7F00FF", "#FF3399", "#009900", "#3333FF", "#FF0000", "#CC99FF", "#FFFF33", "#FF9933", "#C0C0C0", "#00FF00"))    
+clustermean <- aggregateAcrossCells(sce_stromal, ids = DataFrame(cluster = sce_stromal$stromal_cluster), average = TRUE)
+colnames(clustermean) <- clustermean$cluster
+
+# Normalize raw counts
+norm_counts <- t(apply(assay(clustermean, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean, "normalized", withDimnames = FALSE) <- norm_counts
+
+dittoHeatmap(clustermean[markers_include_umap,], assay = "normalized", scale = "none",
+            heatmap.colors = viridis(100),
+            cluster_cols = TRUE, show_colnames = TRUE, annot.by = "celltype", annot.colors =
+              c("#7F00FF", "#FF3399", "#009900", "#3333FF", "#FF0000", "#CC99FF", "#FFFF33", "#FF9933", "#C0C0C0", "#00FF00"))
 ```
 
 
