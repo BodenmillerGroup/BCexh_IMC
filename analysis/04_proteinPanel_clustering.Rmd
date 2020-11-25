@@ -35,7 +35,7 @@ library(cowplot)
 library(scran)
 
 # Read SingleCellExperiment object
-sce_protein <- readRDS(paste0(getwd(), "/output/sce_ProteinPanel_afterQC.rds"))
+sce_protein <- readRDS("output/sce_ProteinPanel_afterQC.rds")
 ```
 
 # UMAP representation
@@ -216,12 +216,12 @@ sce_tumor <- sce_protein[,cellid_tumor]
 sce_stroma <- sce_protein[,cellid_stroma]
 
 # Save 
-saveRDS(sce_tumor, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_tumor.rds"))
-saveRDS(sce_stroma, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_stroma.rds"))
+saveRDS(sce_tumor, "output/ProteinPanel/sce_ProteinPanel_tumor.rds")
+saveRDS(sce_stroma, "output/ProteinPanel/sce_ProteinPanel_stroma.rds")
 
 # Save updated objects
-saveRDS(sce_protein, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_TS_assigned.rds"))
-saveRDS(sce_protein_sub, paste0(getwd(), "/output/ProteinPanel/sce_ProteinPanel_sub_UMAP.rds"))
+saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_TS_assigned.rds")
+saveRDS(sce_protein_sub, "output/ProteinPanel/sce_ProteinPanel_sub_UMAP.rds")
 ```
 
 # Compare tumor/stroma proportions for the two panels
