@@ -108,7 +108,7 @@ plot_grid(plotlist = p.list, ncol = 7)
 p.list <- list()
 for(i in rownames(sce_protein_sub)){
   p.list[[i]] <- plotUMAP(sce_protein_sub, colour_by = i, by_exprs_values = "scaled", 
-                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3), na.value = "#b2182b")
 }
 
 plot_grid(plotlist = p.list, ncol = 7)
@@ -129,7 +129,7 @@ cluster_counts_normalized <- subset(assay(sce_protein, "normalized"), rownames(a
 g <- buildSNNGraph(cluster_counts_normalized, k=8)
 clust<- igraph::cluster_louvain(g)$membership
 table(clust)
-write.csv(table(clust), paste0(getwd(), "/output/RNApanel/cluster_cellnumbers.csv"), row.names = FALSE)
+write.csv(table(clust), "output/RNApanel/cluster_cellnumbers.csv", row.names = FALSE)
 
 #add cluster information to sce object
 sce_protein$phenograph_cluster <- as.factor(clust)
@@ -182,7 +182,7 @@ dittoDimPlot(sce_protein_sub, var = "phenograph_cluster", reduction.use = "UMAP"
 Look at tumor/stroma proportion per sample.
 
 ```{r assign-TS-labels, fig.width=5, fig.height=3}
-labels <- read.csv(paste0(getwd(), "/data/ProteinPanel_tumor_stroma_clusters.csv"))
+labels <- read.csv("data/ProteinPanel_tumor_stroma_clusters.csv")
 
 label_list <- labels$class[match(sce_protein$phenograph_cluster, labels$cluster)]
 sce_protein$cell_class <- label_list
@@ -228,7 +228,7 @@ saveRDS(sce_protein_sub, "output/ProteinPanel/sce_ProteinPanel_sub_UMAP.rds")
 
 ```{r compare-TS-proportions, fig.width=5, fig.height=3}
 #Read in RNApanel object and prepare data
-sce_RNA <- readRDS(paste0(getwd(), "/output/RNApanel/sce_RNApanel_TS_assigned.rds"))
+sce_RNA <- readRDS("output/RNApanel/sce_RNApanel_TS_assigned.rds")
 tab2 <-as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$cell_class), margin = 1))
 colnames(tab2) <- c("sample", "class", "proportion")
 tab2$panel <- "RNApanel"
