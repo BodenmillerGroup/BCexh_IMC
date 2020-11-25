@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree7bd896b096560629c6d08b67dee0a266e5789cd3targetblank7bd896ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/7bd896b096560629c6d08b67dee0a266e5789cd3" target="_blank">7bd896b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6066f65601bb2da248cfe3841a5eaa01a06911d6targetblank6066f65a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6066f65601bb2da248cfe3841a5eaa01a06911d6" target="_blank">6066f65</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree7bd896b096560629c6d08b67dee0a266e5789cd3targetblank7bd896ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6066f65601bb2da248cfe3841a5eaa01a06911d6targetblank6066f65a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/7bd896b096560629c6d08b67dee0a266e5789cd3" target="_blank">7bd896b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6066f65601bb2da248cfe3841a5eaa01a06911d6" target="_blank">6066f65</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,7 +521,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  CD11c_CD68_scatter.png
@@ -597,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/6066f65601bb2da248cfe3841a5eaa01a06911d6/analysis/04_proteinPanel_clustering.Rmd" target="_blank">6066f65</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-25
+</td>
+<td>
+Update marker expression UMAP plots
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/b5a217921d3400b82f316981aac7e1dc8c5f1d64/docs/04_proteinPanel_clustering.html" target="_blank">b5a2179</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -984,7 +1017,7 @@ SandraTietscher
 <pre class="r"><code>p.list &lt;- list()
 for(i in rownames(sce_protein_sub)){
   p.list[[i]] &lt;- plotUMAP(sce_protein_sub, colour_by = i, by_exprs_values = &quot;scaled&quot;, 
-                          point_size = 0.5, point_alpha = 1, shape_by = &quot;panel_type&quot;)  + scale_colour_gradient2(name = i, low = &quot;#2166ac&quot;, mid = &quot;white&quot;, high = &quot;#b2182b&quot;, limits = c(-3, 3))
+                          point_size = 0.5, point_alpha = 1, shape_by = &quot;panel_type&quot;)  + scale_colour_gradient2(name = i, low = &quot;#2166ac&quot;, mid = &quot;white&quot;, high = &quot;#b2182b&quot;, limits = c(-3, 3), na.value = &quot;#b2182b&quot;)
 }
 
 plot_grid(plotlist = p.list, ncol = 7)</code></pre>
@@ -1046,7 +1079,7 @@ table(clust)</code></pre>
 30502 25030 22230 21998 11160 26709  6465  9970 20761 18085  9779 30607 25045 
    14    15    16    17    18    19    20    21    22    23    24 
 14282 18618 22430 27898  6545 20180  4015  7042  8455  2979 33918 </code></pre>
-<pre class="r"><code>write.csv(table(clust), paste0(getwd(), &quot;/output/RNApanel/cluster_cellnumbers.csv&quot;), row.names = FALSE)
+<pre class="r"><code>write.csv(table(clust), &quot;output/RNApanel/cluster_cellnumbers.csv&quot;, row.names = FALSE)
 
 #add cluster information to sce object
 sce_protein$phenograph_cluster &lt;- as.factor(clust)</code></pre>
@@ -1241,7 +1274,7 @@ SandraTietscher
 <div id="assign-tumorstroma-labels" class="section level1">
 <h1>Assign tumor/stroma labels</h1>
 <p>Look at tumor/stroma proportion per sample.</p>
-<pre class="r"><code>labels &lt;- read.csv(paste0(getwd(), &quot;/data/ProteinPanel_tumor_stroma_clusters.csv&quot;))
+<pre class="r"><code>labels &lt;- read.csv(&quot;data/ProteinPanel_tumor_stroma_clusters.csv&quot;)
 
 label_list &lt;- labels$class[match(sce_protein$phenograph_cluster, labels$cluster)]
 sce_protein$cell_class &lt;- label_list
@@ -1358,7 +1391,7 @@ saveRDS(sce_protein_sub, &quot;output/ProteinPanel/sce_ProteinPanel_sub_UMAP.rds
 <div id="compare-tumorstroma-proportions-for-the-two-panels" class="section level1">
 <h1>Compare tumor/stroma proportions for the two panels</h1>
 <pre class="r"><code>#Read in RNApanel object and prepare data
-sce_RNA &lt;- readRDS(paste0(getwd(), &quot;/output/RNApanel/sce_RNApanel_TS_assigned.rds&quot;))
+sce_RNA &lt;- readRDS(&quot;output/RNApanel/sce_RNApanel_TS_assigned.rds&quot;)
 tab2 &lt;-as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$cell_class), margin = 1))
 colnames(tab2) &lt;- c(&quot;sample&quot;, &quot;class&quot;, &quot;proportion&quot;)
 tab2$panel &lt;- &quot;RNApanel&quot;
