@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-06
+<strong>Last updated:</strong> 2020-11-25
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree11f349146fdc04986d986a9543279f5648a6e786targetblank11f3491a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/11f349146fdc04986d986a9543279f5648a6e786" target="_blank">11f3491</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree30ad478543ed28e29ea5314e303da4f30621d798targetblank30ad478a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/30ad478543ed28e29ea5314e303da4f30621d798" target="_blank">30ad478</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree11f349146fdc04986d986a9543279f5648a6e786targetblank11f3491a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree30ad478543ed28e29ea5314e303da4f30621d798targetblank30ad478a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/11f349146fdc04986d986a9543279f5648a6e786" target="_blank">11f3491</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/30ad478543ed28e29ea5314e303da4f30621d798" target="_blank">30ad478</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,17 +521,28 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
 
 Untracked files:
-    Untracked:  analysis/11_RNAscope_cytokine_communities.Rmd
+    Untracked:  CD11c_CD68_scatter.png
+    Untracked:  Neighbourhood_TLS_relative.pdf
+    Untracked:  Neighbourhood_TLS_relative.png
+    Untracked:  Neighbourhood_all_relative.pdf
+    Untracked:  Neighbourhood_all_relative.png
+    Untracked:  analysis/13_proteinPanel_neighbourhood_extended.Rmd
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
-    Untracked:  data/Ki67_IHC.csv
+    Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
     Untracked:  data/ROI_info_RNAscope.csv
     Untracked:  data/cpout/
     Untracked:  data/masks/
+    Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_TIGdifference.png
+    Untracked:  neighbourhood_myeloid_TLS_relative.png
+    Untracked:  neighbourhood_myeloid_all_relative.png
+    Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
     Untracked:  output/RNApanel/
     Untracked:  output/TLS_score_25samples.png
@@ -541,6 +552,12 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  test.pdf
+    Untracked:  test.png
+    Untracked:  test_Treg_enrichment.png
+
+Unstaged changes:
+    Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
 
 </code></pre>
 <p>
@@ -579,6 +596,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/30ad478543ed28e29ea5314e303da4f30621d798/analysis/05_proteinPanel_StromalSubclustering.Rmd" target="_blank">30ad478</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-25
+</td>
+<td>
+Figure updates for Supplemental Fig. S2
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/07fbe3320c8599bfb4d2ddf8d527328b5ee214c4/docs/05_proteinPanel_StromalSubclustering.html" target="_blank">07fbe33</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -756,6 +807,7 @@ library(cowplot)
 library(ggpubr)
 library(scran)
 library(plyr)
+library(patchwork)
 
 # Read SingleCellExperiment object (with stromal cells only)
 sce_stromal &lt;- readRDS(paste0(getwd(), &quot;/output/ProteinPanel/sce_ProteinPanel_stroma.rds&quot;))</code></pre>
@@ -1227,6 +1279,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/07fbe3320c8599bfb4d2ddf8d527328b5ee214c4/docs/figure/05_proteinPanel_StromalSubclustering.Rmd/stromal-labels-1.png" target="_blank">07fbe33</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/84af25eba94c950776252dbe4f71eba992859dfb/docs/figure/05_proteinPanel_StromalSubclustering.Rmd/stromal-labels-1.png" target="_blank">84af25e</a>
 </td>
 <td>
@@ -1349,6 +1412,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/07fbe3320c8599bfb4d2ddf8d527328b5ee214c4/docs/figure/05_proteinPanel_StromalSubclustering.Rmd/plot-celltype-umap-1.png" target="_blank">07fbe33</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-06
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/84af25eba94c950776252dbe4f71eba992859dfb/docs/figure/05_proteinPanel_StromalSubclustering.Rmd/plot-celltype-umap-1.png" target="_blank">84af25e</a>
 </td>
 <td>
@@ -1363,17 +1437,39 @@ SandraTietscher
 </div>
 </div>
 </div>
+<div id="plot-expression-heatmap-with-celltype-labels" class="section level2">
+<h2>Plot expression heatmap with celltype labels</h2>
+<pre class="r"><code># dittoHeatmap(clustermean[markers_include_umap,], assay = &quot;normalized&quot;, scale = &quot;none&quot;,
+#             heatmap.colors = viridis(100), 
+#             cluster_cols = TRUE, show_colnames = TRUE, annot.by = &quot;celltype&quot;, annot.colors = 
+#               c(&quot;#7F00FF&quot;, &quot;#FF3399&quot;, &quot;#009900&quot;, &quot;#3333FF&quot;, &quot;#FF0000&quot;, &quot;#CC99FF&quot;, &quot;#FFFF33&quot;, &quot;#FF9933&quot;, &quot;#C0C0C0&quot;, &quot;#00FF00&quot;))    </code></pre>
+</div>
 <div id="plot-celltype-proportions-per-sample-and-per-image" class="section level2">
 <h2>Plot celltype proportions per sample and per image</h2>
 <p>Include TLS and pre-TLS images.</p>
-<pre class="r"><code># Plot cell type frequencies per sample
+<pre class="r"><code>celltype_colors = c(tumor = &quot;#00FFFF&quot;,
+                          fibroblast = &quot;#3333FF&quot;,
+                          endothelial = &quot;#009900&quot;,
+                          T_NK = &quot;#00FF00&quot;,
+                          pDC = &quot;#FFFF33&quot;,
+                          plasma_cell = &quot;#FF9933&quot;,
+                          myeloid = &quot;#FF0000&quot;,
+                          aDC = &quot;#7F00FF&quot;,
+                          B_cell = &quot;#FF3399&quot;,
+                          neutrophil = &quot;#CC99FF&quot;,
+                          stromal_undefined = &quot;#C0C0C0&quot;
+                          )
+
+# Plot cell type frequencies per sample
 tab &lt;- as.data.frame(prop.table(table(sce_Protein$sample, sce_Protein$celltype), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;celltype&quot;, &quot;proportion&quot;)
+tab$celltype &lt;- factor(tab$celltype, levels = rev(names(celltype_colors)))
 
 ggplot(tab, aes(sample, y = proportion, fill=celltype)) +
   geom_bar(stat=&quot;identity&quot;)+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
-  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  scale_fill_manual(values = celltype_colors)</code></pre>
 <p><img src="figure/05_proteinPanel_StromalSubclustering.Rmd/celltype-proportion-sample-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-celltype-proportion-sample-1">
@@ -1416,10 +1512,39 @@ SandraTietscher
 tab &lt;- as.data.frame(prop.table(table(sce_Protein$ImageNumber, sce_Protein$celltype), margin = 1))
 colnames(tab) &lt;- c(&quot;image&quot;, &quot;celltype&quot;, &quot;proportion&quot;)
 
-ggplot(tab, aes(image, y = proportion, fill=celltype)) +
+# Order images by tumor cell content
+tumor_tab &lt;- filter(tab, celltype == &quot;tumor&quot;)
+order &lt;- tumor_tab[order(tumor_tab$proportion),]$image
+tab$image &lt;- factor(tab$image, levels = order)
+tab$celltype &lt;- factor(tab$celltype, levels = rev(names(celltype_colors)))
+
+p_proportion &lt;- ggplot(tab, aes(image, y = proportion, fill=celltype)) +
   geom_bar(stat=&quot;identity&quot;)+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
-  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))+
+  scale_fill_manual(values = celltype_colors)
+
+# Plot image metadata
+ROI_info &lt;- read.csv(&quot;data/ROI_info_HIER_TLSrevised.csv&quot;)
+ROI_info$RNApanel_ImageNumber &lt;- factor(ROI_info$RNApanel_ImageNumber, levels = order)
+ROI_info$sample &lt;- factor(ROI_info$sample, levels = levels(sce_stromal$sample))
+
+p_sample &lt;- ggplot(ROI_info, aes(x = RNApanel_ImageNumber, y = &quot;sample&quot;, fill = sample))+
+  geom_tile()+
+  scale_fill_manual(values = metadata(sce_stromal)$colour_vectors$sample)+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+p_TLS &lt;- ggplot(ROI_info, aes(x = RNApanel_ImageNumber, y = &quot;TLS&quot;, fill = TLS))+
+  geom_tile()+
+  scale_fill_manual(values = metadata(sce_stromal)$colour_vectors$TLS)+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+p_TIG &lt;- ggplot(ROI_info, aes(x = RNApanel_ImageNumber, y = &quot;TIG&quot;, fill = TIG))+
+  geom_tile()+
+  scale_fill_manual(values = metadata(sce_stromal)$colour_vectors$TIG)+
+  theme(panel.background = element_blank(), axis.text.x = element_blank(), axis.title = element_blank(), axis.ticks = element_blank())
+
+p_TLS/p_TIG/p_sample/p_proportion + plot_layout(heights = c(1,1,1,20), guides = &quot;collect&quot;)</code></pre>
 <p><img src="figure/05_proteinPanel_StromalSubclustering.Rmd/celltype-proportion-image-1.png" width="768" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-celltype-proportion-image-1">
@@ -1461,7 +1586,9 @@ SandraTietscher
 </div>
 <div id="compare-celltype-proportions-per-tig" class="section level2">
 <h2>Compare celltype proportions per TIG</h2>
-<pre class="r"><code>tab &lt;- as.data.frame(prop.table(table(sce_Protein$sample, sce_Protein$celltype), margin = 1))
+<p>Exclude TLS and pre-TLS.</p>
+<pre class="r"><code>sce_TLSex &lt;- sce_Protein[,which(sce_Protein$TLS == &quot;no&quot;)]
+tab &lt;- as.data.frame(prop.table(table(sce_TLSex$sample, sce_TLSex$celltype), margin = 1))
 colnames(tab) &lt;- c(&quot;sample&quot;, &quot;celltype&quot;, &quot;proportion&quot;)
 TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)
 tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
@@ -1469,7 +1596,7 @@ tab$TIG &lt;- ifelse(tab$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
 ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
   geom_boxplot()+
   geom_point()+
-  facet_wrap(~celltype, scales=&quot;free&quot;, ncol=6, strip.position=&quot;top&quot;)+
+  facet_wrap(~celltype, scales=&quot;fixed&quot;, ncol=6, strip.position=&quot;top&quot;)+
   theme(axis.ticks.x = element_blank(),
         axis.text.x=element_text(angle = 90, hjust=1),
         axis.title.x = element_blank(),
@@ -1478,7 +1605,7 @@ ggplot(tab, aes(x= TIG, y = proportion, color=TIG))+
         strip.background = element_blank(),
         legend.background = element_blank())+
   ylab(&quot;Of total [%]&quot;)+
-  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))</code></pre>
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = &quot;middle&quot;, label.y.npc = 0.9)</code></pre>
 <p><img src="figure/05_proteinPanel_StromalSubclustering.Rmd/celltype-proportions-TIG-boxplot-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-celltype-proportions-TIG-boxplot-1">
@@ -1556,7 +1683,7 @@ IMC_perc &lt;- filter(IMC_perc, sample != &quot;TBB338&quot;)
 
 ## Read in and adapt CyTOF celltypes ##
 cytof_perc &lt;- read.csv(paste0(getwd(), &quot;/data/cytof_celltype_prop.csv&quot;), row.names = 1)
-cytof_perc[&quot;other&quot;,] &lt;- cytof_perc[&quot;granulocyt&quot;,] + cytof_perc[&quot;other&quot;,]
+cytof_perc[&quot;other&quot;,] &lt;- cytof_perc[&quot;granulocyte&quot;,] + cytof_perc[&quot;other&quot;,]
 cytof_perc[&quot;myeloid&quot;, ] &lt;- cytof_perc[&quot;myeloid&quot;, ] + cytof_perc[&quot;dendritic cell&quot;, ]
 cytof_perc &lt;- cytof_perc[!(rownames(cytof_perc) %in% c(&quot;dendritic cell&quot;, &quot;granulocyte&quot;)),]
 rownames(cytof_perc) &lt;- c(&quot;endothelial&quot;, &quot;epithelial&quot;, &quot;fibroblast&quot;, &quot;B_cell&quot;, &quot;plasma_cell&quot;, &quot;myeloid&quot;, &quot;other&quot;, &quot;T_NK&quot;)
@@ -1628,6 +1755,7 @@ SandraTietscher
 <pre class="r"><code># Plot
 ggplot(celltype_perc, aes(x = method, y = proportion)) +
   geom_line(aes(group = sample, color = sample))+
+  scale_color_manual(values = sce_IMC@metadata$colour_vectors$sample)+
   facet_wrap(~celltype, scales = &quot;free&quot;, ncol = 4)+
   theme(axis.title.x = element_blank(),
         axis.text.x = element_text(angle = 30),
@@ -1769,6 +1897,48 @@ SandraTietscher
 </table>
 </div>
 </div>
+</div>
+</div>
+<div id="compare-cell-type-proportions-of-the-two-panels" class="section level1">
+<h1>Compare cell type proportions of the two panels</h1>
+<pre class="r"><code>sce_RNA &lt;- readRDS(&quot;output/RNApanel/sce_RNApanel_celltypes.rds&quot;)
+
+sce_RNA[,which(sce_RNA$celltype %in% c(&quot;stromal_SMA+&quot;, &quot;stromal_undefined&quot;))]$celltype &lt;- &quot;stromal&quot;
+sce_RNA[,which(sce_RNA$celltype == &quot;Bcell&quot;)]$celltype &lt;- &quot;B_cell&quot;
+sce_RNA[,which(sce_RNA$celltype %in% c(&quot;NK&quot;, &quot;T_CD4&quot;, &quot;T_CD8&quot;))]$celltype &lt;- &quot;T_NK&quot;
+
+sce_Protein[,which(sce_Protein$celltype %in% c(&quot;fibroblast&quot;, &quot;stromal_undefined&quot;, &quot;plasma_cell&quot;, &quot;pDC&quot;))]$celltype &lt;- &quot;stromal&quot;
+
+tab_protein &lt;- as.data.frame(prop.table(table(sce_Protein$ImageNumber, sce_Protein$celltype), margin = 1))
+tab_protein$panel &lt;- &quot;protein_panel&quot;
+tab_RNA &lt;- as.data.frame(prop.table(table(sce_RNA$ImageNumber, sce_RNA$celltype), margin = 1))
+tab_RNA$panel &lt;- &quot;RNA_panel&quot;
+
+tab_comb &lt;- rbind(tab_protein, tab_RNA)
+colnames(tab_comb) &lt;- c(&quot;ImageNumber&quot;, &quot;celltype&quot;, &quot;proportion&quot;, &quot;panel&quot;)
+
+# Plot
+ggplot(tab_comb, aes(panel, y = proportion, fill=celltype)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~ImageNumber, ncol = 20)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/05_proteinPanel_StromalSubclustering.Rmd/celltype-comparison-panels-1.png" width="1440" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>tab_protein &lt;- as.data.frame(prop.table(table(sce_Protein$sample, sce_Protein$celltype), margin = 1))
+tab_protein$panel &lt;- &quot;protein_panel&quot;
+tab_RNA &lt;- as.data.frame(prop.table(table(sce_RNA$sample, sce_RNA$celltype), margin = 1))
+tab_RNA$panel &lt;- &quot;RNA_panel&quot;
+
+tab_comb &lt;- rbind(tab_protein, tab_RNA)
+colnames(tab_comb) &lt;- c(&quot;sample&quot;, &quot;celltype&quot;, &quot;proportion&quot;, &quot;panel&quot;)
+
+# Plot
+ggplot(tab_comb, aes(panel, y = proportion, fill=celltype)) +
+  geom_bar(stat=&quot;identity&quot;)+
+  facet_wrap(~sample, ncol = 20)+
+  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))</code></pre>
+<p><img src="figure/05_proteinPanel_StromalSubclustering.Rmd/celltype-comparison-panels-samplebased-1.png" width="960" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1797,20 +1967,21 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] plyr_1.8.6                  scran_1.16.0               
- [3] ggpubr_0.4.0                cowplot_1.0.0              
- [5] viridis_0.5.1               viridisLite_0.3.0          
- [7] dittoSeq_1.0.2              forcats_0.5.0              
- [9] stringr_1.4.0               dplyr_1.0.1                
-[11] purrr_0.3.4                 readr_1.3.1                
-[13] tidyr_1.1.1                 tibble_3.0.3               
-[15] tidyverse_1.3.0             scater_1.16.2              
-[17] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
-[19] DelayedArray_0.14.1         matrixStats_0.56.0         
-[21] Biobase_2.48.0              GenomicRanges_1.40.0       
-[23] GenomeInfoDb_1.24.2         IRanges_2.22.2             
-[25] S4Vectors_0.26.1            BiocGenerics_0.34.0        
-[27] ggplot2_3.3.2               workflowr_1.6.2            
+ [1] patchwork_1.0.1             plyr_1.8.6                 
+ [3] scran_1.16.0                ggpubr_0.4.0               
+ [5] cowplot_1.0.0               viridis_0.5.1              
+ [7] viridisLite_0.3.0           dittoSeq_1.0.2             
+ [9] forcats_0.5.0               stringr_1.4.0              
+[11] dplyr_1.0.1                 purrr_0.3.4                
+[13] readr_1.3.1                 tidyr_1.1.1                
+[15] tibble_3.0.3                tidyverse_1.3.0            
+[17] scater_1.16.2               SingleCellExperiment_1.10.1
+[19] SummarizedExperiment_1.18.2 DelayedArray_0.14.1        
+[21] matrixStats_0.56.0          Biobase_2.48.0             
+[23] GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
+[25] IRanges_2.22.2              S4Vectors_0.26.1           
+[27] BiocGenerics_0.34.0         ggplot2_3.3.2              
+[29] workflowr_1.6.2            
 
 loaded via a namespace (and not attached):
   [1] ggbeeswarm_0.6.0          colorspace_1.4-1         
@@ -1863,7 +2034,6 @@ loaded via a namespace (and not attached):
  [95] reprex_0.3.0              digest_0.6.25            
  [97] httpuv_1.5.4              munsell_0.5.0            
  [99] beeswarm_0.2.3            vipor_0.4.5              </code></pre>
-</div>
 </div>
 </div>
 
