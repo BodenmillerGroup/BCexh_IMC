@@ -355,7 +355,7 @@ ggplot(tab, aes(sample, y = proportion, fill=cell_status)) +
 
 Single-cell violin plots.
 
-```{r subtype-marker-comparison-singlecell, fig.width=3, fig.height=6}
+```{r subtype-marker-comparison-singlecell, fig.width=6, fig.height=3}
 
 exprs <- data.frame(HLA_ABC = assay(sce_tumor, "exprs")["HLA-ABC",],
                     `PD-L1` = assay(sce_tumor, "exprs")["CD274",],
@@ -380,7 +380,7 @@ ggplot(tumor_tab, aes(x=cell_status, y = exprs, fill = cell_status))+
 
 Single-cell violin plots - TIG2 only.
 
-```{r subtype-marker-comparison-singlecell-TIG2, fig.width=3, fig.height=6}
+```{r subtype-marker-comparison-singlecell-TIG2, fig.width=6, fig.height=3}
 sce_tumor_TIG2 <- sce_tumor[,which(sce_tumor$TIG == "TIG2")]
 
 exprs <- data.frame(HLA_ABC = assay(sce_tumor_TIG2, "exprs")["HLA-ABC",],
@@ -424,7 +424,7 @@ saveRDS(sce_protein, "output/ProteinPanel/sce_ProteinPanel_subtypes.rds")
 
 # Cytomapper visualization
 
-```{r cytomapper-tumor, message = FALSE}
+```{r cytomapper-tumor, message = FALSE, warning=FALSE}
 library(cytomapper)
 
 # Load mask files
