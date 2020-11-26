@@ -43,27 +43,27 @@ TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
 ## Calculate UMAP on all tumor cells
 
 ```{r tumor-umap}
-markers_include_umap <- c("CAIX", "Cleaved_CP", "Ki-67", "E-Cadherin", "panCK", "HLA-ABC", "MMP9", "SMA", "CD274")
-
-sce_tumor <- runUMAP(sce_tumor, exprs_values = "exprs", 
-                     subset_row = rownames(assay(sce_tumor, "scaled")) %in% markers_include_umap)
+# markers_include_umap <- c("CAIX", "Cleaved_CP", "Ki-67", "E-Cadherin", "panCK", "HLA-ABC", "MMP9", "SMA", "CD274")
+# 
+# sce_tumor <- runUMAP(sce_tumor, exprs_values = "exprs", 
+#                      subset_row = rownames(assay(sce_tumor, "scaled")) %in% markers_include_umap)
 ```
 
 ### Visualize features on UMAP
 
 ```{r tumor-umap-features, fig.width=8, fig.height=8}
 
-dittoDimPlot(sce_tumor, var = "sample", reduction.use = "UMAP", size = 0.5, 
-                               color.panel = metadata(sce_tumor)$colour_vectors$sample, opacity = 0.2) 
-
-dittoDimPlot(sce_tumor, var = "sample", reduction.use = "UMAP", size = 0.5, 
-                               color.panel = metadata(sce_tumor)$colour_vectors$sample, split.by = "sample", opacity = 0.2) 
-
-dittoDimPlot(sce_tumor, var = "TIG", reduction.use = "UMAP", size = 0.5, 
-                               color.panel = metadata(sce_tumor)$colour_vectors$TIG)
-
-dittoDimPlot(sce_tumor, var = "TLS", reduction.use = "UMAP", size = 0.5, 
-                               color.panel = metadata(sce_tumor)$colour_vectors$TLS)
+# dittoDimPlot(sce_tumor, var = "sample", reduction.use = "UMAP", size = 0.5, 
+#                                color.panel = metadata(sce_tumor)$colour_vectors$sample, opacity = 0.2) 
+# 
+# dittoDimPlot(sce_tumor, var = "sample", reduction.use = "UMAP", size = 0.5, 
+#                                color.panel = metadata(sce_tumor)$colour_vectors$sample, split.by = "sample", opacity = 0.2) 
+# 
+# dittoDimPlot(sce_tumor, var = "TIG", reduction.use = "UMAP", size = 0.5, 
+#                                color.panel = metadata(sce_tumor)$colour_vectors$TIG)
+# 
+# dittoDimPlot(sce_tumor, var = "TLS", reduction.use = "UMAP", size = 0.5, 
+#                                color.panel = metadata(sce_tumor)$colour_vectors$TLS)
 ```
 
 ### Visualize marker expression on UMAP
@@ -71,12 +71,12 @@ dittoDimPlot(sce_tumor, var = "TLS", reduction.use = "UMAP", size = 0.5,
 ```{r tumor-umap-markerexpression, fig.width=35, fig.height=25, message=FALSE, warning=FALSE}
 
 # Plot expression of all markers
-p.list <- list()
-for(i in markers_include_umap){
-  p.list[[i]] <- plotUMAP(sce_tumor, colour_by = i, by_exprs_values = "scaled", 
-                          point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
-}
-plot_grid(plotlist = p.list, ncol = 5)
+# p.list <- list()
+# for(i in markers_include_umap){
+#   p.list[[i]] <- plotUMAP(sce_tumor, colour_by = i, by_exprs_values = "scaled", 
+#                           point_size = 0.5, point_alpha = 1, shape_by = "panel_type")  + scale_colour_gradient2(name = i, low = "#2166ac", mid = "white", high = "#b2182b", limits = c(-3, 3))
+# }
+# plot_grid(plotlist = p.list, ncol = 5)
 ```
 
 ## Run graph-based clustering for tumor subset (Phenograph)
@@ -84,57 +84,57 @@ plot_grid(plotlist = p.list, ncol = 5)
 Display clusters on UMAP.
 
 ```{r tumor-clustering-umap, fig.width=8, fig.height=8}
-cluster_counts_tumor <- subset(assay(sce_tumor, "normalized"), rownames(assay(sce_tumor, "normalized")) %in% markers_include_umap)
-
-g <- buildSNNGraph(cluster_counts_tumor, k=50)
-clust <- igraph::cluster_louvain(g)$membership
-table(clust)
-#write.csv(table(clust), paste0(getwd(), "/output/ProteinPanel/tumor_cluster_cellnumbers.csv"), row.names = FALSE)
-
-#add cluster information to sce object
-sce_tumor$tumor_cluster <- as.factor(clust)
-
-#plot on umap
-dittoDimPlot(sce_tumor, var = "tumor_cluster", reduction.use = "UMAP", size = 0.2, do.label = TRUE, opacity = 0.2)
-dittoDimPlot(sce_tumor, var = "tumor_cluster", reduction.use = "UMAP", size = 0.2, split.by = "tumor_cluster", opacity = 0.2)
+# cluster_counts_tumor <- subset(assay(sce_tumor, "normalized"), rownames(assay(sce_tumor, "normalized")) %in% markers_include_umap)
+# 
+# g <- buildSNNGraph(cluster_counts_tumor, k=50)
+# clust <- igraph::cluster_louvain(g)$membership
+# table(clust)
+# #write.csv(table(clust), paste0(getwd(), "/output/ProteinPanel/tumor_cluster_cellnumbers.csv"), row.names = FALSE)
+# 
+# #add cluster information to sce object
+# sce_tumor$tumor_cluster <- as.factor(clust)
+# 
+# #plot on umap
+# dittoDimPlot(sce_tumor, var = "tumor_cluster", reduction.use = "UMAP", size = 0.2, do.label = TRUE, opacity = 0.2)
+# dittoDimPlot(sce_tumor, var = "tumor_cluster", reduction.use = "UMAP", size = 0.2, split.by = "tumor_cluster", opacity = 0.2)
 ```
 
 ### Plot mean expression for each cluster
 
 ```{r tumor-clusters-expression-heatmap, fig.width=5, fig.height=5}
-clustermean <- aggregateAcrossCells(sce_tumor, ids = DataFrame(cluster = sce_tumor$tumor_cluster), average = TRUE)
-colnames(clustermean) <- clustermean$cluster
-
-# Center and scale raw counts
-assay(clustermean, "scaled") <- t(scale(t(assay(clustermean, "counts"))))
-
-# Normalize raw counts
-norm_counts <- t(apply(assay(clustermean, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
-assay(clustermean, "normalized", withDimnames = FALSE) <- norm_counts
-
-## Plot
-# Z-scaled
-dittoHeatmap(clustermean[markers_include_umap,], assay = "scaled", scale = "none",
-            heatmap.colors = magma(100), 
-            cluster_cols = TRUE, show_colnames = TRUE,
-            breaks = seq(-3, 3, length.out = 101))
-
-# Normalized (0-1)
-dittoHeatmap(clustermean[markers_include_umap,], assay = "normalized", scale = "none",
-            heatmap.colors = viridis(100), 
-            cluster_cols = TRUE, show_colnames = TRUE)
+# clustermean <- aggregateAcrossCells(sce_tumor, ids = DataFrame(cluster = sce_tumor$tumor_cluster), average = TRUE)
+# colnames(clustermean) <- clustermean$cluster
+# 
+# # Center and scale raw counts
+# assay(clustermean, "scaled") <- t(scale(t(assay(clustermean, "counts"))))
+# 
+# # Normalize raw counts
+# norm_counts <- t(apply(assay(clustermean, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+# assay(clustermean, "normalized", withDimnames = FALSE) <- norm_counts
+# 
+# ## Plot
+# # Z-scaled
+# dittoHeatmap(clustermean[markers_include_umap,], assay = "scaled", scale = "none",
+#             heatmap.colors = magma(100), 
+#             cluster_cols = TRUE, show_colnames = TRUE,
+#             breaks = seq(-3, 3, length.out = 101))
+# 
+# # Normalized (0-1)
+# dittoHeatmap(clustermean[markers_include_umap,], assay = "normalized", scale = "none",
+#             heatmap.colors = viridis(100), 
+#             cluster_cols = TRUE, show_colnames = TRUE)
 ```
 
 ### Plot sample proportions per cluster
 
 ```{r sample-proportions-cluster}
-props <- as.data.frame(prop.table(table(sce_tumor$tumor_cluster, sce_tumor$sample), margin = 1))
-colnames(props) <- c("cluster", "sample", "proportion")
-
-ggplot(props, aes(cluster, y = proportion, fill=sample)) +
-  geom_bar(stat="identity")+
-  theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
-  theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+# props <- as.data.frame(prop.table(table(sce_tumor$tumor_cluster, sce_tumor$sample), margin = 1))
+# colnames(props) <- c("cluster", "sample", "proportion")
+# 
+# ggplot(props, aes(cluster, y = proportion, fill=sample)) +
+#   geom_bar(stat="identity")+
+#   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
+#   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
 ```
 
 
@@ -157,13 +157,10 @@ ggplot(tumor_tab, aes(x=TIG, y = exprs, fill = TIG))+
   geom_violin(aes(fill=TIG))+
   geom_boxplot(position=position_dodge(width=0.9), width=0.1, color="black", aes(fill=TIG))+
   facet_wrap(~marker, scale = "free")+
-  theme(axis.line.x = element_line(colour = "black", size = 0.25),
-        axis.line.y = element_line(colour = "black", size = 0.25),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=1),
         panel.background = element_blank(),
-        axis.title.x = element_blank())+
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank())+
   ylab("Marker expression (arcsin-transformed counts)")
 ```
 
@@ -245,9 +242,9 @@ Based on Ki67, Carbonic Anhydrase IX and Cleaved Caspase/Cleaved PARP expression
 ## Define Ki-67 positive tumor cells
 
 ```{r Ki67-cutoff-cluster, fig.width=6, fig.height=3}
-dittoPlot(sce_tumor, "Ki-67", group.by = "tumor_cluster",
-    plots = c("vlnplot"), assay = "exprs")+
-  geom_hline(yintercept = 0.7, lty = "dashed")
+# dittoPlot(sce_tumor, "Ki-67", group.by = "tumor_cluster",
+#     plots = c("vlnplot"), assay = "exprs")+
+#   geom_hline(yintercept = 0.7, lty = "dashed")
 ```
 ```{r Ki67-cutoff-full, fig.width=3, fig.height=4}
 dittoPlot(sce_tumor, "Ki-67", group.by = "panel_type",
@@ -285,13 +282,13 @@ ggplot(Ki67_comb, aes(IMC_proportion*100, Ki67_IHC)) +
 ## Define hypoxic and apoptotic tumor cells
 
 ```{r cutoff-cluster, fig.width=6, fig.height=3}
-dittoPlot(sce_tumor, "Cleaved_CP", group.by = "tumor_cluster",
-    plots = c("vlnplot"), assay = "exprs")+
-  geom_hline(yintercept = 0.5, lty = "dashed")
-
-dittoPlot(sce_tumor, "CAIX", group.by = "tumor_cluster",
-    plots = c("vlnplot"), assay = "exprs")+
-  geom_hline(yintercept = 0.9, lty = "dashed")
+# dittoPlot(sce_tumor, "Cleaved_CP", group.by = "tumor_cluster",
+#     plots = c("vlnplot"), assay = "exprs")+
+#   geom_hline(yintercept = 0.5, lty = "dashed")
+# 
+# dittoPlot(sce_tumor, "CAIX", group.by = "tumor_cluster",
+#     plots = c("vlnplot"), assay = "exprs")+
+#   geom_hline(yintercept = 0.9, lty = "dashed")
 ```
 ```{r cutoff-full, fig.width=3, fig.height=4}
 dittoPlot(sce_tumor, "Cleaved_CP", group.by = "panel_type",
@@ -352,6 +349,59 @@ ggplot(tab, aes(sample, y = proportion, fill=cell_status)) +
   geom_bar(stat="identity")+
   theme(axis.title.x=element_blank(), axis.title.y = element_blank())+
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
+```
+
+# Compare marker expression in tumor subtypes
+
+Single-cell violin plots.
+
+```{r subtype-marker-comparison-singlecell, fig.width=3, fig.height=6}
+
+exprs <- data.frame(HLA_ABC = assay(sce_tumor, "exprs")["HLA-ABC",],
+                    `PD-L1` = assay(sce_tumor, "exprs")["CD274",],
+                    MMP9 = assay(sce_tumor, "exprs")["MMP9",])
+tumor_tab <- cbind(exprs, colData(sce_tumor))
+tumor_tab <- pivot_longer(tumor_tab, 1:3, names_to = "marker", values_to = "exprs")
+
+#my_comparisons <- list(c("tumor", "tumor_apoptotic"), c("tumor", "tumor_hypoxic"), c("tumor", "tumor_Ki67"), c("tumor_apoptotic", "tumor_hypoxic"), c("tumor_Ki67", "tumor_hypoxic"), c("tumor_apoptotic", "tumor_Ki67"))
+
+ggplot(tumor_tab, aes(x=cell_status, y = exprs, fill = cell_status))+
+  geom_violin()+
+  geom_boxplot(position=position_dodge(width=0.9), width=0.1, color="black")+
+  facet_wrap(~marker, scale = "free")+
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        strip.background = element_blank())+
+  ylab("Marker expression (arcsin-transformed counts)")
+  #stat_compare_means(comparisons = my_comparisons)
+```
+
+Single-cell violin plots - TIG2 only.
+
+```{r subtype-marker-comparison-singlecell-TIG2, fig.width=3, fig.height=6}
+sce_tumor_TIG2 <- sce_tumor[,which(sce_tumor$TIG == "TIG2")]
+
+exprs <- data.frame(HLA_ABC = assay(sce_tumor_TIG2, "exprs")["HLA-ABC",],
+                    `PD-L1` = assay(sce_tumor_TIG2, "exprs")["CD274",],
+                    MMP9 = assay(sce_tumor_TIG2, "exprs")["MMP9",])
+tumor_tab <- cbind(exprs, colData(sce_tumor_TIG2))
+tumor_tab <- pivot_longer(tumor_tab, 1:3, names_to = "marker", values_to = "exprs")
+
+#my_comparisons <- list(c("tumor", "tumor_apoptotic"), c("tumor", "tumor_hypoxic"), c("tumor", "tumor_Ki67"), c("tumor_apoptotic", "tumor_hypoxic"), c("tumor_Ki67", "tumor_hypoxic"), c("tumor_apoptotic", "tumor_Ki67"))
+
+ggplot(tumor_tab, aes(x=cell_status, y = exprs, fill = cell_status))+
+  geom_violin()+
+  geom_boxplot(position=position_dodge(width=0.9), width=0.1, color="black")+
+  facet_wrap(~marker, scale = "free")+
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_blank(),
+        strip.background = element_blank())+
+  ylab("Marker expression (arcsin-transformed counts)")
+  #stat_compare_means(comparisons = my_comparisons)
 ```
 
 # Update SCE objects
