@@ -41,3 +41,5 @@ editor_options:
 [Detailed analysis of T/NK cells](07_proteinPanel_TNK_analysis.html)  
 
 [Pairwise neighbourhood analysis](08_proteinPanel_neighbourhood.html) 
+
+[Extended neighbourhood analysis](13_proteinPanel_extended.html) 
