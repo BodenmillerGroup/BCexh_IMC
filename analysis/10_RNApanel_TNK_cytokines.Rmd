@@ -180,9 +180,9 @@ All CSF1-positive T and NK cells (except CXCL13+) will be classified as NKT cell
 sce_RNA$subtype <- ifelse(sce_RNA$subtype %in% c("NK", "T_CD8", "T_CD4") & sce_RNA$CSF1_expression == 1, "CSF1_NKT", sce_RNA$subtype)
 ```
 
-## Check CSF1_NKT proportions/frequency (out of all cells)
+## Check CSF1_NKT proportions/frequency 
 
-### Across TLS states
+### Across TLS states; proportion out of all cells
 
 ```{r CSF1-frequency-TLS, fig.width=3, fig.height=4}
 tab <- as.data.frame(prop.table(table(sce_RNA$ImageNumber, sce_RNA$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
@@ -229,7 +229,8 @@ ggplot(tab_comb, aes(TLS, proportion))+
         legend.background = element_blank())+
   ylab("Proportion of all cells per ROI")
 ```
-### Across samples/TIGs
+
+### Across samples/TIGs, proportion out of T/NK cells
 
 For non-TLS images only.
 
@@ -278,7 +279,8 @@ prop <- prop[!(prop$sample %in% not.measured),]
 
 # Retrieve IMC proportions (of all T/NK cells)
 sce_TNK <- sce_RNA[, which(sce_RNA$celltype %in% c("NK", "T_CD4", "T_CD8"))]
-IMC_prop <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
+sce_TNK_TLSex <- sce_TNK[,which(sce_TNK$TLS == "no")]
+IMC_prop <- as.data.frame(prop.table(table(sce_TNK_TLSex$sample, sce_TNK_TLSex$subtype), margin = 1)) %>% filter(Var2 == "CSF1_NKT")
 colnames(IMC_prop) <- c("sample", "subtype", "IMC_proportion")
 
 # Merge
@@ -313,8 +315,7 @@ not.measured <- c("TBB011", "TBB330")
 prop <- prop[!(prop$sample %in% not.measured),]
 
 # Retrieve IMC proportions (of all T/NK cells)
-sce_TNK <- sce_RNA[, which(sce_RNA$celltype %in% c("NK", "T_CD4", "T_CD8"))]
-IMC_prop <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %>% filter(Var2 == "T_CD4_CXCL13")
+IMC_prop <- as.data.frame(prop.table(table(sce_TNK_TLSex$sample, sce_TNK_TLSex$subtype), margin = 1)) %>% filter(Var2 == "T_CD4_CXCL13")
 colnames(IMC_prop) <- c("sample", "subtype", "IMC_proportion")
 
 # Merge
@@ -349,8 +350,7 @@ not.measured <- c("TBB011", "TBB330")
 prop <- prop[!(prop$sample %in% not.measured),]
 
 # Retrieve IMC proportions (of all T/NK cells)
-sce_TNK <- sce_RNA[, which(sce_RNA$celltype %in% c("NK", "T_CD4", "T_CD8"))]
-IMC_prop <- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %>% filter(Var2 == "T_CD8_CXCL13")
+IMC_prop <- as.data.frame(prop.table(table(sce_TNK_TLSex$sample, sce_TNK_TLSex$subtype), margin = 1)) %>% filter(Var2 == "T_CD8_CXCL13")
 colnames(IMC_prop) <- c("sample", "subtype", "IMC_proportion")
 
 # Merge
@@ -504,6 +504,7 @@ prop <- cbind(prop.CXCL13, prop.PD1)
 # Add ROI info
 ROI_info <- read.csv("data/ROI_info_RNAscope.csv")
 prop <- cbind(prop, ROI_info)
+prop$sample <- factor(prop$sample, levels = levels(sce_RNA$sample))
 
 # CD4+ T cells
 ggplot(prop, aes(T_CD4_CXCL13, CD4_PD1)) +
@@ -528,6 +529,31 @@ ggplot(prop, aes(T_CD8_CXCL13, CD8_PD1)) +
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         panel.background = element_blank())
+
+# CD4+ T cells
+ggplot(prop, aes(T_CD4_CXCL13, CD4_PD1)) +
+  geom_point(aes(color=sample))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())
+
+# All T cells
+ggplot(prop, aes(T_CD8_CXCL13+T_CD4_CXCL13, CD8_PD1+CD4_PD1)) +
+  geom_point(aes(color=sample))+
+  geom_smooth(method = lm, color = "black", se=FALSE)+
+  stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  scale_color_manual(values = sce_TNK@metadata$colour_vectors$sample)
 ```
 
 

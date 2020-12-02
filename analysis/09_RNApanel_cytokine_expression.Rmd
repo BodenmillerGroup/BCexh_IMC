@@ -192,7 +192,35 @@ ggplot(cytokine_prop_g, aes(cytokine, proportion_expressing, fill = cytokine))+
 
 ggplot(cytokine_prop_g, aes(celltype, proportion_expressing, fill = celltype))+
   geom_bar(stat="identity")+
-  facet_wrap(~cytokine)+
+  facet_wrap(~cytokine, scales = "free")+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+   ggtitle("Proportion of celltype that expresses a given cytokine")
+
+```
+
+### Use only main cell types
+```{r chemokine-celltype-proportion-main, fig.width=8, fig.height=7}
+sce_RNA$celltype_main <- ifelse(sce_RNA$celltype %in% c("T_CD8", "T_CD4", "NK"), "T_NK", sce_RNA$celltype)
+
+cytokine_prop <- data.frame("celltype" = levels(as.factor(sce_RNA$celltype_main)))
+cytokine_colnames <- paste0(cytokine_channels, "_expression")
+for (i in cytokine_colnames) {
+  cytokine_prop[[i]] <- prop.table(table(sce_RNA$celltype_main, colData(sce_RNA)[,i]), margin = 1)[,2]
+}
+
+cytokine_prop_g <- gather(cytokine_prop, key = "cytokine", value = "proportion_expressing", 2:11)
+
+# Change celltype order
+cytokine_prop_g$celltype <- factor(cytokine_prop_g$celltype, levels = unique(cytokine_prop_g$celltype)[c(9,6,3,8,4,1,2,5,7)])
+
+ggplot(filter(cytokine_prop_g, cytokine %in% c("CCL17_expression", "CCL22_expression")), aes(celltype, proportion_expressing, fill = celltype))+
+  geom_bar(stat="identity")+
+  facet_wrap(~cytokine, scales = "free")+
   theme(axis.ticks.x = element_blank(),
         axis.text.x=element_blank(),
         panel.background = element_blank(),
