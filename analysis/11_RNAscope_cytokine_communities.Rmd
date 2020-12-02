@@ -199,6 +199,24 @@ plotCells(cur_img, object = sce,
 
 Exclude TLS and pre-TLS images for TIG comparison.
 
+```{r single-vs-cluster-all, fig.width=7, fig.height=5}
+sce_cyt <- sce[,which(sce$cytokine == 1)]
+sce_cyt <- sce_cyt[,which(sce_cyt$TLS == "no")]
+sce_cyt$single <- ifelse(sce_cyt$cytokine_cluster == 0, "single", "cluster")
+
+tab_sample <- as.data.frame(prop.table(table(sce_cyt$sample, sce_cyt$single), margin = 1))
+tab_sample <- filter(tab_sample, Var2 == "cluster")
+tab_sample$TIG <- ifelse(tab_sample$Var1 %in% TIG2, "TIG2", "TIG3")
+colnames(tab_sample)[1:2] <- c("sample", "cluster_single")
+
+ggplot(tab_sample, aes(TIG, Freq, color = TIG))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_jitter(width = 0.1)+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = 0.5, label.y.npc = 0.95)+
+  theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank(), panel.border = element_rect(color = "black", fill = NA), strip.background = element_blank())+
+  ylab("Proportion of cytokine-expressing cells that are part of a cytokine cluster")
+```
+
 ```{r single-vs-cluster, fig.width=7, fig.height=5}
 sce_cyt <- sce[,which(sce$cytokine == 1)]
 sce_cyt <- sce_cyt[,which(sce_cyt$TLS == "no")]
@@ -425,8 +443,8 @@ for (i in cytokine_channels) {
 colnames(enrichment_comm)[3:4] = c("celltype", "enrichment")
 
 ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
-  geom_boxplot()+
-  facet_wrap(~celltype, scales = "free", ncol = 4)+
+  geom_boxplot(outlier.alpha = 0.2)+
+  facet_wrap(~celltype, scales = "free", ncol = 6)+
   theme(panel.background = element_blank(),
         axis.text.x = element_blank(),
         panel.border = element_rect(color = "black", fill = NA, size = 1),
@@ -800,7 +818,7 @@ ggplot(enrichment_image, aes(cytokine, enrichment, fill = cytokine))+
 ### Enrichment of different T cell subtypes
 
 ```{r cytokine-environment-enrichment_TNK, fig.width=8.5, fig.height=6}
-#Calculate enrichment of T cell subtypes in environment k
+#Calculate enrichment of T cell subtypes in environment k, exclude T_AllHigh
 sce_TNK <- sce_protein[,which(sce_protein$celltype == "T_NK" & sce_protein$subtype != "T_AllHigh")]
 coldata_TNK <- data.frame(colData(sce_TNK))
 
@@ -842,16 +860,24 @@ for (k in colnames(coldata_TNK)[24:33]) {
           j_df <- data.frame(sample = j,
                       cytokine = k,
                       enrichment = enrichment_j)
-    enrichment_TNK <- rbind(enrichment_TNK, j_df)
+          j_df$enrichment.Var1 <- as.character(j_df$enrichment.Var1)
+          
+          for (i in unique(sce_TNK$subtype)) {
+            if(!(i %in% j_df$enrichment.Var1)){
+              j_df <- rbind(j_df, c(j, k, i, 0))
+              }     
+          }
+          enrichment_TNK <- rbind(enrichment_TNK, j_df)
     }
   }
 }
 
 colnames(enrichment_TNK)[3:4] = c("T_subtype", "enrichment")
+enrichment_TNK$enrichment <- as.numeric(enrichment_TNK$enrichment)
 
 ggplot(enrichment_TNK, aes(cytokine, enrichment, fill = cytokine))+
   geom_boxplot()+
-  facet_wrap(~T_subtype, scales = "free", ncol = 4)+
+  facet_wrap(~T_subtype, scales = "free", ncol = 3)+
   theme(panel.background = element_blank(),
         axis.text.x = element_blank(),
         panel.border = element_rect(color = "black", fill = NA, size = 1),
@@ -869,28 +895,38 @@ for (k in colnames(coldata_TNK)[24:33]) {
     sce_sub_k <- coldata_TNK[coldata_TNK[,k] == 1,]
     sce_sub_kj <- sce_sub_k[sce_sub_k[,"ImageNumber"] == j,]
     prop_kj <- prop.table(table(sce_sub_kj$subtype))
-    prop_j <- prop.table(table(sce_protein[,which(sce_protein$ImageNumber == j)]$subtype))[names(prop_kj)]
+    prop_j <- prop.table(table(sce_TNK[,which(sce_TNK$ImageNumber == j)]$subtype))[names(prop_kj)]
     enrichment_j <-  prop_kj/prop_j 
     if(length(prop_kj > 0)) {
           j_df <- data.frame(ImageNumber = j,
                       cytokine = k,
                       enrichment = enrichment_j)
+          j_df$enrichment.Var1 <- as.character(j_df$enrichment.Var1)
+          
+          for (i in unique(sce_TNK$subtype)) {
+            if(!(i %in% j_df$enrichment.Var1)){
+              j_df <- rbind(j_df, c(j, k, i, 0))
+            }
+          }
     enrichment_image <- rbind(enrichment_image, j_df)
     }
   }
 }
 
 colnames(enrichment_image)[3:4] = c("subtype", "enrichment")
+enrichment_image$enrichment <- as.numeric(enrichment_image$enrichment)
 
 ggplot(enrichment_image, aes(cytokine, enrichment, fill = cytokine))+
-  geom_boxplot()+
-  facet_wrap(~subtype, scales = "free", ncol = 4)+
+  geom_boxplot(outlier.shape = NA)+
+  coord_cartesian(ylim = c(0, 3))+
+  facet_wrap(~subtype, scales = "free", ncol = 3)+
   theme(panel.background = element_blank(),
         axis.text.x = element_blank(),
         panel.border = element_rect(color = "black", fill = NA, size = 1),
         strip.background = element_blank(),
         legend.background = element_blank())+
   geom_hline(yintercept = 1, linetype = "dashed")
+  
 
 ```
 

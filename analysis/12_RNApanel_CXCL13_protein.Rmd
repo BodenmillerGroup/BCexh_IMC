@@ -54,12 +54,13 @@ CXCL13_exp <- data.frame(mRNA = as.factor(sce_T$CXCL13_mRNA_expression),
 
 ggplot(CXCL13_exp, aes(x=mRNA, y = protein))+
   #geom_violin(width=1, fill = "black")+
-  geom_boxplot()+
+  geom_boxplot(outlier.shape = NA)+
   stat_compare_means(label = "p.format", method = "wilcox", label.x.npc = "middle")+
   theme(panel.border = element_rect(color = "black", fill = NA, size = 1),
         panel.background = element_blank())+
   xlab("CXCL13 mRNA expression")+
-  ylab("CXCL13 protein counts")
+  ylab("CXCL13 protein counts")+
+  coord_cartesian(ylim = c(0,10))
 ```
 
 # Calculate distance to the next CXCL13_mRNA expressing cell (for each cell)
