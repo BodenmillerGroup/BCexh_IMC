@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-19
+<strong>Last updated:</strong> 2020-12-02
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree29fd85550f2d2e90d7e72a5eda460cad40041c03targetblank29fd855a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/29fd85550f2d2e90d7e72a5eda460cad40041c03" target="_blank">29fd855</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreefc86fff79148d81ca4be592f92b4c74e2ad2e456targetblankfc86fffa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/fc86fff79148d81ca4be592f92b4c74e2ad2e456" target="_blank">fc86fff</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree29fd85550f2d2e90d7e72a5eda460cad40041c03targetblank29fd855a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreefc86fff79148d81ca4be592f92b4c74e2ad2e456targetblankfc86fffa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/29fd85550f2d2e90d7e72a5eda460cad40041c03" target="_blank">29fd855</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/fc86fff79148d81ca4be592f92b4c74e2ad2e456" target="_blank">fc86fff</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,7 +521,6 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  CD11c_CD68_scatter.png
@@ -551,10 +550,15 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  test.pdf
+    Untracked:  test.png
     Untracked:  test_Treg_enrichment.png
 
 Unstaged changes:
-    Modified:   analysis/06_proteinPanel_tumor_analysis.Rmd
+    Modified:   analysis/05_proteinPanel_StromalSubclustering.Rmd
+    Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
+    Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
+    Modified:   analysis/12_RNApanel_CXCL13_protein.Rmd
 
 </code></pre>
 <p>
@@ -593,6 +597,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fc86fff79148d81ca4be592f92b4c74e2ad2e456/analysis/10_RNApanel_TNK_cytokines.Rmd" target="_blank">fc86fff</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+Plot changes for paper figures
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/75b9d1e03bbfae66f7fde75eb13200447b4e31b6/docs/10_RNApanel_TNK_cytokines.html" target="_blank">75b9d1e</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-19
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1134,10 +1172,10 @@ SandraTietscher
 <h1>Assign CSF1+ NKT cell subtype</h1>
 <p>All CSF1-positive T and NK cells (except CXCL13+) will be classified as NKT cells. This is only an approximation, but as close as we can get to defining this cell type.</p>
 <pre class="r"><code>sce_RNA$subtype &lt;- ifelse(sce_RNA$subtype %in% c(&quot;NK&quot;, &quot;T_CD8&quot;, &quot;T_CD4&quot;) &amp; sce_RNA$CSF1_expression == 1, &quot;CSF1_NKT&quot;, sce_RNA$subtype)</code></pre>
-<div id="check-csf1_nkt-proportionsfrequency-out-of-all-cells" class="section level2">
-<h2>Check CSF1_NKT proportions/frequency (out of all cells)</h2>
-<div id="across-tls-states-1" class="section level3">
-<h3>Across TLS states</h3>
+<div id="check-csf1_nkt-proportionsfrequency" class="section level2">
+<h2>Check CSF1_NKT proportions/frequency</h2>
+<div id="across-tls-states-proportion-out-of-all-cells" class="section level3">
+<h3>Across TLS states; proportion out of all cells</h3>
 <pre class="r"><code>tab &lt;- as.data.frame(prop.table(table(sce_RNA$ImageNumber, sce_RNA$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
 frequency &lt;- as.data.frame(table(sce_RNA$ImageNumber, sce_RNA$subtype)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
 tab$frequency &lt;- frequency[,3]
@@ -1277,8 +1315,8 @@ SandraTietscher
 </div>
 </div>
 </div>
-<div id="across-samplestigs" class="section level3">
-<h3>Across samples/TIGs</h3>
+<div id="across-samplestigs-proportion-out-of-tnk-cells" class="section level3">
+<h3>Across samples/TIGs, proportion out of T/NK cells</h3>
 <p>For non-TLS images only.</p>
 <pre class="r"><code>sce_TLSex &lt;- sce_RNA[,which(sce_RNA$TLS == &quot;no&quot;)]
 sce_TLSex_TNK &lt;- sce_TLSex[,which(sce_TLSex$celltype %in% c(&quot;T_CD4&quot;, &quot;T_CD8&quot;, &quot;NK&quot;))]
@@ -1395,7 +1433,8 @@ prop &lt;- prop[!(prop$sample %in% not.measured),]
 
 # Retrieve IMC proportions (of all T/NK cells)
 sce_TNK &lt;- sce_RNA[, which(sce_RNA$celltype %in% c(&quot;NK&quot;, &quot;T_CD4&quot;, &quot;T_CD8&quot;))]
-IMC_prop &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
+sce_TNK_TLSex &lt;- sce_TNK[,which(sce_TNK$TLS == &quot;no&quot;)]
+IMC_prop &lt;- as.data.frame(prop.table(table(sce_TNK_TLSex$sample, sce_TNK_TLSex$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;CSF1_NKT&quot;)
 colnames(IMC_prop) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;IMC_proportion&quot;)
 
 # Merge
@@ -1466,8 +1505,7 @@ not.measured &lt;- c(&quot;TBB011&quot;, &quot;TBB330&quot;)
 prop &lt;- prop[!(prop$sample %in% not.measured),]
 
 # Retrieve IMC proportions (of all T/NK cells)
-sce_TNK &lt;- sce_RNA[, which(sce_RNA$celltype %in% c(&quot;NK&quot;, &quot;T_CD4&quot;, &quot;T_CD8&quot;))]
-IMC_prop &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;T_CD4_CXCL13&quot;)
+IMC_prop &lt;- as.data.frame(prop.table(table(sce_TNK_TLSex$sample, sce_TNK_TLSex$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;T_CD4_CXCL13&quot;)
 colnames(IMC_prop) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;IMC_proportion&quot;)
 
 # Merge
@@ -1538,8 +1576,7 @@ not.measured &lt;- c(&quot;TBB011&quot;, &quot;TBB330&quot;)
 prop &lt;- prop[!(prop$sample %in% not.measured),]
 
 # Retrieve IMC proportions (of all T/NK cells)
-sce_TNK &lt;- sce_RNA[, which(sce_RNA$celltype %in% c(&quot;NK&quot;, &quot;T_CD4&quot;, &quot;T_CD8&quot;))]
-IMC_prop &lt;- as.data.frame(prop.table(table(sce_TNK$sample, sce_TNK$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;T_CD8_CXCL13&quot;)
+IMC_prop &lt;- as.data.frame(prop.table(table(sce_TNK_TLSex$sample, sce_TNK_TLSex$subtype), margin = 1)) %&gt;% filter(Var2 == &quot;T_CD8_CXCL13&quot;)
 colnames(IMC_prop) &lt;- c(&quot;sample&quot;, &quot;subtype&quot;, &quot;IMC_proportion&quot;)
 
 # Merge
@@ -1906,6 +1943,7 @@ prop &lt;- cbind(prop.CXCL13, prop.PD1)
 # Add ROI info
 ROI_info &lt;- read.csv(&quot;data/ROI_info_RNAscope.csv&quot;)
 prop &lt;- cbind(prop, ROI_info)
+prop$sample &lt;- factor(prop$sample, levels = levels(sce_RNA$sample))
 
 # CD4+ T cells
 ggplot(prop, aes(T_CD4_CXCL13, CD4_PD1)) +
@@ -2007,6 +2045,33 @@ SandraTietscher
 </table>
 </div>
 </div>
+<pre class="r"><code># CD4+ T cells
+ggplot(prop, aes(T_CD4_CXCL13, CD4_PD1)) +
+  geom_point(aes(color=sample))+
+  geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/PD1-CXCL13-correlation-3.png" width="480" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># All T cells
+ggplot(prop, aes(T_CD8_CXCL13+T_CD4_CXCL13, CD8_PD1+CD4_PD1)) +
+  geom_point(aes(color=sample))+
+  geom_smooth(method = lm, color = &quot;black&quot;, se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  scale_color_manual(values = sce_TNK@metadata$colour_vectors$sample)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/PD1-CXCL13-correlation-4.png" width="480" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
