@@ -39,6 +39,8 @@ library(patchwork)
 
 sce = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_communities.rds")
 
+TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
+
 # Read object relationship file (output from Cellprofiler)
 dat_relation <- fread("data/cpout/Object_relationships_RNApanel.csv")
 dat_relation$cellA <- paste0(dat_relation$`First Image Number`, "_", dat_relation$`First Object Number`)
@@ -167,7 +169,31 @@ p_TLS <- ggplot(tab_TLS, aes(Var1, Freq, fill = Var2))+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank())
 
 p <- (p_subtype + p_TIG) + p_TLS
+p
 
 ```
+
+```{r CXCL13-single-cluster-sample}
+tab_sample <- as.data.frame(prop.table(table(sce_T_CXCL13$sample, sce_T_CXCL13$CXCL13_cluster), margin = 1))
+tab_sample <- filter(tab_sample, Var2 == "cluster")
+colnames(tab_sample) <- c("sample", "cluster", "proportion")
+tab_sample$TIG <- ifelse(tab_sample$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(tab_sample, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab("Of total [%]")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.format..), label.x.npc = 0.5)+
+  ggtitle("Proportion of cells that are part of a CXCL13+ cluster")
+
+```
+
 
 

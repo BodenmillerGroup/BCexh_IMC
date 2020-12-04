@@ -385,7 +385,7 @@ Set 800 as maximum distance.
 max_dist <- 800
 cur_sce <- data.frame(colData(sce_RNA))
 cellIDs_NKT <- cur_sce[cur_sce[,"subtype"] == "CSF1_NKT",]
-new_sce <- data.frame(matrix(ncol=length(colnames(cur_sce))+1, nrow = 0))
+new_sce <- data.frame(matrix(ncol=length(colnames(cur_sce))+2, nrow = 0))
 
 # For each image separately: nearest neighbour search
 
@@ -403,6 +403,7 @@ for (j in unique(cur_sce$ImageNumber)) {
     
     #Set distance parameter to max for all cells with distance > max
     cur_sce_j$NKT_distance<- ifelse(cur_sce_j$NKT_distance > max_dist, max_dist, cur_sce_j$NKT_distance)
+    cur_sce_j$ImageNumber <- j
   }
   new_sce <- rbind(cur_sce_j, new_sce)
 }
@@ -416,6 +417,10 @@ plot(density(sce_RNA[,which(sce_RNA$subtype == "CSF1_NKT")]$NKT_distance))
 # Bin the distances
 breaks <- seq(from = 0, to = 800, by = 5)
 sce_RNA$NKT_distance_bin <- cut(sce_RNA$NKT_distance, breaks = breaks, include.lowest = TRUE, right = TRUE, ordered_result = TRUE)
+
+breaks50 <- seq(from = 0, to = 800, by = 50)
+sce_RNA$NKT_distance_bin50 <- cut(sce_RNA$NKT_distance, breaks = breaks50, include.lowest = TRUE, right = TRUE, ordered_result = TRUE)
+
 ```
 
 ### Use the cytokine-expression status as a proxy for cell activation
@@ -439,7 +444,47 @@ ggplot(cytokine_myeloid, aes(distance, prop_cytokine_expressing)) +
         panel.background = element_blank())+
   ylab("Proportion of myeloid cells that express at least one cytokine")+
   xlab("Distance to the next NKT cells (5um bins)")
+
+
+## Separately for the samples
+cytokine_myeloid_sample <- data.frame(matrix(nrow=0, ncol=3))
   
+for (i in unique(sce_myeloid$sample)) {
+  sce_myeloid_i <- sce_myeloid[,which(sce_myeloid$sample == i)]
+  cytokine_myeloid_i <- as.data.frame(prop.table(table(sce_myeloid_i$NKT_distance_bin50, sce_myeloid_i$cytokine), margin = 1)[,2])
+  cytokine_myeloid_i$distance <- seq(from = 25, to = 800, by = 50)
+  cytokine_myeloid_i$sample <- i
+  cytokine_myeloid_sample <- rbind(cytokine_myeloid_sample, cytokine_myeloid_i)
+}
+
+colnames(cytokine_myeloid_sample)[1] <- "prop_cytokine_expressing"
+
+ggplot(cytokine_myeloid_sample, aes(distance, prop_cytokine_expressing, color = sample)) +
+  geom_line(aes(group=sample))+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion of myeloid cells that express at least one cytokine")+
+  xlab("Distance to the next NKT cells (50um bins)")  
+
+
+# Smoothing instead of binning
+colData_myeloid <- data.frame(colData(sce_myeloid))
+
+ggplot(colData_myeloid, aes(NKT_distance, as.numeric(cytokine))) +
+  geom_smooth(aes(group=sample, color=sample), method = loess)+
+  #geom_smooth(method = loess, se = FALSE)+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion of myeloid cells that express at least one cytokine")+
+  xlab("Distance to the next NKT cell")  
 ```
 
 ### Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation
@@ -474,6 +519,19 @@ ggplot(myeloid_summarized, aes(distance, mean_activation_score)) +
   geom_point()+
   geom_smooth(method = lm, color = "red", se=FALSE)+
   stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Mean myeloid cell activation score")+
+  xlab("Distance to the next NKT cells (5um bins)")
+
+ggplot(coldata_myeloid, aes(NKT_distance, activation_score)) +
+  geom_smooth(aes(group=sample, color = sample), method = loess)+
+  #stat_cor(method="spearman")+
+  #geom_smooth(method = loess, se = FALSE)+
   theme(axis.line.x = element_line(colour = "black", size = 0.25),
         axis.line.y = element_line(colour = "black", size = 0.25),
         panel.grid.major = element_blank(),
