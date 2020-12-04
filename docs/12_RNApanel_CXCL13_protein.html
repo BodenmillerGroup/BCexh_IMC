@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-12-02
+<strong>Last updated:</strong> 2020-12-04
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreed475008313e107a6d4cafaa5e65279d047fc6152targetblankd475008a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/d475008313e107a6d4cafaa5e65279d047fc6152" target="_blank">d475008</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree20735a18c2c8b14fb5b009a633c13ba5213c4ff3targetblank20735a1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/20735a18c2c8b14fb5b009a633c13ba5213c4ff3" target="_blank">20735a1</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreed475008313e107a6d4cafaa5e65279d047fc6152targetblankd475008a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree20735a18c2c8b14fb5b009a633c13ba5213c4ff3targetblank20735a1a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/d475008313e107a6d4cafaa5e65279d047fc6152" target="_blank">d475008</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/20735a18c2c8b14fb5b009a633c13ba5213c4ff3" target="_blank">20735a1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -524,9 +524,8 @@ Ignored files:
 
 Untracked files:
     Untracked:  CD11c_CD68_scatter.png
-    Untracked:  Neighbourhood_TLS_relative.pdf
+    Untracked:  FigS11_TLS_celltype_frequency.pdf
     Untracked:  Neighbourhood_TLS_relative.png
-    Untracked:  Neighbourhood_all_relative.pdf
     Untracked:  Neighbourhood_all_relative.png
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
     Untracked:  cytokine_environment.png
@@ -557,7 +556,6 @@ Untracked files:
 Unstaged changes:
     Modified:   analysis/05_proteinPanel_StromalSubclustering.Rmd
     Modified:   analysis/07_proteinPanel_TNK_analysis.Rmd
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -596,6 +594,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/20735a18c2c8b14fb5b009a633c13ba5213c4ff3/analysis/12_RNApanel_CXCL13_protein.Rmd" target="_blank">20735a1</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-12-04
+</td>
+<td>
+Changes of plots for paper figures
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/a0ae2bf3435ebe9fb26e2f80f78cc3f43e5407d9/docs/12_RNApanel_CXCL13_protein.html" target="_blank">a0ae2bf</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-12-02
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -747,6 +779,8 @@ library(data.table)
 library(patchwork)
 
 sce = readRDS(file = &quot;output/RNApanel/sce_RNApanel_cytokines_communities.rds&quot;)
+
+TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)
 
 # Read object relationship file (output from Cellprofiler)
 dat_relation &lt;- fread(&quot;data/cpout/Object_relationships_RNApanel.csv&quot;)
@@ -930,7 +964,28 @@ p_TLS &lt;- ggplot(tab_TLS, aes(Var1, Freq, fill = Var2))+
     scale_fill_manual(values = c(&quot;#E69F00&quot;, &quot;#006600&quot;))+
     theme(axis.title.x=element_blank(),panel.background = element_blank(), axis.text.x = element_text(angle = 60, hjust = 1), legend.title = element_blank())
 
-p &lt;- (p_subtype + p_TIG) + p_TLS</code></pre>
+p &lt;- (p_subtype + p_TIG) + p_TLS
+p</code></pre>
+<p><img src="figure/12_RNApanel_CXCL13_protein.Rmd/CXCL13-single-cluster-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>tab_sample &lt;- as.data.frame(prop.table(table(sce_T_CXCL13$sample, sce_T_CXCL13$CXCL13_cluster), margin = 1))
+tab_sample &lt;- filter(tab_sample, Var2 == &quot;cluster&quot;)
+colnames(tab_sample) &lt;- c(&quot;sample&quot;, &quot;cluster&quot;, &quot;proportion&quot;)
+tab_sample$TIG &lt;- ifelse(tab_sample$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(tab_sample, aes(x= TIG, y = proportion, color=TIG))+
+  geom_boxplot()+
+  geom_point()+
+  theme(axis.ticks.x = element_blank(),
+        axis.text.x=element_text(angle = 90, hjust=1),
+        axis.title.x = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  ylab(&quot;Of total [%]&quot;)+
+  stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..), label.x.npc = 0.5)+
+  ggtitle(&quot;Proportion of cells that are part of a CXCL13+ cluster&quot;)</code></pre>
+<p><img src="figure/12_RNApanel_CXCL13_protein.Rmd/CXCL13-single-cluster-sample-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
