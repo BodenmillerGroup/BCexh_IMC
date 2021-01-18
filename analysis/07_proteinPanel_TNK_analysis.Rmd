@@ -155,26 +155,26 @@ ggplot(props, aes(cluster, y = proportion, fill=sample)) +
 ### Exclude cluster 9 and plot mean expression for each cluster
 
 ```{r TNK-clusters-expression-heatmap-woCluster9, fig.width=5, fig.height=6}
-clustermean_wo7 <- clustermean[,-9]
+clustermean_wo9 <- clustermean[,-9]
 
 # Center and scale raw counts
-assay(clustermean_wo7, "scaled") <- t(scale(t(assay(clustermean_wo7, "counts"))))
+assay(clustermean_wo9, "scaled") <- t(scale(t(assay(clustermean_wo9, "counts"))))
 
 # Normalize raw counts
-norm_counts <- t(apply(assay(clustermean_wo7, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
-assay(clustermean_wo7, "normalized", withDimnames = FALSE) <- norm_counts
+norm_counts <- t(apply(assay(clustermean_wo9, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean_wo9, "normalized", withDimnames = FALSE) <- norm_counts
 
 ## Plot
 # Z-scaled
-dittoHeatmap(clustermean_wo7[include_plot,], assay = "scaled", scale = "none",
+dittoHeatmap(clustermean_wo9[include_plot,], assay = "scaled", scale = "none",
             heatmap.colors = magma(100), 
             cluster_cols = TRUE, show_colnames = TRUE,
             breaks = seq(-3, 3, length.out = 101))
 
 # Normalized (0-1)
-dittoHeatmap(clustermean_wo7[include_plot,], assay = "normalized", scale = "none",
+dittoHeatmap(clustermean_wo9[include_plot,], assay = "normalized", scale = "none",
             heatmap.colors = viridis(100), 
-            cluster_cols = TRUE, show_colnames = TRUE)
+            cluster_cols = TRUE, show_colnames = TRUE,)
 ```
 
 ### Assign cell type labels
@@ -202,12 +202,29 @@ ggplot(tab, aes(sample, y = proportion, fill=subtype)) +
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
 ```
 
+
 ### Remove "T_AllHigh" cluster for further analysis
 
 This cluster is present in only one sample and appears to be an artefact rather than a true cluster.
 
 ```{r}
 sce_TNK <- sce_TNK[,which(sce_TNK$subtype != "T_AllHigh")]
+```
+
+## Plot expression heatmap with celltype labels
+
+```{r expression_heatmap_celltype_labels}
+clustermean <- aggregateAcrossCells(sce_TNK, ids = DataFrame(cluster = sce_TNK$TNK_cluster), average = TRUE)
+colnames(clustermean) <- clustermean$cluster
+
+# Normalize raw counts
+norm_counts <- t(apply(assay(clustermean, "counts"), 1, function(x)(x-min(x))/(max(x)-min(x))))
+assay(clustermean, "normalized", withDimnames = FALSE) <- norm_counts
+
+dittoHeatmap(clustermean[include_plot,], assay = "normalized", scale = "none",
+            heatmap.colors = viridis(100),
+            cluster_cols = TRUE, show_colnames = TRUE, annot.by = "subtype")
+
 ```
 
 
@@ -506,8 +523,8 @@ for (i in colnames(counts)) {
 sample_means$TIG <- c(rep("TIG2", 6), rep("TIG3", 6))
 sample_means <- pivot_longer(sample_means, 2:7, names_to = "marker", values_to = "counts")
 
-ggplot(sample_means, aes(TIG, counts, fill = TIG))+
-    geom_boxplot(aes(fill=TIG))+
+ggplot(sample_means, aes(TIG, counts, color = TIG))+
+    geom_boxplot(aes(color=TIG))+
     geom_point(position=position_dodge(width=0.75), aes(group=TIG))+
     facet_wrap(~marker, scales = "free", ncol = 6)+
     stat_compare_means(method = "wilcox.test", aes(label=..p.format..), vjust = 1, label.x.npc = 0.5)+
@@ -535,6 +552,15 @@ dittoPlot(sce_TNK.sub, "Ki-67", group.by = "subtype",
   #geom_hline(yintercept = 0.5, lty = "dashed")+
   ylab("Scaled arcsinh-counts")+
   theme(legend.position = "none")
+
+TNK_coldata <- data.frame(colData(sce_TNK.sub))
+TNK_coldata$Ki67 <- assay(sce_TNK.sub, "scaled")["Ki-67",]
+
+my_comparisons <- list( c("CD4", "CD4_PD1"), c("CD8", "CD8_PD1"))
+ggplot(TNK_coldata, aes(subtype, Ki67))+
+  geom_violin()+
+  stat_compare_means(comparisons = my_comparisons, method = "wilcox.test", aes(label=..p..))
+  
 ```
 
 # Add subtypes to full SCE object and save
@@ -604,14 +630,30 @@ dittoHeatmap(subtypemean, assay = "scaled", scale = "none",
 dittoHeatmap(subtypemean, assay = "normalized", scale = "none",
             heatmap.colors = viridis(100), 
             cluster_cols = TRUE, show_colnames = TRUE)
+
+# aDC markers
+# dittoHeatmap(subtypemean[c("LAMP3","CD274", "IDO1", "CD40"),], assay = "normalized", scale = "none",
+#             heatmap.colors = viridis(100), 
+#             cluster_cols = TRUE, show_colnames = TRUE, cluster_rows = FALSE)
 ```
 
 ### Violinplots of marker expression
 
 ```{r violinplots-marker-celltype}
-dittoPlot(sce_protein, "CD11c", group.by = "subtype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
-dittoPlot(sce_protein, "IDO1", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
-dittoPlot(sce_protein, "CD274", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
+cur_sce_scaled <- t(data.frame(assay(sce_protein_woTAllHigh[c("CD274", "IDO1", "CD40"),], "scaled", withDimnames = TRUE)))
+cur_sce_scaled <- data.frame(cur_sce_scaled)
+colData <- data.frame(colData(sce_protein_woTAllHigh))
+cur_sce_scaled <- cbind(cur_sce_scaled, colData)
+cur_sce_scaled <- pivot_longer(cur_sce_scaled, 1:3, names_to = "marker", values_to = "scaled_counts")
+
+ggplot(cur_sce_scaled, aes(x = subtype, y = scaled_counts))+
+  geom_violin()+
+  facet_wrap(~marker, ncol = 1)
+
+
+# dittoPlot(sce_protein, "CD274", group.by = "subtype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
+# dittoPlot(sce_protein, "IDO1", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
+# dittoPlot(sce_protein, "CD274", group.by = "celltype", plots = "vlnplot", assay = "scaled", vlnplot.width = 1.5)
 
 ```
 
@@ -670,7 +712,7 @@ ggplot(tab.comb, aes(TLS, cellnumber))+
   geom_boxplot()+
   geom_point()+
   stat_compare_means(comparisons = my_comparisons, label = "p.signif")+
-  facet_wrap(~subtype, scales = "free")+
+  facet_wrap(~subtype, scales = "free", ncol=4)+
     theme(axis.ticks.x = element_blank(),
         axis.text.x=element_text(angle = 90, hjust=1),
         axis.title.x = element_blank(),

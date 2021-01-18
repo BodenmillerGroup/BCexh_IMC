@@ -152,7 +152,7 @@ dittoHeatmap(mean_sce_RNA, assay = "arcsinh",
                                      TLS =  metadata(sce_RNA)$colour_vectors$TLS))
 
 # Centered and scaled
-dittoHeatmap(mean_sce_protein, assay = "arcsinh",
+dittoHeatmap(mean_sce_RNA, assay = "arcsinh",
             annot.by = c("sample2", "TIG", "TLS"),
             cluster_cols = TRUE, heatmap.colors = colorRampPalette(c("dark blue", "white", "dark red"))(100),
             annotation_colors = list(sample2 = metadata(sce_RNA)$colour_vectors$sample,

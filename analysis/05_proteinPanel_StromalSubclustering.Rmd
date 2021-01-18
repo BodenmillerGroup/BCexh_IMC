@@ -471,5 +471,32 @@ ggplot(tab_comb, aes(panel, y = proportion, fill=celltype)) +
   theme(panel.background = element_blank(), axis.text.x = element_text(angle = 30))
 ```
 
+# MMP9 expression of myeloid cells
+
+```{r myeloid_MMP9, fig.width=3, fig.height=3.5}
+# sce_myeloid <- sce_protein[,which(sce_protein$celltype == "myeloid")]
+# 
+# counts <- data.frame(MMP9 = assay(sce_myeloid, "counts")["MMP9",])
+# tab <- cbind(counts, colData(sce_myeloid))
+# MMP9.means <- tab %>% group_by(sample) %>% dplyr::summarise(mean = mean(MMP9))
+# MMP9.means$TIG <- c(rep("TIG2", 6), rep("TIG3", 6))
+# 
+# ggplot(MMP9.means, aes(TIG, mean, color = TIG))+
+#     geom_boxplot(aes(color=TIG))+
+#     geom_point(position=position_dodge(width=0.75), aes(group=TIG))+
+#     stat_compare_means(method = "wilcox.test", aes(label=..p.format..), vjust = 1, label.x.npc = 0.5)+
+#     theme(axis.line.x = element_line(colour = "black", size = 0.25),
+#         axis.line.y = element_line(colour = "black", size = 0.25),
+#         panel.grid.major = element_blank(),
+#         panel.grid.minor = element_blank(),
+#         panel.border = element_rect(colour = "black", fill=NA, size=1),
+#         panel.background = element_blank(),
+#         strip.background = element_blank())+
+#   ylab("Mean counts")+
+#   ggtitle("MMP9 expression on myeloid cells (patient means)")
+```
+
+
+
 
 
