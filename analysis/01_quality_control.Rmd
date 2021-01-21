@@ -195,6 +195,17 @@ plotPCA(mean_sce_RNA, colour_by = "sample2", shape_by = "TIG",
         point_alpha = 1, point_size = 4) + 
   scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)
 
+# Using just a few selected markers
+mean_sce_RNA <- runPCA(mean_sce_RNA, exprs_values = "arcsinh", ncomponents = 10, 
+                   subset_row = c("HLA-ABC", "CXCL13_mRNA", "CXCL13_protein"))
+plotPCA(mean_sce_RNA, colour_by = "sample2", shape_by = "TIG", 
+        point_alpha = 1, point_size = 4) + 
+  scale_shape_manual(values= c(8,15))+
+  scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample) 
+
+# Mean expression of just two markers (Scatterplot)
+dittoScatterPlot(mean_sce_RNA, "HLA-ABC", "CXCL13_protein", color.var = "sample2", shape.by = "TIG", size = 2, shape.panel = c(8, 15)) + scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)
+
 ```
 
 ```{r PCA-ProteinPanel, message = FALSE}
@@ -205,7 +216,19 @@ plotPCA(mean_sce_protein, colour_by = "sample2", shape_by = "TIG",
         point_alpha = 1, point_size = 4) + 
   scale_colour_manual(values = metadata(sce_protein)$colour_vectors$sample)
 
+# Using just a few selected markers
+mean_sce_protein <- runPCA(mean_sce_protein, exprs_values = "arcsinh", ncomponents = 10, 
+                   subset_row = c("HLA-ABC", "PD1",  "CD274"))
+plotPCA(mean_sce_protein, colour_by = "sample2", shape_by = "TIG", 
+        point_alpha = 1, point_size = 4) + 
+  scale_shape_manual(values= c(8,15))+
+  scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)
+
+# Mean expression of just two markers (Scatterplot)
+dittoScatterPlot(mean_sce_protein, "HLA-ABC", "PD1", color.var = "sample2", shape.by = "TIG", size = 2, shape.panel = c(8, 15)) + scale_colour_manual(values = metadata(sce_RNA)$colour_vectors$sample)
+
 ```
+
 
 # Visualize cell-level information
 
