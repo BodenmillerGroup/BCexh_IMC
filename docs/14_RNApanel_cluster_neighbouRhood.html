@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeaec68736015bce73f3d2484dabf97be6f2c16b45targetblankaec6873a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/aec68736015bce73f3d2484dabf97be6f2c16b45" target="_blank">aec6873</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree1d7714f9142a1303c98df503518fb1bd25b1e0d3targetblank1d7714fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/1d7714f9142a1303c98df503518fb1bd25b1e0d3" target="_blank">1d7714f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreeaec68736015bce73f3d2484dabf97be6f2c16b45targetblankaec6873a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree1d7714f9142a1303c98df503518fb1bd25b1e0d3targetblank1d7714fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/aec68736015bce73f3d2484dabf97be6f2c16b45" target="_blank">aec6873</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/1d7714f9142a1303c98df503518fb1bd25b1e0d3" target="_blank">1d7714f</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -608,6 +608,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/1d7714f9142a1303c98df503518fb1bd25b1e0d3/analysis/14_RNApanel_cluster_neighbouRhood.Rmd" target="_blank">1d7714f</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-02-01
+</td>
+<td>
+Script to compare non-random cytokine cluster frequency in TIGs
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/7fd083e8ce7f4155452fa5c2e6b75fc0fa0d52e1/docs/14_RNApanel_cluster_neighbouRhood.html" target="_blank">7fd083e</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-02-01
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/aec68736015bce73f3d2484dabf97be6f2c16b45/analysis/14_RNApanel_cluster_neighbouRhood.Rmd" target="_blank">aec6873</a>
 </td>
 <td>
@@ -680,7 +714,7 @@ n_perm = 100 </code></pre>
 </div>
 <div id="start-the-analysis-takes-30-min-if-run-on-one-core-only" class="section level2">
 <h2>Start the analysis (takes ~30 min if run on one core only)</h2>
-<pre class="r"><code>#start = Sys.time()
+<pre class="r"><code>start = Sys.time()
 sce_adapt &lt;- sce_rna
 sce_adapt$cellID &lt;- paste0(&quot;R_&quot;, sce_adapt$ImageNumber, &quot;_&quot;, sce_adapt$CellNumber)
 cur_sce &lt;- as.data.frame(colData(sce_adapt))
@@ -761,21 +795,23 @@ for(j in c(&quot;TIG2&quot;, &quot;TIG3&quot;)) {
   # add to data.frame
   image_df &lt;- rbind(image_df, images)
 }
-#end = Sys.time()
+end = Sys.time()
 
-#print(end-start)</code></pre>
+print(end-start)</code></pre>
+<pre><code>Time difference of 32.18816 mins</code></pre>
 </div>
 </div>
 <div id="plot-the-results" class="section level1">
 <h1>Plot the results</h1>
 <p>Plot percentage of images where 3-cell-patches of the given cytokine-expressing cells occur more often than randomly expected.</p>
-<pre class="r"><code># image_df$chemokine &lt;- gsub(&quot;_expression&quot;, &quot;&quot;, image_df$chemokine)
-# 
-# ggplot(image_df, aes(x = chemokine, y = significant_images, fill = TIG))+
-#   geom_bar(position=&quot;dodge&quot;, stat=&quot;identity&quot;)+
-#   theme(panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
-#         panel.background = element_blank(), 
-#         axis.text.x = element_text(angle = 60, hjust = 1))</code></pre>
+<pre class="r"><code>image_df$chemokine &lt;- gsub(&quot;_expression&quot;, &quot;&quot;, image_df$chemokine)
+
+ggplot(image_df, aes(x = chemokine, y = significant_images, fill = TIG))+
+  geom_bar(position=&quot;dodge&quot;, stat=&quot;identity&quot;)+
+  theme(panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 60, hjust = 1))</code></pre>
+<p><img src="figure/14_RNApanel_cluster_neighbouRhood.Rmd/patch-comparison-TIG-1.png" width="480" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -827,24 +863,24 @@ loaded via a namespace (and not attached):
 [10] DBI_1.1.0              colorspace_1.4-1       GetoptLong_1.0.2      
 [13] withr_2.2.0            tidyselect_1.1.0       compiler_4.0.2        
 [16] git2r_0.27.1           cli_2.0.2              rvest_0.3.6           
-[19] xml2_1.3.2             scales_1.1.1           digest_0.6.25         
-[22] rmarkdown_2.3          XVector_0.28.0         pkgconfig_2.0.3       
-[25] htmltools_0.5.0        dbplyr_1.4.4           rlang_0.4.7           
-[28] GlobalOptions_0.1.2    readxl_1.3.1           rstudioapi_0.11       
-[31] shape_1.4.4            generics_0.0.2         jsonlite_1.7.0        
-[34] RCurl_1.98-1.2         GenomeInfoDbData_1.2.3 Matrix_1.2-18         
-[37] Rcpp_1.0.5             munsell_0.5.0          fansi_0.4.1           
-[40] lifecycle_0.2.0        stringi_1.4.6          whisker_0.4           
-[43] yaml_2.2.1             zlibbioc_1.34.0        plyr_1.8.6            
-[46] blob_1.2.1             promises_1.1.1         crayon_1.3.4          
-[49] lattice_0.20-41        haven_2.3.1            hms_0.5.3             
-[52] knitr_1.29             pillar_1.4.6           rjson_0.2.20          
-[55] reprex_0.3.0           glue_1.4.1             evaluate_0.14         
-[58] modelr_0.1.8           vctrs_0.3.2            png_0.1-7             
-[61] httpuv_1.5.4           cellranger_1.1.0       gtable_0.3.0          
-[64] clue_0.3-57            assertthat_0.2.1       xfun_0.16             
-[67] broom_0.7.0            later_1.1.0.1          cluster_2.1.0         
-[70] ellipsis_0.3.1        </code></pre>
+[19] xml2_1.3.2             labeling_0.3           scales_1.1.1          
+[22] digest_0.6.25          rmarkdown_2.3          XVector_0.28.0        
+[25] pkgconfig_2.0.3        htmltools_0.5.0        dbplyr_1.4.4          
+[28] rlang_0.4.7            GlobalOptions_0.1.2    readxl_1.3.1          
+[31] rstudioapi_0.11        farver_2.0.3           shape_1.4.4           
+[34] generics_0.0.2         jsonlite_1.7.0         RCurl_1.98-1.2        
+[37] GenomeInfoDbData_1.2.3 Matrix_1.2-18          Rcpp_1.0.5            
+[40] munsell_0.5.0          fansi_0.4.1            lifecycle_0.2.0       
+[43] stringi_1.4.6          whisker_0.4            yaml_2.2.1            
+[46] zlibbioc_1.34.0        plyr_1.8.6             blob_1.2.1            
+[49] promises_1.1.1         crayon_1.3.4           lattice_0.20-41       
+[52] haven_2.3.1            hms_0.5.3              knitr_1.29            
+[55] pillar_1.4.6           rjson_0.2.20           reprex_0.3.0          
+[58] glue_1.4.1             evaluate_0.14          modelr_0.1.8          
+[61] vctrs_0.3.2            png_0.1-7              httpuv_1.5.4          
+[64] cellranger_1.1.0       gtable_0.3.0           clue_0.3-57           
+[67] assertthat_0.2.1       xfun_0.16              broom_0.7.0           
+[70] later_1.1.0.1          cluster_2.1.0          ellipsis_0.3.1        </code></pre>
 </div>
 </div>
 
