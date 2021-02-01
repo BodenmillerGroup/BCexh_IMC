@@ -1,0 +1,153 @@
+---
+title: "XX_RNApanel_cluster_neighbourhood"
+author: "SandraTietscher"
+date: "2021-02-01"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+This script calculates whether cytokine-expressing cells form clusters more than would be expected randomly.
+
+# Preparations
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE, message= FALSE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+```
+
+## Load libraries
+
+First, we will load the libraries needed for this part of the analysis.
+
+```{r load-libraries, message=FALSE}
+sapply(list.files("code/helper_functions", full.names = TRUE), source)
+library(SingleCellExperiment)
+library(reshape2)
+library(tidyverse)
+library(dplyr)
+library(data.table) 
+library(ComplexHeatmap)
+library(circlize)
+library(gridExtra)
+library(neighbouRhood)
+library(viridis)
+```
+
+## Load CP output and SCE
+
+```{r}
+# Load and prepare
+sce_rna = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_communities.rds")
+dat_cells = fread(file = "~/home//Segmentation/BCexh_RNAscope/cpout/cell.csv",stringsAsFactors = FALSE)
+dat_relation = fread("data/cpout/Object_relationships_RNApanel.csv",stringsAsFactors = FALSE)
+
+# define number of permutations
+n_perm = 100 
+```
+
+## Start the analysis (takes ~30 min if run on one core only)
+
+```{r milieu_analysis, eval=F}
+#start = Sys.time()
+sce_adapt <- sce_rna
+sce_adapt$cellID <- paste0("R_", sce_adapt$ImageNumber, "_", sce_adapt$CellNumber)
+cur_sce <- as.data.frame(colData(sce_adapt))
+
+TIG_images <- as.data.frame(table(sce_adapt$ImageNumber, sce_adapt$TIG))
+TIG_images <- TIG_images[which(TIG_images$Freq > 0),]
+colnames(TIG_images) <- c("ImageNumber", "TIG", "cells")
+
+# add same cellID to dat_cells as in sce object
+dat_cells$cellID <- paste("R_", paste(dat_cells$ImageNumber, dat_cells$ObjectNumber, sep = "_"), sep = "")
+
+size <- 3
+image_df <- data.frame()
+for(j in c("TIG2", "TIG3")) {
+  selected_images <- as.vector(filter(TIG_images, TIG == j)[,1])
+  images <- data.frame()
+  # loop through the colnames indicating if a cell is positive for a certain chemokine
+  for(i in colnames(cur_sce[,grepl("CCL|CXCL|CSF",colnames(cur_sce))])){
+    # add chemokine info to celltype
+    sce_info <- cur_sce[,c("cellID", i , "celltype")]
+    
+    # add celltype information
+    dat_cells_tmp <- left_join(as.data.frame(dat_cells), sce_info, by = "cellID")
+    
+    #assign labels and groups
+    dat_cells_tmp$label <- dat_cells_tmp[,i]
+    dat_cells_tmp$group <- dat_cells_tmp$celltype
+    dat_cells_tmp <- as.data.table(dat_cells_tmp)
+    
+    # subset dat_relation and dat_cells
+    dat_cells_sub <- dat_cells_tmp#[dat_cells$celltype == "P3",]
+    dat_relation_sub <- dat_relation[which(dat_relation$`First Image Number` %in% selected_images),]
+    
+    # Prepare the data
+    d = neighbouRhood::prepare_tables(dat_cells_sub, dat_relation_sub)
+    
+    # Calculate the baseline statistics
+    dat_baseline = neighbouRhood::apply_labels(d[[1]], d[[2]]) %>%
+      neighbouRhood::aggregate_classic_patch(., patch_size = size)
+    
+    # Calculate the permutation statistics
+    # This will run the test using parallel computing. The name of the idcol does actually not matter.
+    
+    set.seed(12312)
+    dat_perm = rbindlist(lapply(1:n_perm, function(x){
+      dat_labels = neighbouRhood::shuffle_labels(d[[1]])
+      neighbouRhood::apply_labels(dat_labels, d[[2]]) %>%
+        neighbouRhood::aggregate_classic_patch(., patch_size = size)
+    }
+    ), idcol = 'run')
+    
+    # calc p values
+    dat_p <- neighbouRhood::calc_p_vals(dat_baseline, dat_perm, n_perm = n_perm, p_tresh = 0.01) 
+    
+    # select interactions between chemokine+ cells
+    dat_p$interaction <- paste(dat_p$FirstLabel, dat_p$SecondLabel, sep = "_")
+    
+    dat_p_wide <- dat_p %>%
+      reshape2::dcast(group ~ interaction, value.var = "sigval", fill = 0) %>%
+      select(group, `1_1`)
+    
+    summary <- as.data.frame(dat_p_wide) %>%
+      group_by(`1_1`) %>%
+      summarise(n=n(),.groups = 'drop') %>%
+      ungroup() %>%
+      mutate(percentage_sig = (n/sum(n)) * 100)
+    
+    images <- rbind(images, cbind(summary[1,], i))
+  }
+  
+  # calculate percentage of images with significant patches
+  images$percentage_sig <- 100 - images$percentage_sig
+  images$patch_size <- size
+  images$TIG <- j
+  images <- select(images, percentage_sig, i, patch_size, TIG)
+  colnames(images) <- c("significant_images", "chemokine", "patch_size", "TIG")
+  
+  # add to data.frame
+  image_df <- rbind(image_df, images)
+}
+#end = Sys.time()
+
+#print(end-start)
+```
+
+# Plot the results
+
+Plot percentage of images where 3-cell-patches of the given cytokine-expressing cells occur more often than randomly expected.
+
+```{r patch-comparison-TIG, fig.width= 5, fig.height=3}
+# image_df$chemokine <- gsub("_expression", "", image_df$chemokine)
+# 
+# ggplot(image_df, aes(x = chemokine, y = significant_images, fill = TIG))+
+#   geom_bar(position="dodge", stat="identity")+
+#   theme(panel.border = element_rect(color = "black", fill = NA, size = 1),
+#         panel.background = element_blank(), 
+#         axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
