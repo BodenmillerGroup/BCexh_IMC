@@ -83,5 +83,37 @@ plotCells(cur_img, object = sce_protein,
           )
 ```
 
+# Fig 6: aDC - PD1high interaction
 
+```{r Fig6-example, fig.width=10, fig.height=10}
 
+cur_img <- getImages(all_masks_protein, "20200821_ST_BCexh_H_TBB165_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask")
+
+plotCells(cur_img, object = sce_protein,
+            img_id = "ImageNumber", cell_id = "CellNumber",
+            colour_by = "subtype",
+            colour = list(subtype = c(tumor_Ki67 = "#C0C0C0",
+                                      tumor = "#C0C0C0",
+                                      tumor_hypoxic = "#C0C0C0",
+                                      tumor_apoptotic = "#C0C0C0",
+                                      fibroblast = "#C0C0C0",
+                                      plasma_cell = "#C0C0C0",
+                                      endothelial = "#C0C0C0",
+                                      myeloid = "#C0C0C0",
+                                      Treg = "#C0C0C0",
+                                      stromal_undefined = "#C0C0C0",
+                                      B_cell = "#C0C0C0",
+                                      NK = "#C0C0C0",
+                                      neutrophil = "#C0C0C0",
+                                      pDC = "#C0C0C0",
+                                      T_AllHigh = "#C0C0C0",
+                                      CD8 = "#FF9933",
+                                      CD4 = "#FF9933",
+                                      CD8_PD1 = "#FF0000",
+                                      CD4_PD1 = "#FF0000",
+                                      aDC = "#00FF00")),
+          scale_bar = NULL,
+          image_title = NULL
+          )
+
+```
