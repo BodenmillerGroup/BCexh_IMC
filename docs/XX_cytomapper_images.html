@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-11-23
+<strong>Last updated:</strong> 2021-02-01
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6c288e4213d750e9cf7435768db2e19f1ca1ebd4targetblank6c288e4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6c288e4213d750e9cf7435768db2e19f1ca1ebd4" target="_blank">6c288e4</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree49d9a2b61d91dfb180a3f0b8103091b99887eabbtargetblank49d9a2ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/49d9a2b61d91dfb180a3f0b8103091b99887eabb" target="_blank">49d9a2b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree6c288e4213d750e9cf7435768db2e19f1ca1ebd4targetblank6c288e4a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree49d9a2b61d91dfb180a3f0b8103091b99887eabbtargetblank49d9a2ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/6c288e4213d750e9cf7435768db2e19f1ca1ebd4" target="_blank">6c288e4</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/49d9a2b61d91dfb180a3f0b8103091b99887eabb" target="_blank">49d9a2b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -523,13 +523,21 @@ Ignored files:
     Ignored:    analysis/.Rhistory
 
 Untracked files:
+    Untracked:  BB184_aDC_PD1.png
+    Untracked:  BB212_aDC_PD1.png
+    Untracked:  BB212_aDC_PD1_Bcells.png
     Untracked:  CD11c_CD68_scatter.png
-    Untracked:  Neighbourhood_TLS_relative.pdf
     Untracked:  Neighbourhood_TLS_relative.png
-    Untracked:  Neighbourhood_all_relative.pdf
     Untracked:  Neighbourhood_all_relative.png
-    Untracked:  analysis/13_proteinPanel_neighbourhood_extended.Rmd
+    Untracked:  PD1_tumor_neighbour_boxplot.png
+    Untracked:  RNApanel_ROImean_HLAABC_CXCL13protein.png
+    Untracked:  RNApanel_ROImean_HLAABC_CXCL13rna.png
+    Untracked:  RNApanel_nonrandom_clusters.pdf
+    Untracked:  TBB129_aDC_PD1.png
+    Untracked:  TBB129_aDC_PD1_Bcell.png
+    Untracked:  analysis/14_RNApanel_cluster_neighbouRhood.Rmd
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  barplot_tumorSubtype_image.pdf
     Untracked:  cytokine_environment.png
     Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_epithelial.rds
@@ -551,12 +559,13 @@ Untracked files:
     Untracked:  output/sce_RNApanel_afterQC.rds
     Untracked:  output/sce_RNApanel_initial.rds
     Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
-    Untracked:  test.pdf
-    Untracked:  test.png
-    Untracked:  test_Treg_enrichment.png
+    Untracked:  proteinPanel_PCA_HLAABC_PD1_CD274.png
+    Untracked:  proteinPanel_ROImean_HLAABC_PD1.png
+    Untracked:  proteinPanel_ROImean_HLAABC_PDL1.png
 
 Unstaged changes:
-    Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
+    Modified:   analysis/10_RNApanel_TNK_cytokines.Rmd
+    Modified:   analysis/13_proteinPanel_neighbourhood_extended.Rmd
 
 </code></pre>
 <p>
@@ -595,6 +604,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/49d9a2b61d91dfb180a3f0b8103091b99887eabb/analysis/XX_cytomapper_images.Rmd" target="_blank">49d9a2b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-02-01
+</td>
+<td>
+Minor color changes
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/1225a58d4436f77fa0b4d1c1650c666488322839/docs/XX_cytomapper_images.html" target="_blank">1225a58</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-11-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -791,6 +834,38 @@ SandraTietscher
 </table>
 </div>
 </div>
+</div>
+<div id="fig-6-adc---pd1high-interaction" class="section level1">
+<h1>Fig 6: aDC - PD1high interaction</h1>
+<pre class="r"><code>cur_img &lt;- getImages(all_masks_protein, &quot;20200821_ST_BCexh_H_TBB165_s0_p3_r1_a1_ac_ilastik_s2_Probabilities_mask&quot;)
+
+plotCells(cur_img, object = sce_protein,
+            img_id = &quot;ImageNumber&quot;, cell_id = &quot;CellNumber&quot;,
+            colour_by = &quot;subtype&quot;,
+            colour = list(subtype = c(tumor_Ki67 = &quot;#C0C0C0&quot;,
+                                      tumor = &quot;#C0C0C0&quot;,
+                                      tumor_hypoxic = &quot;#C0C0C0&quot;,
+                                      tumor_apoptotic = &quot;#C0C0C0&quot;,
+                                      fibroblast = &quot;#C0C0C0&quot;,
+                                      plasma_cell = &quot;#C0C0C0&quot;,
+                                      endothelial = &quot;#C0C0C0&quot;,
+                                      myeloid = &quot;#C0C0C0&quot;,
+                                      Treg = &quot;#C0C0C0&quot;,
+                                      stromal_undefined = &quot;#C0C0C0&quot;,
+                                      B_cell = &quot;#C0C0C0&quot;,
+                                      NK = &quot;#C0C0C0&quot;,
+                                      neutrophil = &quot;#C0C0C0&quot;,
+                                      pDC = &quot;#C0C0C0&quot;,
+                                      T_AllHigh = &quot;#C0C0C0&quot;,
+                                      CD8 = &quot;#FF9933&quot;,
+                                      CD4 = &quot;#FF9933&quot;,
+                                      CD8_PD1 = &quot;#FF0000&quot;,
+                                      CD4_PD1 = &quot;#FF0000&quot;,
+                                      aDC = &quot;#00FF00&quot;)),
+          scale_bar = NULL,
+          image_title = NULL
+          )</code></pre>
+<p><img src="figure/XX_cytomapper_images.Rmd/Fig6-example-1.png" width="960" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
