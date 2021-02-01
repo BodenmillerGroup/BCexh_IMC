@@ -50,8 +50,8 @@ n_perm = 100
 
 ## Start the analysis (takes ~30 min if run on one core only)
 
-```{r milieu_analysis, eval=F}
-#start = Sys.time()
+```{r milieu_analysis}
+start = Sys.time()
 sce_adapt <- sce_rna
 sce_adapt$cellID <- paste0("R_", sce_adapt$ImageNumber, "_", sce_adapt$CellNumber)
 cur_sce <- as.data.frame(colData(sce_adapt))
@@ -132,9 +132,9 @@ for(j in c("TIG2", "TIG3")) {
   # add to data.frame
   image_df <- rbind(image_df, images)
 }
-#end = Sys.time()
+end = Sys.time()
 
-#print(end-start)
+print(end-start)
 ```
 
 # Plot the results
@@ -142,12 +142,12 @@ for(j in c("TIG2", "TIG3")) {
 Plot percentage of images where 3-cell-patches of the given cytokine-expressing cells occur more often than randomly expected.
 
 ```{r patch-comparison-TIG, fig.width= 5, fig.height=3}
-# image_df$chemokine <- gsub("_expression", "", image_df$chemokine)
-# 
-# ggplot(image_df, aes(x = chemokine, y = significant_images, fill = TIG))+
-#   geom_bar(position="dodge", stat="identity")+
-#   theme(panel.border = element_rect(color = "black", fill = NA, size = 1),
-#         panel.background = element_blank(), 
-#         axis.text.x = element_text(angle = 60, hjust = 1))
+image_df$chemokine <- gsub("_expression", "", image_df$chemokine)
+
+ggplot(image_df, aes(x = chemokine, y = significant_images, fill = TIG))+
+  geom_bar(position="dodge", stat="identity")+
+  theme(panel.border = element_rect(color = "black", fill = NA, size = 1),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 60, hjust = 1))
 ```
 
