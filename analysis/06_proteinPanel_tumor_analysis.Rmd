@@ -174,19 +174,20 @@ counts <- data.frame(HLA_ABC = assay(sce_tumor, "counts")["HLA-ABC",],
                     CAIX = assay(sce_tumor, "counts")["CAIX",],
                     Cleaved_CP = assay(sce_tumor, "counts")["Cleaved_CP",],
                     `PD-L1` = assay(sce_tumor, "counts")["CD274",],
-                    MMP9 = assay(sce_tumor, "counts")["MMP9",])
+                    MMP9 = assay(sce_tumor, "counts")["MMP9",],
+                    HLA_DR = assay(sce_tumor, "counts")["HLA-DR",])
 tumor_tab_2 <- cbind(counts, colData(sce_tumor))
-tumor_tab_2 <- pivot_longer(tumor_tab_2, 1:6, names_to = "marker", values_to = "counts")
+tumor_tab_2 <- pivot_longer(tumor_tab_2, 1:7, names_to = "marker", values_to = "counts")
 
 sample_means <- data.frame(sample = levels(factor(tumor_tab_2$sample)))
-for (i in c("HLA_ABC", "CAIX", "Cleaved_CP", "Ki.67", "PD.L1", "MMP9")) {
+for (i in c("HLA_ABC", "CAIX", "Cleaved_CP", "Ki.67", "PD.L1", "MMP9", "HLA_DR")) {
   tumor.i <- filter(tumor_tab_2, marker == i)
   i.means <- tumor.i %>% group_by(sample) %>% dplyr::summarise(mean = mean(counts))
   sample_means[,i] <- i.means$mean
 }
 
 sample_means$TIG <- ifelse(sample_means$sample %in% TIG2, "TIG2", "TIG3")
-sample_means <- pivot_longer(sample_means, 2:7, names_to = "marker", values_to = "counts")
+sample_means <- pivot_longer(sample_means, 2:8, names_to = "marker", values_to = "counts")
 
 ggplot(sample_means, aes(TIG, counts, fill = TIG))+
     geom_boxplot(aes(fill=TIG))+
