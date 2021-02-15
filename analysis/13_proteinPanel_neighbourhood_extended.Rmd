@@ -29,6 +29,7 @@ library(gplots)
 library(RColorBrewer)
 library(tidyr)
 library(ggpubr)
+library(dittoSeq)
 
 # Read SingleCellExperiment object
 sce_protein <- readRDS("output/ProteinPanel/sce_ProteinPanel_subtypes_all.rds")
@@ -51,14 +52,15 @@ TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
 
 # Likelihood of PD1-high T cells neighbouring tumor cells
 
-For all images.
+For TIG2 images only (TIG3 images often have so few PD-1 T cells that it distorts the image).
 
 ```{r PD1-tumor-neighbourhood, fig.height=4, fig.width=4}
 cur_sce <- data.frame(colData(sce_protein))
+cur_sce <- cur_sce[cur_sce[,"sample"] %in% TIG2,]
 df <- data.frame(matrix(nrow=0, ncol =3))
 
-for (i in unique(cur_sce$sample)){
-  cur_sce_i <- cur_sce[cur_sce[,"sample"] == i,]
+for (i in unique(cur_sce$ImageNumber)){
+  cur_sce_i <- cur_sce[cur_sce[,"ImageNumber"] == i,]
   
   # get T cell IDs
   cellIDs_PD1 <- cur_sce[cur_sce_i[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
@@ -93,6 +95,51 @@ df[,2:3] <- df[,2:3] %>% mutate_if(is.character,as.numeric)
 ggpaired(df, cond1 = "PD1_perc", cond2 = "nonPD1_perc", line.color = "gray", ylab = "Direct tumor neighbour (proportion)", xlab = FALSE)+
   stat_compare_means(paired = TRUE)
 ```
+
+### CD8 only, TIG2 only
+
+```{r PD1-CD4-tumor-neighbourhood}
+cur_sce <- data.frame(colData(sce_protein))
+cur_sce <- cur_sce[cur_sce[,"sample"] %in% TIG2,]
+df <- data.frame(matrix(nrow=0, ncol =3))
+
+for (i in unique(cur_sce$ImageNumber)){
+  cur_sce_i <- cur_sce[cur_sce[,"ImageNumber"] == i,]
+  
+  # get T cell IDs
+  cellIDs_PD1 <- cur_sce[cur_sce_i[,"subtype"] == "CD4_PD1",]
+  PD1_shortID <- paste0(cellIDs_PD1$ImageNumber, "_", cellIDs_PD1$CellNumber)
+  cellIDs_nonPD1 <- cur_sce[cur_sce_i[,"subtype"] %in% c("CD4"),]
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  
+  # get tumor cell IDs
+  cellIDs_tumor <- cur_sce[cur_sce_i[,"celltype"] == "tumor",]
+  tumor_shortID <- paste0(cellIDs_tumor$ImageNumber, "_", cellIDs_tumor$CellNumber)
+  
+  # subset neighbourhood list to include only `PD1-high T cell <-> tumor cell` interactions
+  dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% tumor_shortID) | (cellB %in% PD1_shortID & cellA %in% tumor_shortID))
+  # extract PD1 IDs that border tumor cells
+  PD1_tumor_bordering <- setdiff(unique(c(dat_relation_sub_PD1$cellA, dat_relation_sub_PD1$cellB)), tumor_shortID)
+  PD1_perc <- length(PD1_tumor_bordering)/length(PD1_shortID)
+  
+  # subset neighbourhood list to include only `PD1-low T cell <-> tumor cell` interactions
+  dat_relation_sub_nonPD1 <- dat_relation %>% filter((cellA %in% nonPD1_shortID & cellB %in% tumor_shortID) | (cellB %in% nonPD1_shortID & cellA %in% tumor_shortID))
+  # extract PD1 IDs that border tumor cells
+  nonPD1_tumor_bordering <- setdiff(unique(c(dat_relation_sub_nonPD1$cellA, dat_relation_sub_nonPD1$cellB)), tumor_shortID)
+  nonPD1_perc <- length(nonPD1_tumor_bordering)/length(nonPD1_shortID)
+  
+  new_row <- c(i, PD1_perc, nonPD1_perc)
+  df <- rbind(df, new_row)
+} 
+
+colnames(df) <- c("sample", "PD1_perc", "nonPD1_perc")
+df[,2:3] <- df[,2:3] %>% mutate_if(is.character,as.numeric)
+
+# Plot
+ggpaired(df, cond1 = "PD1_perc", cond2 = "nonPD1_perc", line.color = "gray", ylab = "Direct tumor neighbour (proportion)", xlab = FALSE)+
+  stat_compare_means(paired = TRUE)
+```
+
 
 # Likelihood of PD1-high T cells neighbouring aDCs
 
@@ -141,5 +188,95 @@ ggpaired(df, cond1 = "PD1_perc", cond2 = "nonPD1_perc", line.color = "gray", yla
 
 
 ```
+
+# T cell suppressive signature
+
+
+```{r myeloid-suppressive-TcellSignature}
+sce_myeloid <- sce_protein[,which(sce_protein$celltype == "myeloid")]
+
+# Define "suppressive" myeloid cells
+suppr_counts <- data.frame(t(assay(sce_myeloid, "counts")[c("CD274", "IDO1"),]))
+sce_myeloid$suppressive <- ifelse(suppr_counts$CD274 > 1 | suppr_counts$IDO1 > 4, TRUE, FALSE)
+prop.table(table(sce_myeloid$suppressive))
+
+# Plot IDO1 vs CD274 expression & choose cutoffs
+dittoScatterPlot(sce_myeloid, "IDO1", "CD274", color.var = "suppressive")+
+  geom_hline(yintercept = 1, lty = "dashed")+
+  geom_vline(xintercept = 4, lty = "dashed")
+
+# ROI-wide correlation with PD1 T cells (excluding Tregs)
+ROI_myeloid <- prop.table(table(sce_myeloid$ImageNumber, sce_myeloid$suppressive), margin = 1)[,2]
+sce_T <- sce_protein[,which(sce_protein$subtype %in% c("CD4", "CD8", "CD4_PD1", "CD8_PD1"))]
+sce_T$PD1 <- ifelse(sce_T$subtype %in% c("CD4", "CD8"), FALSE, TRUE)
+ROI_T <- prop.table(table(sce_T$ImageNumber, sce_T$PD1), margin = 1)[,2]
+ROI_comb <- as.data.frame(cbind(ROI_myeloid, ROI_T))
+ROI_comb$TIG <- ROI_info$TIG
+ROI_comb$sample <- ROI_info$sample
+
+ggplot(ROI_comb, aes(ROI_myeloid, ROI_T))+
+  geom_point(aes(color = sample))+
+   theme(panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank())+
+  ylab("Proportion of PD-1 high T cells\n(out of all T cells, excl. Tregs)")+
+  xlab("Proportion of suppressive myeloid cells (high in PD-L1 and/or IDO1)\n(out of all myeloid cells)")+
+  stat_cor(method="spearman", label.x.npc = "middle")+
+  geom_smooth(method = lm, color = "black", se=FALSE)
+```
+
+## PD-1 status of the 10 closest T cells (for suppressive and non-suppressive myeloid cells)
+
+Exclude Tregs.
+
+```{r suppr-myeloid-PD1high-neighbours, fig.width=3.5, fig.height=4}
+cur_sce <- data.frame(colData(sce_protein))
+cellIDs_T <- cur_sce[cur_sce[,"subtype"] %in% c("CD4", "CD8", "CD4_PD1", "CD8_PD1"),]
+cellIDs_PD1low <- rownames(cur_sce[cur_sce[,"subtype"] %in% c("CD4", "CD8"),])
+cellIDs_T$PD1 <- ifelse(rownames(cellIDs_T) %in% cellIDs_PD1low, FALSE, TRUE)
+new_sce <- data.frame(matrix(ncol=length(colnames(cur_sce))+1, nrow = 0))
+
+# For each image separately: nearest neighbour search
+
+for (j in unique(cur_sce$ImageNumber)) {
+  cur_sce_j <- filter(cur_sce, ImageNumber == j)
+  T_j <- filter(cellIDs_T, ImageNumber == j)[,c("Center_X", "Center_Y")]
+  T_j_PD1 <- filter(cellIDs_T, ImageNumber == j)[,c("PD1")]
+  
+  # Search 10 closest T cells for each cell
+    j_coord <- cur_sce_j[,c("Center_X", "Center_Y")]
+    nn <- RANN::nn2(T_j, j_coord)
+    
+  # Check PD-1 status for each neighbouring T cell and calculate PD1-high proportions
+    nn$nn.idx.PD1 <- t(apply(nn$nn.idx, 1, function(x) T_j_PD1[x]))
+    nn$nn.PD1low.prop <- apply(nn$nn.idx.PD1, 1, function(x) prop.table(table(x))[1])
+    cur_sce_j$neigh_PD1 <- 1 - nn$nn.PD1low.prop 
+
+  # Add to full sce
+    new_sce <- rbind(cur_sce_j, new_sce)
+}
+
+# Add T_distances to colData of original object
+sce_protein$neigh_PD1 <- new_sce[order(match(new_sce$cellID, sce_protein$cellID)),]$neigh_PD1
+
+# Subset myeloid cells and define suppressive status as above
+sce_myeloid <- sce_protein[,which(sce_protein$celltype == "myeloid")]
+suppr_counts <- data.frame(t(assay(sce_myeloid, "counts")[c("CD274", "IDO1"),]))
+sce_myeloid$suppressive <- ifelse(suppr_counts$CD274 > 1 | suppr_counts$IDO1 > 4, TRUE, FALSE)
+
+# Plot neighbouring PD1-Tcell-proportion for suppressive vs non-suppressive myeloid cells
+myeloid_coldata <- data.frame(colData(sce_myeloid))
+
+ggplot(myeloid_coldata, aes(x= suppressive, y = neigh_PD1))+
+  geom_boxplot(outlier.shape = NA)+
+  theme(axis.text.x=element_text(angle = 90, hjust=1),
+        panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank())+
+  ylab("PD1-high T cell proportion\n(considering 10 closest T cells)")+
+  xlab("Myeloid cells: T-suppressive signature")+
+  stat_compare_means(method = "wilcox.test", aes(label=..p.signif..), label.x.npc = 0.5, label.y.npc = 0.8)
+```
+
 
 
