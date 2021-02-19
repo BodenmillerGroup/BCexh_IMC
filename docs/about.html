@@ -22,6 +22,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -290,7 +292,13 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/SandraTietscher/BCexh_IMC">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -325,7 +333,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-19
+<strong>Last updated:</strong> 2021-02-19
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -356,22 +364,64 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong96e48c0"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 96e48c0 </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree0699e351375fe6d3f8c732a79761621234657f35targetblank0699e35a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/0699e351375fe6d3f8c732a79761621234657f35" target="_blank">0699e35</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong96e48c0" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree0699e351375fe6d3f8c732a79761621234657f35targetblank0699e35a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 96e48c0. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/0699e351375fe6d3f8c732a79761621234657f35" target="_blank">0699e35</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
-working directory clean
+Ignored files:
+    Ignored:    analysis/.Rhistory
+
+Untracked files:
+    Untracked:  BB184_aDC_PD1.png
+    Untracked:  BB212_aDC_PD1.png
+    Untracked:  BB212_aDC_PD1_Bcells.png
+    Untracked:  CD11c_CD68_scatter.png
+    Untracked:  Neighbourhood_TLS_relative.png
+    Untracked:  Neighbourhood_all_relative.png
+    Untracked:  PD1_tumor_neighbour_boxplot.png
+    Untracked:  RNApanel_ROImean_HLAABC_CXCL13protein.png
+    Untracked:  RNApanel_ROImean_HLAABC_CXCL13rna.png
+    Untracked:  RNApanel_nonrandom_clusters.pdf
+    Untracked:  TBB129_aDC_PD1.png
+    Untracked:  TBB129_aDC_PD1_Bcell.png
+    Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  barplot_tumorSubtype_image.pdf
+    Untracked:  cytokine_environment.png
+    Untracked:  data/RNAseq_Tcells.rds
+    Untracked:  data/RNAseq_epithelial.rds
+    Untracked:  data/ROI_info_HIER.csv
+    Untracked:  data/ROI_info_RNAscope.csv
+    Untracked:  data/cpout/
+    Untracked:  data/masks/
+    Untracked:  heatmap_markerexpression_myeloid_sub.png
+    Untracked:  neighbourhood_myeloid_TIGdifference.png
+    Untracked:  neighbourhood_myeloid_TLS_relative.png
+    Untracked:  neighbourhood_myeloid_all_relative.png
+    Untracked:  neighbourhood_myeloid_split_TLS.png
+    Untracked:  output/ProteinPanel/
+    Untracked:  output/RNApanel/
+    Untracked:  output/TLS_score_25samples.png
+    Untracked:  output/sce_ProteinPanel_afterQC.rds
+    Untracked:  output/sce_ProteinPanel_initial.rds
+    Untracked:  output/sce_ProteinPanel_initial_TLSrevised.rds
+    Untracked:  output/sce_RNApanel_afterQC.rds
+    Untracked:  output/sce_RNApanel_initial.rds
+    Untracked:  output/sce_RNApanel_initial_TLSrevised.rds
+    Untracked:  proteinPanel_PCA_HLAABC_PD1_CD274.png
+    Untracked:  proteinPanel_ROImean_HLAABC_PD1.png
+    Untracked:  proteinPanel_ROImean_HLAABC_PDL1.png
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
@@ -414,7 +464,41 @@ Message
 Rmd
 </td>
 <td>
-96e48c0
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0699e351375fe6d3f8c732a79761621234657f35/analysis/about.Rmd" target="_blank">0699e35</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-02-19
+</td>
+<td>
+Clean repository a bit
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/925e70bfb5b51341a93552a3c2513e939a5fa715/docs/about.html" target="_blank">925e70b</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2020-10-19
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/96e48c0deb9794c216fb4f9ede2b762968bb8e15/analysis/about.Rmd" target="_blank">96e48c0</a>
 </td>
 <td>
 SandraTietscher
@@ -433,7 +517,7 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Describe your project.</p>
+<p>A collection of analysis scripts for the BC-exhaustion IMC datasets (RNA panel and protein panel). Primary aim is to validate findings from the scRNA-seq dataset and to provide a spatial context.</p>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
