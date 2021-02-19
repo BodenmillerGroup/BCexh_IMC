@@ -7,4 +7,5 @@ editor_options:
   chunk_output_type: console
 ---
 
-Describe your project.
+A collection of analysis scripts for the BC-exhaustion IMC datasets (RNA panel and protein panel).
+Primary aim is to validate findings from the scRNA-seq dataset and to provide a spatial context.

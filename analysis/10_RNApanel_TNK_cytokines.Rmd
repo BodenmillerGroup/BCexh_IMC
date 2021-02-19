@@ -483,6 +483,7 @@ ggplot(colData_myeloid, aes(NKT_distance, as.numeric(cytokine))) +
         panel.grid.minor = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         panel.background = element_blank())+
+  coord_cartesian(xlim = c(0,400))+
   ylab("Proportion of myeloid cells that express at least one cytokine")+
   xlab("Distance to the next NKT cell")  
 ```
