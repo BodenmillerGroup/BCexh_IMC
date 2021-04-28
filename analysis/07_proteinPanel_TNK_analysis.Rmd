@@ -548,9 +548,9 @@ Elevated Ki-67 expression in PD1+ T cells (both CD4 and CD8) confirms that these
 sce_TNK.sub <- sce_TNK[,which(sce_TNK$subtype %in% c("CD4", "CD8", "CD4_PD1", "CD8_PD1"))]
 
 dittoPlot(sce_TNK.sub, "Ki-67", group.by = "subtype",
-    plots = c("vlnplot"), assay = "scaled")+
-  #geom_hline(yintercept = 0.5, lty = "dashed")+
-  ylab("Scaled arcsinh-counts")+
+    plots = c("vlnplot"), assay = "exprs")+
+  geom_hline(yintercept = 0.7, lty = "dashed")+
+  ylab("Arcsinh-counts")+
   theme(legend.position = "none")
 
 TNK_coldata <- data.frame(colData(sce_TNK.sub))
@@ -560,6 +560,23 @@ my_comparisons <- list( c("CD4", "CD4_PD1"), c("CD8", "CD8_PD1"))
 ggplot(TNK_coldata, aes(subtype, Ki67))+
   geom_violin()+
   stat_compare_means(comparisons = my_comparisons, method = "wilcox.test", aes(label=..p..))
+
+# Define cells with Ki67 arcsinh-counts > 0.5 as proliferating
+arcsinh_counts <- assay(sce_TNK, "exprs")
+sce_TNK$proliferating <- ifelse(arcsinh_counts["Ki-67",] > 0.7, "yes", "no")
+table(sce_TNK$proliferating)
+
+prolif <- prop.table(table(sce_TNK$proliferating, sce_TNK$subtype), margin = 2)
+prolif <- as.data.frame(prolif["yes",c("CD4", "CD8", "CD4_PD1", "CD8_PD1")])
+colnames(prolif) <- "perc.proliferating"
+prolif$CD4CD8 <- c("CD4", "CD8", "CD4", "CD8")
+prolif$subtype <- c("PD1-low", "PD1-low", "PD1-high", "PD1-high")
+
+ggplot(prolif, aes(CD4CD8, perc.proliferating, fill = subtype)) +
+  geom_col(position=position_dodge())+
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1))
+
   
 ```
 
