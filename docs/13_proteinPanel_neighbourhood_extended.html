@@ -413,7 +413,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-04-30
+<strong>Last updated:</strong> 2021-05-03
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,16 +504,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreec24207c2c81e356b782e823048d1c7c9441d9d40targetblankc24207ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/c24207c2c81e356b782e823048d1c7c9441d9d40" target="_blank">c24207c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree4e0bc19dcf446df9adceec8c5ccdeff397c85cdctargetblank4e0bc19a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/4e0bc19dcf446df9adceec8c5ccdeff397c85cdc" target="_blank">4e0bc19</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreec24207c2c81e356b782e823048d1c7c9441d9d40targetblankc24207ca" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree4e0bc19dcf446df9adceec8c5ccdeff397c85cdctargetblank4e0bc19a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/c24207c2c81e356b782e823048d1c7c9441d9d40" target="_blank">c24207c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/4e0bc19dcf446df9adceec8c5ccdeff397c85cdc" target="_blank">4e0bc19</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -605,6 +605,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/4e0bc19dcf446df9adceec8c5ccdeff397c85cdc/analysis/13_proteinPanel_neighbourhood_extended.Rmd" target="_blank">4e0bc19</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-05-03
+</td>
+<td>
+Add quantification of direct T-cell - tumor interaction
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/8b46e20cbb3adcbfe491fd56ddaf108f2c399171/docs/13_proteinPanel_neighbourhood_extended.html" target="_blank">8b46e20</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-04-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -750,6 +784,66 @@ TLS_nr &lt;- filter(ROI_info, TLS %in% c(&quot;pre&quot;, &quot;yes&quot;))$Imag
 
 TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)</code></pre>
 </div>
+<div id="quantify-direct-t-cell---tumor-cell-interaction" class="section level1">
+<h1>Quantify direct T cell - tumor cell interaction</h1>
+<pre class="r"><code># Exclude TLS images
+sce_noTLS &lt;- sce_protein[,which(sce_protein$TLS == &quot;no&quot;)]
+
+cur_sce &lt;- data.frame(colData(sce_noTLS))
+df &lt;- data.frame(matrix(nrow=0, ncol =4))
+
+for (i in unique(cur_sce$sample)){
+  cur_sce_i &lt;- cur_sce[cur_sce[,&quot;sample&quot;] == i,]
+  
+  # get T cell and tumor cell IDs
+  cellIDs_Tcell &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;T_NK&quot;,]
+  Tcell_shortID &lt;- paste0(cellIDs_Tcell$ImageNumber, &quot;_&quot;, cellIDs_Tcell$CellNumber)
+  cellIDs_tumor &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;tumor&quot;,]
+  tumor_shortID &lt;- paste0(cellIDs_tumor$ImageNumber, &quot;_&quot;, cellIDs_tumor$CellNumber)
+  
+  # subset neighbourhood list to include only `T cell &lt;-&gt; tumor cell` interactions
+  dat_relation_sub &lt;- dat_relation %&gt;% filter((cellA %in% Tcell_shortID &amp; cellB %in% tumor_shortID))
+  # count interactions
+  intnr_i &lt;- nrow(dat_relation_sub)
+  
+  # divide through T cell nr
+  intnr_Tcell_prop &lt;- intnr_i/length(Tcell_shortID)
+  # divide through T cell nr
+  intnr_tumor_prop &lt;- intnr_i/length(tumor_shortID)
+  
+  new_row &lt;- c(i, intnr_i, intnr_Tcell_prop, intnr_tumor_prop)
+  df &lt;- rbind(df, new_row)
+} 
+
+colnames(df) &lt;- c(&quot;sample&quot;, &quot;total_interactions&quot;, &quot;Tcell_prop&quot;, &quot;tumor_prop&quot;)
+df[,2:4] &lt;- df[,2:4] %&gt;% mutate_if(is.character,as.numeric)
+df$TIG &lt;- ifelse(df$sample %in% TIG2, &quot;TIG2&quot;, &quot;TIG3&quot;)
+
+ggplot(df, aes(TIG, Tcell_prop))+
+    geom_boxplot()+
+    geom_point(position=position_dodge(width=0.75))+
+    stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))+
+    theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank(),
+        strip.background = element_blank()) + ggtitle(&quot;Average number of direct tumor cell interactions\nper T cell&quot;)</code></pre>
+<p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/Tcell-tumor-interactions-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(df, aes(TIG, tumor_prop))+
+    geom_boxplot()+
+    geom_point(position=position_dodge(width=0.75))+
+    stat_compare_means(method = &quot;wilcox.test&quot;, aes(label=..p.format..))+
+    theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank(),
+        strip.background = element_blank()) + ggtitle(&quot;Average number of direct T cell interactions\nper tumor cell&quot;)</code></pre>
+<p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/Tcell-tumor-interactions-2.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
 <div id="likelihood-of-pd1-high-t-cells-neighbouring-tumor-cells" class="section level1">
 <h1>Likelihood of PD1-high T cells neighbouring tumor cells</h1>
 <p>For TIG2 images only (TIG3 images often have so few PD-1 T cells that it distorts the image).</p>
@@ -815,6 +909,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8b46e20cbb3adcbfe491fd56ddaf108f2c399171/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-tumor-neighbourhood-1.png" target="_blank">8b46e20</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-04-30
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/77a4593c88f2ffcdcb5e57a0caa9556c01f92149/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-tumor-neighbourhood-1.png" target="_blank">77a4593</a>
@@ -907,6 +1012,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8b46e20cbb3adcbfe491fd56ddaf108f2c399171/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-CD4-tumor-neighbourhood-1.png" target="_blank">8b46e20</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-04-30
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/77a4593c88f2ffcdcb5e57a0caa9556c01f92149/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-CD4-tumor-neighbourhood-1.png" target="_blank">77a4593</a>
 </td>
 <td>
@@ -989,6 +1105,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8b46e20cbb3adcbfe491fd56ddaf108f2c399171/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-aDC-neighbourhood-1.png" target="_blank">8b46e20</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-04-30
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/018772a28c3db068c3d850f9d4632c57e5bfc870/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-aDC-neighbourhood-1.png" target="_blank">018772a</a>
 </td>
 <td>
@@ -1049,6 +1176,43 @@ df[,2:3] &lt;- df[,2:3] %&gt;% mutate_if(is.character,as.numeric)
 ggpaired(df, cond1 = &quot;PD1_perc&quot;, cond2 = &quot;nonPD1_perc&quot;, line.color = &quot;gray&quot;, ylab = &quot;Direct aDC neighbour (proportion)&quot;, xlab = FALSE)+
   stat_compare_means(paired = TRUE)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-aDC-neighbourhood-images-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-aDC-neighbourhood-images-1">
+Past versions of PD1-aDC-neighbourhood-images-1.png
+</button>
+</p>
+<div id="fig-PD1-aDC-neighbourhood-images-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8b46e20cbb3adcbfe491fd56ddaf108f2c399171/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-aDC-neighbourhood-images-1.png" target="_blank">8b46e20</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-04-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="t-cell-suppressive-signature" class="section level1">
 <h1>T cell suppressive signature</h1>
