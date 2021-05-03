@@ -49,6 +49,69 @@ TLS_nr <- filter(ROI_info, TLS %in% c("pre", "yes"))$ImageNumber
 TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
 ```
 
+# Quantify direct T cell - tumor cell interaction
+
+```{r Tcell-tumor-interactions, fig.width=4, fig.height=5}
+
+# Exclude TLS images
+sce_noTLS <- sce_protein[,which(sce_protein$TLS == "no")]
+
+cur_sce <- data.frame(colData(sce_noTLS))
+df <- data.frame(matrix(nrow=0, ncol =4))
+
+for (i in unique(cur_sce$sample)){
+  cur_sce_i <- cur_sce[cur_sce[,"sample"] == i,]
+  
+  # get T cell and tumor cell IDs
+  cellIDs_Tcell <- cur_sce_i[cur_sce_i[,"celltype"] == "T_NK",]
+  Tcell_shortID <- paste0(cellIDs_Tcell$ImageNumber, "_", cellIDs_Tcell$CellNumber)
+  cellIDs_tumor <- cur_sce_i[cur_sce_i[,"celltype"] == "tumor",]
+  tumor_shortID <- paste0(cellIDs_tumor$ImageNumber, "_", cellIDs_tumor$CellNumber)
+  
+  # subset neighbourhood list to include only `T cell <-> tumor cell` interactions
+  dat_relation_sub <- dat_relation %>% filter((cellA %in% Tcell_shortID & cellB %in% tumor_shortID))
+  # count interactions
+  intnr_i <- nrow(dat_relation_sub)
+  
+  # divide through T cell nr
+  intnr_Tcell_prop <- intnr_i/length(Tcell_shortID)
+  # divide through T cell nr
+  intnr_tumor_prop <- intnr_i/length(tumor_shortID)
+  
+  new_row <- c(i, intnr_i, intnr_Tcell_prop, intnr_tumor_prop)
+  df <- rbind(df, new_row)
+} 
+
+colnames(df) <- c("sample", "total_interactions", "Tcell_prop", "tumor_prop")
+df[,2:4] <- df[,2:4] %>% mutate_if(is.character,as.numeric)
+df$TIG <- ifelse(df$sample %in% TIG2, "TIG2", "TIG3")
+
+ggplot(df, aes(TIG, Tcell_prop))+
+    geom_boxplot()+
+    geom_point(position=position_dodge(width=0.75))+
+    stat_compare_means(method = "wilcox.test", aes(label=..p.format..))+
+    theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank(),
+        strip.background = element_blank()) + ggtitle("Average number of direct tumor cell interactions\nper T cell")
+
+ggplot(df, aes(TIG, tumor_prop))+
+    geom_boxplot()+
+    geom_point(position=position_dodge(width=0.75))+
+    stat_compare_means(method = "wilcox.test", aes(label=..p.format..))+
+    theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank(),
+        strip.background = element_blank()) + ggtitle("Average number of direct T cell interactions\nper tumor cell")
+
+```
+
 # Likelihood of PD1-high T cells neighbouring tumor cells
 
 For TIG2 images only (TIG3 images often have so few PD-1 T cells that it distorts the image).
