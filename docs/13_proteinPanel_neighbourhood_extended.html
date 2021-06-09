@@ -21,6 +21,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -38,12 +47,16 @@ div.section {
 }
 </style>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -56,32 +69,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -91,10 +79,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -111,40 +95,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -172,7 +129,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -184,7 +141,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -195,10 +152,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -210,7 +180,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -336,7 +305,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -372,7 +341,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SandraTietscher/BCexh_IMC">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
     Source code
   </a>
@@ -382,7 +351,7 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -413,7 +382,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-05-03
+<strong>Last updated:</strong> 2021-06-09
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,22 +473,23 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree4e0bc19dcf446df9adceec8c5ccdeff397c85cdctargetblank4e0bc19a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/4e0bc19dcf446df9adceec8c5ccdeff397c85cdc" target="_blank">4e0bc19</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree0f5d816ebbecbd10584503d32449c3434df84111targetblank0f5d816a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/0f5d816ebbecbd10584503d32449c3434df84111" target="_blank">0f5d816</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree4e0bc19dcf446df9adceec8c5ccdeff397c85cdctargetblank4e0bc19a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree0f5d816ebbecbd10584503d32449c3434df84111targetblank0f5d816a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/4e0bc19dcf446df9adceec8c5ccdeff397c85cdc" target="_blank">4e0bc19</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/0f5d816ebbecbd10584503d32449c3434df84111" target="_blank">0f5d816</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .RData
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
@@ -538,9 +508,13 @@ Untracked files:
     Untracked:  TBB129_aDC_PD1.png
     Untracked:  TBB129_aDC_PD1_Bcell.png
     Untracked:  TNK_perc_proliferating.pdf
+    Untracked:  analysis/15_spatial_TLS.Rmd
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  analysis/spicyR.Rmd
     Untracked:  barplot_tumorSubtype_image.pdf
+    Untracked:  code/generate_fullSCEs_for_Zenodo.Rmd
     Untracked:  cytokine_environment.png
+    Untracked:  cytokine_exprs_TLS.pdf
     Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
@@ -564,9 +538,12 @@ Untracked files:
     Untracked:  proteinPanel_PCA_HLAABC_PD1_CD274.png
     Untracked:  proteinPanel_ROImean_HLAABC_PD1.png
     Untracked:  proteinPanel_ROImean_HLAABC_PDL1.png
+    Untracked:  test.pdf
 
 Unstaged changes:
     Modified:   BCexh_IMC.Rproj
+    Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
+    Modified:   analysis/12_RNApanel_CXCL13_protein.Rmd
 
 </code></pre>
 <p>
@@ -605,6 +582,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/0f5d816ebbecbd10584503d32449c3434df84111/analysis/13_proteinPanel_neighbourhood_extended.Rmd" target="_blank">0f5d816</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-06-09
+</td>
+<td>
+Correct mismatched ImageNumbers
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/fa0fc7ee69d266b33f188ee5ce9f731057bcafc1/docs/13_proteinPanel_neighbourhood_extended.html" target="_blank">fa0fc7e</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-05-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -776,11 +787,11 @@ dat_relation$cellB &lt;- paste0(dat_relation$`Second Image Number`, &quot;_&quot
 
 # ROI info
 ROI_info &lt;- read.csv(&quot;data/ROI_info_HIER_TLSrevised.csv&quot;)
-ROI_info$ImageNumber &lt;- c(1:77)
+ROI_info$HIER_ImageNumber &lt;- c(1:77)
 
 #TLS image numbers
-nonTLS_nr &lt;- filter(ROI_info, TLS == &quot;no&quot;)$ImageNumber
-TLS_nr &lt;- filter(ROI_info, TLS %in% c(&quot;pre&quot;, &quot;yes&quot;))$ImageNumber
+nonTLS_nr &lt;- filter(ROI_info, TLS == &quot;no&quot;)$HIER_ImageNumber
+TLS_nr &lt;- filter(ROI_info, TLS %in% c(&quot;pre&quot;, &quot;yes&quot;))$HIER_ImageNumber
 
 TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)</code></pre>
 </div>
@@ -797,9 +808,9 @@ for (i in unique(cur_sce$sample)){
   
   # get T cell and tumor cell IDs
   cellIDs_Tcell &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;T_NK&quot;,]
-  Tcell_shortID &lt;- paste0(cellIDs_Tcell$ImageNumber, &quot;_&quot;, cellIDs_Tcell$CellNumber)
+  Tcell_shortID &lt;- paste0(cellIDs_Tcell$HIER_ImageNumber, &quot;_&quot;, cellIDs_Tcell$CellNumber)
   cellIDs_tumor &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;tumor&quot;,]
-  tumor_shortID &lt;- paste0(cellIDs_tumor$ImageNumber, &quot;_&quot;, cellIDs_tumor$CellNumber)
+  tumor_shortID &lt;- paste0(cellIDs_tumor$HIER_ImageNumber, &quot;_&quot;, cellIDs_tumor$CellNumber)
   
   # subset neighbourhood list to include only `T cell &lt;-&gt; tumor cell` interactions
   dat_relation_sub &lt;- dat_relation %&gt;% filter((cellA %in% Tcell_shortID &amp; cellB %in% tumor_shortID))
@@ -831,6 +842,43 @@ ggplot(df, aes(TIG, Tcell_prop))+
         panel.background = element_blank(),
         strip.background = element_blank()) + ggtitle(&quot;Average number of direct tumor cell interactions\nper T cell&quot;)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/Tcell-tumor-interactions-1.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Tcell-tumor-interactions-1">
+Past versions of Tcell-tumor-interactions-1.png
+</button>
+</p>
+<div id="fig-Tcell-tumor-interactions-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fa0fc7ee69d266b33f188ee5ce9f731057bcafc1/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/Tcell-tumor-interactions-1.png" target="_blank">fa0fc7e</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-05-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>ggplot(df, aes(TIG, tumor_prop))+
     geom_boxplot()+
     geom_point(position=position_dodge(width=0.75))+
@@ -843,6 +891,43 @@ ggplot(df, aes(TIG, Tcell_prop))+
         panel.background = element_blank(),
         strip.background = element_blank()) + ggtitle(&quot;Average number of direct T cell interactions\nper tumor cell&quot;)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/Tcell-tumor-interactions-2.png" width="384" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-Tcell-tumor-interactions-2">
+Past versions of Tcell-tumor-interactions-2.png
+</button>
+</p>
+<div id="fig-Tcell-tumor-interactions-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/fa0fc7ee69d266b33f188ee5ce9f731057bcafc1/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/Tcell-tumor-interactions-2.png" target="_blank">fa0fc7e</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-05-03
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="likelihood-of-pd1-high-t-cells-neighbouring-tumor-cells" class="section level1">
 <h1>Likelihood of PD1-high T cells neighbouring tumor cells</h1>
@@ -851,18 +936,18 @@ ggplot(df, aes(TIG, Tcell_prop))+
 cur_sce &lt;- cur_sce[cur_sce[,&quot;sample&quot;] %in% TIG2,]
 df &lt;- data.frame(matrix(nrow=0, ncol =3))
 
-for (i in unique(cur_sce$ImageNumber)){
-  cur_sce_i &lt;- cur_sce[cur_sce[,&quot;ImageNumber&quot;] == i,]
+for (i in unique(cur_sce$HIER_ImageNumber)){
+  cur_sce_i &lt;- cur_sce[cur_sce[,&quot;HIER_ImageNumber&quot;] == i,]
   
   # get T cell IDs
   cellIDs_PD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD4_PD1&quot;, &quot;CD8_PD1&quot;),]
-  PD1_shortID &lt;- paste0(cellIDs_PD1$ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
+  PD1_shortID &lt;- paste0(cellIDs_PD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
   cellIDs_nonPD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD4&quot;, &quot;CD8&quot;, &quot;Treg&quot;),]
-  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
+  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
   
   # get tumor cell IDs
   cellIDs_tumor &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;tumor&quot;,]
-  tumor_shortID &lt;- paste0(cellIDs_tumor$ImageNumber, &quot;_&quot;, cellIDs_tumor$CellNumber)
+  tumor_shortID &lt;- paste0(cellIDs_tumor$HIER_ImageNumber, &quot;_&quot;, cellIDs_tumor$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell &lt;-&gt; tumor cell` interactions
   dat_relation_sub_PD1 &lt;- dat_relation %&gt;% filter((cellA %in% PD1_shortID &amp; cellB %in% tumor_shortID) | (cellB %in% PD1_shortID &amp; cellA %in% tumor_shortID))
@@ -952,18 +1037,18 @@ SandraTietscher
 cur_sce &lt;- cur_sce[cur_sce[,&quot;sample&quot;] %in% TIG2,]
 df &lt;- data.frame(matrix(nrow=0, ncol =3))
 
-for (i in unique(cur_sce$ImageNumber)){
-  cur_sce_i &lt;- cur_sce[cur_sce[,&quot;ImageNumber&quot;] == i,]
+for (i in unique(cur_sce$HIER_ImageNumber)){
+  cur_sce_i &lt;- cur_sce[cur_sce[,&quot;HIER_ImageNumber&quot;] == i,]
   
   # get T cell IDs
-  cellIDs_PD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] == &quot;CD4_PD1&quot;,]
-  PD1_shortID &lt;- paste0(cellIDs_PD1$ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
-  cellIDs_nonPD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD4&quot;),]
-  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
+  cellIDs_PD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] == &quot;CD8_PD1&quot;,]
+  PD1_shortID &lt;- paste0(cellIDs_PD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
+  cellIDs_nonPD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD8&quot;),]
+  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
   
   # get tumor cell IDs
   cellIDs_tumor &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;tumor&quot;,]
-  tumor_shortID &lt;- paste0(cellIDs_tumor$ImageNumber, &quot;_&quot;, cellIDs_tumor$CellNumber)
+  tumor_shortID &lt;- paste0(cellIDs_tumor$HIER_ImageNumber, &quot;_&quot;, cellIDs_tumor$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell &lt;-&gt; tumor cell` interactions
   dat_relation_sub_PD1 &lt;- dat_relation %&gt;% filter((cellA %in% PD1_shortID &amp; cellB %in% tumor_shortID) | (cellB %in% PD1_shortID &amp; cellA %in% tumor_shortID))
@@ -1049,13 +1134,13 @@ for (i in unique(cur_sce$sample)){
   
   # get T cell IDs
   cellIDs_PD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD4_PD1&quot;, &quot;CD8_PD1&quot;),]
-  PD1_shortID &lt;- paste0(cellIDs_PD1$ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
+  PD1_shortID &lt;- paste0(cellIDs_PD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
   cellIDs_nonPD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD4&quot;, &quot;CD8&quot;, &quot;Treg&quot;),]
-  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
+  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
   
   # get aDC IDs
   cellIDs_aDC &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;aDC&quot;,]
-  aDC_shortID &lt;- paste0(cellIDs_aDC$ImageNumber, &quot;_&quot;, cellIDs_aDC$CellNumber)
+  aDC_shortID &lt;- paste0(cellIDs_aDC$HIER_ImageNumber, &quot;_&quot;, cellIDs_aDC$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell &lt;-&gt; aDC` interactions
   dat_relation_sub_PD1 &lt;- dat_relation %&gt;% filter((cellA %in% PD1_shortID &amp; cellB %in% aDC_shortID) | (cellB %in% PD1_shortID &amp; cellA %in% aDC_shortID))
@@ -1133,25 +1218,25 @@ SandraTietscher
 <pre class="r"><code>cur_sce &lt;- data.frame(colData(sce_protein))
 df &lt;- data.frame(matrix(nrow=0, ncol =3))
 
-aDC_nr &lt;- table(cur_sce$ImageNumber, cur_sce$celltype)[,&quot;aDC&quot;]
+aDC_nr &lt;- table(cur_sce$HIER_ImageNumber, cur_sce$celltype)[,&quot;aDC&quot;]
 aDC_img &lt;- names(aDC_nr[aDC_nr &gt; 15])
-PD1_nr &lt;- table(cur_sce$ImageNumber, cur_sce$subtype)[,&quot;CD4_PD1&quot;]+table(cur_sce$ImageNumber, cur_sce$subtype)[,&quot;CD8_PD1&quot;]
+PD1_nr &lt;- table(cur_sce$HIER_ImageNumber, cur_sce$subtype)[,&quot;CD4_PD1&quot;]+table(cur_sce$HIER_ImageNumber, cur_sce$subtype)[,&quot;CD8_PD1&quot;]
 PD1_img &lt;- names(PD1_nr[PD1_nr &gt; 15])
 
 incl_img &lt;- intersect(PD1_img, aDC_img)
 
 for (i in incl_img){
-  cur_sce_i &lt;- cur_sce[cur_sce[,&quot;ImageNumber&quot;] == i,]
+  cur_sce_i &lt;- cur_sce[cur_sce[,&quot;HIER_ImageNumber&quot;] == i,]
   
   # get T cell IDs
   cellIDs_PD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD4_PD1&quot;, &quot;CD8_PD1&quot;),]
-  PD1_shortID &lt;- paste0(cellIDs_PD1$ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
+  PD1_shortID &lt;- paste0(cellIDs_PD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_PD1$CellNumber)
   cellIDs_nonPD1 &lt;- cur_sce_i[cur_sce_i[,&quot;subtype&quot;] %in% c(&quot;CD4&quot;, &quot;CD8&quot;, &quot;Treg&quot;),]
-  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
+  nonPD1_shortID &lt;- paste0(cellIDs_nonPD1$HIER_ImageNumber, &quot;_&quot;, cellIDs_nonPD1$CellNumber)
   
   # get aDC IDs
   cellIDs_aDC &lt;- cur_sce_i[cur_sce_i[,&quot;celltype&quot;] == &quot;aDC&quot;,]
-  aDC_shortID &lt;- paste0(cellIDs_aDC$ImageNumber, &quot;_&quot;, cellIDs_aDC$CellNumber)
+  aDC_shortID &lt;- paste0(cellIDs_aDC$HIER_ImageNumber, &quot;_&quot;, cellIDs_aDC$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell &lt;-&gt; aDC` interactions
   dat_relation_sub_PD1 &lt;- dat_relation %&gt;% filter((cellA %in% PD1_shortID &amp; cellB %in% aDC_shortID) | (cellB %in% PD1_shortID &amp; cellA %in% aDC_shortID))
@@ -1268,10 +1353,10 @@ SandraTietscher
 </div>
 </div>
 <pre class="r"><code># ROI-wide correlation with PD1 T cells (excluding Tregs)
-ROI_myeloid &lt;- prop.table(table(sce_myeloid$ImageNumber, sce_myeloid$suppressive), margin = 1)[,2]
+ROI_myeloid &lt;- prop.table(table(sce_myeloid$HIER_ImageNumber, sce_myeloid$suppressive), margin = 1)[,2]
 sce_T &lt;- sce_protein[,which(sce_protein$subtype %in% c(&quot;CD4&quot;, &quot;CD8&quot;, &quot;CD4_PD1&quot;, &quot;CD8_PD1&quot;))]
 sce_T$PD1 &lt;- ifelse(sce_T$subtype %in% c(&quot;CD4&quot;, &quot;CD8&quot;), FALSE, TRUE)
-ROI_T &lt;- prop.table(table(sce_T$ImageNumber, sce_T$PD1), margin = 1)[,2]
+ROI_T &lt;- prop.table(table(sce_T$HIER_ImageNumber, sce_T$PD1), margin = 1)[,2]
 ROI_comb &lt;- as.data.frame(cbind(ROI_myeloid, ROI_T))
 ROI_comb$TIG &lt;- ROI_info$TIG
 ROI_comb$sample &lt;- ROI_info$sample
@@ -1334,10 +1419,10 @@ new_sce &lt;- data.frame(matrix(ncol=length(colnames(cur_sce))+1, nrow = 0))
 
 # For each image separately: nearest neighbour search
 
-for (j in unique(cur_sce$ImageNumber)) {
-  cur_sce_j &lt;- filter(cur_sce, ImageNumber == j)
-  T_j &lt;- filter(cellIDs_T, ImageNumber == j)[,c(&quot;Center_X&quot;, &quot;Center_Y&quot;)]
-  T_j_PD1 &lt;- filter(cellIDs_T, ImageNumber == j)[,c(&quot;PD1&quot;)]
+for (j in unique(cur_sce$HIER_ImageNumber)) {
+  cur_sce_j &lt;- filter(cur_sce, HIER_ImageNumber == j)
+  T_j &lt;- filter(cellIDs_T, HIER_ImageNumber == j)[,c(&quot;Center_X&quot;, &quot;Center_Y&quot;)]
+  T_j_PD1 &lt;- filter(cellIDs_T, HIER_ImageNumber == j)[,c(&quot;PD1&quot;)]
   
   # Search 10 closest T cells for each cell
     j_coord &lt;- cur_sce_j[,c(&quot;Center_X&quot;, &quot;Center_Y&quot;)]
@@ -1441,43 +1526,45 @@ other attached packages:
  [1] dittoSeq_1.0.2              ggpubr_0.4.0               
  [3] tidyr_1.1.3                 RColorBrewer_1.1-2         
  [5] gplots_3.1.1                ggplot2_3.3.3              
- [7] magrittr_2.0.1              dplyr_1.0.5                
+ [7] magrittr_2.0.1              dplyr_1.0.6                
  [9] data.table_1.14.0           SingleCellExperiment_1.10.1
 [11] SummarizedExperiment_1.18.2 DelayedArray_0.14.1        
-[13] matrixStats_0.56.0          Biobase_2.48.0             
+[13] matrixStats_0.58.0          Biobase_2.48.0             
 [15] GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
 [17] IRanges_2.22.2              S4Vectors_0.26.1           
 [19] BiocGenerics_0.34.0         workflowr_1.6.2            
 
 loaded via a namespace (and not attached):
- [1] nlme_3.1-148           bitops_1.0-6           fs_1.5.0              
- [4] rprojroot_1.3-2        tools_4.0.2            backports_1.1.8       
- [7] utf8_1.2.1             R6_2.5.0               KernSmooth_2.23-17    
-[10] mgcv_1.8-31            DBI_1.1.1              colorspace_1.4-1      
-[13] withr_2.4.2            gridExtra_2.3          tidyselect_1.1.0      
-[16] curl_4.3               compiler_4.0.2         git2r_0.27.1          
-[19] labeling_0.3           caTools_1.18.2         scales_1.1.1          
-[22] ggridges_0.5.2         stringr_1.4.0          digest_0.6.25         
-[25] foreign_0.8-80         rmarkdown_2.3          rio_0.5.16            
-[28] XVector_0.28.0         pkgconfig_2.0.3        htmltools_0.5.0       
-[31] limma_3.44.3           rlang_0.4.10           readxl_1.3.1          
-[34] farver_2.0.3           generics_0.1.0         gtools_3.8.2          
-[37] zip_2.0.4              car_3.0-8              RCurl_1.98-1.2        
-[40] GenomeInfoDbData_1.2.3 Matrix_1.2-18          Rcpp_1.0.5            
-[43] munsell_0.5.0          fansi_0.4.2            abind_1.4-5           
-[46] lifecycle_1.0.0        edgeR_3.30.3           stringi_1.4.6         
-[49] whisker_0.4            yaml_2.2.1             carData_3.0-4         
-[52] zlibbioc_1.34.0        plyr_1.8.6             grid_4.0.2            
-[55] promises_1.1.1         ggrepel_0.8.2          forcats_0.5.1         
-[58] crayon_1.4.1           lattice_0.20-41        splines_4.0.2         
-[61] haven_2.3.1            cowplot_1.0.0          hms_1.0.0             
-[64] locfit_1.5-9.4         knitr_1.29             pillar_1.6.0          
-[67] ggsignif_0.6.1         glue_1.4.2             evaluate_0.14         
-[70] vctrs_0.3.7            httpuv_1.5.4           cellranger_1.1.0      
-[73] RANN_2.6.1             gtable_0.3.0           purrr_0.3.4           
-[76] assertthat_0.2.1       xfun_0.16              openxlsx_4.1.5        
-[79] broom_0.7.6            rstatix_0.7.0          later_1.1.0.1         
-[82] pheatmap_1.0.12        tibble_3.1.1           ellipsis_0.3.1        </code></pre>
+ [1] nlme_3.1-152           bitops_1.0-7           fs_1.5.0              
+ [4] rprojroot_2.0.2        tools_4.0.2            backports_1.2.1       
+ [7] bslib_0.2.4            utf8_1.2.1             R6_2.5.0              
+[10] KernSmooth_2.23-17     mgcv_1.8-31            DBI_1.1.1             
+[13] colorspace_2.0-1       withr_2.4.2            gridExtra_2.3         
+[16] tidyselect_1.1.1       curl_4.3.1             compiler_4.0.2        
+[19] git2r_0.28.0           labeling_0.4.2         sass_0.3.1            
+[22] caTools_1.18.2         scales_1.1.1           ggridges_0.5.3        
+[25] stringr_1.4.0          digest_0.6.27          foreign_0.8-81        
+[28] rmarkdown_2.8          rio_0.5.26             XVector_0.28.0        
+[31] pkgconfig_2.0.3        htmltools_0.5.1.1      highr_0.9             
+[34] limma_3.44.3           rlang_0.4.11           readxl_1.3.1          
+[37] farver_2.1.0           jquerylib_0.1.4        generics_0.1.0        
+[40] jsonlite_1.7.2         gtools_3.8.2           zip_2.1.1             
+[43] car_3.0-10             RCurl_1.98-1.3         GenomeInfoDbData_1.2.3
+[46] Matrix_1.3-3           Rcpp_1.0.6             munsell_0.5.0         
+[49] fansi_0.4.2            abind_1.4-5            lifecycle_1.0.0       
+[52] edgeR_3.30.3           stringi_1.6.1          whisker_0.4           
+[55] yaml_2.2.1             carData_3.0-4          zlibbioc_1.34.0       
+[58] plyr_1.8.6             grid_4.0.2             ggrepel_0.9.1         
+[61] promises_1.2.0.1       forcats_0.5.1          crayon_1.4.1          
+[64] lattice_0.20-41        splines_4.0.2          cowplot_1.1.1         
+[67] haven_2.4.1            hms_1.0.0              locfit_1.5-9.4        
+[70] knitr_1.33             pillar_1.6.0           ggsignif_0.6.1        
+[73] glue_1.4.2             evaluate_0.14          vctrs_0.3.8           
+[76] httpuv_1.6.1           cellranger_1.1.0       RANN_2.6.1            
+[79] gtable_0.3.0           purrr_0.3.4            assertthat_0.2.1      
+[82] xfun_0.22              openxlsx_4.2.3         broom_0.7.6           
+[85] rstatix_0.7.0          later_1.2.0            pheatmap_1.0.12       
+[88] tibble_3.1.1           ellipsis_0.3.2        </code></pre>
 </div>
 </div>
 </div>
@@ -1505,7 +1592,7 @@ footer is added to webpages before the MathJax javascript. -->
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -1523,7 +1610,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
