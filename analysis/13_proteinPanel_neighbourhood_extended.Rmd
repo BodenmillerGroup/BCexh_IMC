@@ -40,11 +40,11 @@ dat_relation$cellB <- paste0(dat_relation$`Second Image Number`, "_", dat_relati
 
 # ROI info
 ROI_info <- read.csv("data/ROI_info_HIER_TLSrevised.csv")
-ROI_info$ImageNumber <- c(1:77)
+ROI_info$HIER_ImageNumber <- c(1:77)
 
 #TLS image numbers
-nonTLS_nr <- filter(ROI_info, TLS == "no")$ImageNumber
-TLS_nr <- filter(ROI_info, TLS %in% c("pre", "yes"))$ImageNumber
+nonTLS_nr <- filter(ROI_info, TLS == "no")$HIER_ImageNumber
+TLS_nr <- filter(ROI_info, TLS %in% c("pre", "yes"))$HIER_ImageNumber
 
 TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
 ```
@@ -64,9 +64,9 @@ for (i in unique(cur_sce$sample)){
   
   # get T cell and tumor cell IDs
   cellIDs_Tcell <- cur_sce_i[cur_sce_i[,"celltype"] == "T_NK",]
-  Tcell_shortID <- paste0(cellIDs_Tcell$ImageNumber, "_", cellIDs_Tcell$CellNumber)
+  Tcell_shortID <- paste0(cellIDs_Tcell$HIER_ImageNumber, "_", cellIDs_Tcell$CellNumber)
   cellIDs_tumor <- cur_sce_i[cur_sce_i[,"celltype"] == "tumor",]
-  tumor_shortID <- paste0(cellIDs_tumor$ImageNumber, "_", cellIDs_tumor$CellNumber)
+  tumor_shortID <- paste0(cellIDs_tumor$HIER_ImageNumber, "_", cellIDs_tumor$CellNumber)
   
   # subset neighbourhood list to include only `T cell <-> tumor cell` interactions
   dat_relation_sub <- dat_relation %>% filter((cellA %in% Tcell_shortID & cellB %in% tumor_shortID))
@@ -121,18 +121,18 @@ cur_sce <- data.frame(colData(sce_protein))
 cur_sce <- cur_sce[cur_sce[,"sample"] %in% TIG2,]
 df <- data.frame(matrix(nrow=0, ncol =3))
 
-for (i in unique(cur_sce$ImageNumber)){
-  cur_sce_i <- cur_sce[cur_sce[,"ImageNumber"] == i,]
+for (i in unique(cur_sce$HIER_ImageNumber)){
+  cur_sce_i <- cur_sce[cur_sce[,"HIER_ImageNumber"] == i,]
   
   # get T cell IDs
   cellIDs_PD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
-  PD1_shortID <- paste0(cellIDs_PD1$ImageNumber, "_", cellIDs_PD1$CellNumber)
+  PD1_shortID <- paste0(cellIDs_PD1$HIER_ImageNumber, "_", cellIDs_PD1$CellNumber)
   cellIDs_nonPD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4", "CD8", "Treg"),]
-  nonPD1_shortID <- paste0(cellIDs_nonPD1$ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$HIER_ImageNumber, "_", cellIDs_nonPD1$CellNumber)
   
   # get tumor cell IDs
   cellIDs_tumor <- cur_sce_i[cur_sce_i[,"celltype"] == "tumor",]
-  tumor_shortID <- paste0(cellIDs_tumor$ImageNumber, "_", cellIDs_tumor$CellNumber)
+  tumor_shortID <- paste0(cellIDs_tumor$HIER_ImageNumber, "_", cellIDs_tumor$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell <-> tumor cell` interactions
   dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% tumor_shortID) | (cellB %in% PD1_shortID & cellA %in% tumor_shortID))
@@ -165,18 +165,18 @@ cur_sce <- data.frame(colData(sce_protein))
 cur_sce <- cur_sce[cur_sce[,"sample"] %in% TIG2,]
 df <- data.frame(matrix(nrow=0, ncol =3))
 
-for (i in unique(cur_sce$ImageNumber)){
-  cur_sce_i <- cur_sce[cur_sce[,"ImageNumber"] == i,]
+for (i in unique(cur_sce$HIER_ImageNumber)){
+  cur_sce_i <- cur_sce[cur_sce[,"HIER_ImageNumber"] == i,]
   
   # get T cell IDs
-  cellIDs_PD1 <- cur_sce_i[cur_sce_i[,"subtype"] == "CD4_PD1",]
-  PD1_shortID <- paste0(cellIDs_PD1$ImageNumber, "_", cellIDs_PD1$CellNumber)
-  cellIDs_nonPD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4"),]
-  nonPD1_shortID <- paste0(cellIDs_nonPD1$ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  cellIDs_PD1 <- cur_sce_i[cur_sce_i[,"subtype"] == "CD8_PD1",]
+  PD1_shortID <- paste0(cellIDs_PD1$HIER_ImageNumber, "_", cellIDs_PD1$CellNumber)
+  cellIDs_nonPD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD8"),]
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$HIER_ImageNumber, "_", cellIDs_nonPD1$CellNumber)
   
   # get tumor cell IDs
   cellIDs_tumor <- cur_sce_i[cur_sce_i[,"celltype"] == "tumor",]
-  tumor_shortID <- paste0(cellIDs_tumor$ImageNumber, "_", cellIDs_tumor$CellNumber)
+  tumor_shortID <- paste0(cellIDs_tumor$HIER_ImageNumber, "_", cellIDs_tumor$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell <-> tumor cell` interactions
   dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% tumor_shortID) | (cellB %in% PD1_shortID & cellA %in% tumor_shortID))
@@ -217,13 +217,13 @@ for (i in unique(cur_sce$sample)){
   
   # get T cell IDs
   cellIDs_PD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
-  PD1_shortID <- paste0(cellIDs_PD1$ImageNumber, "_", cellIDs_PD1$CellNumber)
+  PD1_shortID <- paste0(cellIDs_PD1$HIER_ImageNumber, "_", cellIDs_PD1$CellNumber)
   cellIDs_nonPD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4", "CD8", "Treg"),]
-  nonPD1_shortID <- paste0(cellIDs_nonPD1$ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$HIER_ImageNumber, "_", cellIDs_nonPD1$CellNumber)
   
   # get aDC IDs
   cellIDs_aDC <- cur_sce_i[cur_sce_i[,"celltype"] == "aDC",]
-  aDC_shortID <- paste0(cellIDs_aDC$ImageNumber, "_", cellIDs_aDC$CellNumber)
+  aDC_shortID <- paste0(cellIDs_aDC$HIER_ImageNumber, "_", cellIDs_aDC$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell <-> aDC` interactions
   dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% aDC_shortID) | (cellB %in% PD1_shortID & cellA %in% aDC_shortID))
@@ -259,25 +259,25 @@ Only for images with >15 aDCs and >15 PD1+ T cells.
 cur_sce <- data.frame(colData(sce_protein))
 df <- data.frame(matrix(nrow=0, ncol =3))
 
-aDC_nr <- table(cur_sce$ImageNumber, cur_sce$celltype)[,"aDC"]
+aDC_nr <- table(cur_sce$HIER_ImageNumber, cur_sce$celltype)[,"aDC"]
 aDC_img <- names(aDC_nr[aDC_nr > 15])
-PD1_nr <- table(cur_sce$ImageNumber, cur_sce$subtype)[,"CD4_PD1"]+table(cur_sce$ImageNumber, cur_sce$subtype)[,"CD8_PD1"]
+PD1_nr <- table(cur_sce$HIER_ImageNumber, cur_sce$subtype)[,"CD4_PD1"]+table(cur_sce$HIER_ImageNumber, cur_sce$subtype)[,"CD8_PD1"]
 PD1_img <- names(PD1_nr[PD1_nr > 15])
 
 incl_img <- intersect(PD1_img, aDC_img)
 
 for (i in incl_img){
-  cur_sce_i <- cur_sce[cur_sce[,"ImageNumber"] == i,]
+  cur_sce_i <- cur_sce[cur_sce[,"HIER_ImageNumber"] == i,]
   
   # get T cell IDs
   cellIDs_PD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
-  PD1_shortID <- paste0(cellIDs_PD1$ImageNumber, "_", cellIDs_PD1$CellNumber)
+  PD1_shortID <- paste0(cellIDs_PD1$HIER_ImageNumber, "_", cellIDs_PD1$CellNumber)
   cellIDs_nonPD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4", "CD8", "Treg"),]
-  nonPD1_shortID <- paste0(cellIDs_nonPD1$ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$HIER_ImageNumber, "_", cellIDs_nonPD1$CellNumber)
   
   # get aDC IDs
   cellIDs_aDC <- cur_sce_i[cur_sce_i[,"celltype"] == "aDC",]
-  aDC_shortID <- paste0(cellIDs_aDC$ImageNumber, "_", cellIDs_aDC$CellNumber)
+  aDC_shortID <- paste0(cellIDs_aDC$HIER_ImageNumber, "_", cellIDs_aDC$CellNumber)
   
   # subset neighbourhood list to include only `PD1-high T cell <-> aDC` interactions
   dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% aDC_shortID) | (cellB %in% PD1_shortID & cellA %in% aDC_shortID))
@@ -322,10 +322,10 @@ dittoScatterPlot(sce_myeloid, "IDO1", "CD274", color.var = "suppressive")+
   geom_vline(xintercept = 4, lty = "dashed")
 
 # ROI-wide correlation with PD1 T cells (excluding Tregs)
-ROI_myeloid <- prop.table(table(sce_myeloid$ImageNumber, sce_myeloid$suppressive), margin = 1)[,2]
+ROI_myeloid <- prop.table(table(sce_myeloid$HIER_ImageNumber, sce_myeloid$suppressive), margin = 1)[,2]
 sce_T <- sce_protein[,which(sce_protein$subtype %in% c("CD4", "CD8", "CD4_PD1", "CD8_PD1"))]
 sce_T$PD1 <- ifelse(sce_T$subtype %in% c("CD4", "CD8"), FALSE, TRUE)
-ROI_T <- prop.table(table(sce_T$ImageNumber, sce_T$PD1), margin = 1)[,2]
+ROI_T <- prop.table(table(sce_T$HIER_ImageNumber, sce_T$PD1), margin = 1)[,2]
 ROI_comb <- as.data.frame(cbind(ROI_myeloid, ROI_T))
 ROI_comb$TIG <- ROI_info$TIG
 ROI_comb$sample <- ROI_info$sample
@@ -354,10 +354,10 @@ new_sce <- data.frame(matrix(ncol=length(colnames(cur_sce))+1, nrow = 0))
 
 # For each image separately: nearest neighbour search
 
-for (j in unique(cur_sce$ImageNumber)) {
-  cur_sce_j <- filter(cur_sce, ImageNumber == j)
-  T_j <- filter(cellIDs_T, ImageNumber == j)[,c("Center_X", "Center_Y")]
-  T_j_PD1 <- filter(cellIDs_T, ImageNumber == j)[,c("PD1")]
+for (j in unique(cur_sce$HIER_ImageNumber)) {
+  cur_sce_j <- filter(cur_sce, HIER_ImageNumber == j)
+  T_j <- filter(cellIDs_T, HIER_ImageNumber == j)[,c("Center_X", "Center_Y")]
+  T_j_PD1 <- filter(cellIDs_T, HIER_ImageNumber == j)[,c("PD1")]
   
   # Search 10 closest T cells for each cell
     j_coord <- cur_sce_j[,c("Center_X", "Center_Y")]
