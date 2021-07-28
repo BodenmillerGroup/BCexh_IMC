@@ -473,16 +473,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree081cb5263957d599c5a69e714ccbfe7059b09b88targetblank081cb52a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/081cb5263957d599c5a69e714ccbfe7059b09b88" target="_blank">081cb52</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree80185393885b7874d7124be1d7b1e548a72ad583targetblank8018539a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/80185393885b7874d7124be1d7b1e548a72ad583" target="_blank">8018539</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree081cb5263957d599c5a69e714ccbfe7059b09b88targetblank081cb52a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree80185393885b7874d7124be1d7b1e548a72ad583targetblank8018539a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/081cb5263957d599c5a69e714ccbfe7059b09b88" target="_blank">081cb52</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/80185393885b7874d7124be1d7b1e548a72ad583" target="_blank">8018539</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -551,6 +551,7 @@ Unstaged changes:
     Modified:   BCexh_IMC.Rproj
     Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
     Modified:   analysis/12_RNApanel_CXCL13_protein.Rmd
+    Modified:   analysis/XX_cytomapper_images.Rmd
 
 </code></pre>
 <p>
@@ -589,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/80185393885b7874d7124be1d7b1e548a72ad583/analysis/13_proteinPanel_neighbourhood_extended.Rmd" target="_blank">8018539</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+<td>
+Add code to determine whether migDC-neighbouring PD1high T cells are often proliferative
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/f24d241f099231680b8456afcc11706cb1cfd55b/docs/13_proteinPanel_neighbourhood_extended.html" target="_blank">f24d241</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1059,6 +1094,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f24d241f099231680b8456afcc11706cb1cfd55b/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-tumor-neighbourhood-1.png" target="_blank">f24d241</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/5a926f8257449fc4fd22328262728634f1256966/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-tumor-neighbourhood-1.png" target="_blank">5a926f8</a>
 </td>
 <td>
@@ -1147,6 +1193,43 @@ df[,2:3] &lt;- df[,2:3] %&gt;% mutate_if(is.character,as.numeric)
 ggpaired(df, cond1 = &quot;PD1_perc&quot;, cond2 = &quot;nonPD1_perc&quot;, line.color = &quot;gray&quot;, ylab = &quot;Direct tumor neighbour (proportion)&quot;, xlab = FALSE)+
   stat_compare_means(paired = TRUE)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-CD8-tumor-neighbourhood-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-CD8-tumor-neighbourhood-1">
+Past versions of PD1-CD8-tumor-neighbourhood-1.png
+</button>
+</p>
+<div id="fig-PD1-CD8-tumor-neighbourhood-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f24d241f099231680b8456afcc11706cb1cfd55b/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-CD8-tumor-neighbourhood-1.png" target="_blank">f24d241</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="likelihood-of-pd1-high-t-cells-neighbouring-adcs" class="section level1">
@@ -1283,9 +1366,46 @@ sce_protein$cellID &lt;- paste0(sce_protein$HIER_ImageNumber, &quot;_&quot;, sce
 sce_T &lt;- sce_protein[,which(sce_protein$subtype %in% c(&quot;CD4&quot;, &quot;CD4_PD1&quot;))]
 sce_T$migDC_category &lt;- ifelse(sce_T$cellID %in% PD1_migDC, &quot;PD1_migDC&quot;, ifelse(sce_T$cellID %in% PD1_non_migDC, &quot;PD1_non_migDC&quot;, ifelse(sce_T$cellID %in% nonPD1_migDC, &quot;nonPD1_migDC&quot;, &quot;nonPD1_non_migDC&quot;)))
 
-dittoPlot(sce_T, &quot;Ki-67&quot;, plots = &quot;vlnplot&quot;, group.by = &quot;migDC_category&quot;, assay = &quot;scaled&quot;)</code></pre>
+dittoPlot(sce_T, &quot;Ki-67&quot;, plots = &quot;vlnplot&quot;, group.by = &quot;migDC_category&quot;, assay = &quot;exprs&quot;)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># Define cells with Ki67 arcsinh-counts &gt; 0.5 as proliferating
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-migDC-Ki67-1">
+Past versions of PD1-migDC-Ki67-1.png
+</button>
+</p>
+<div id="fig-PD1-migDC-Ki67-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f24d241f099231680b8456afcc11706cb1cfd55b/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-1.png" target="_blank">f24d241</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># Define cells with Ki67 arcsinh-counts &gt; 0.7 as proliferating
 arcsinh_counts &lt;- assay(sce_T, &quot;exprs&quot;)
 sce_T$proliferating &lt;- ifelse(arcsinh_counts[&quot;Ki-67&quot;,] &gt; 0.7, &quot;yes&quot;, &quot;no&quot;)
 table(sce_T$proliferating)</code></pre>
@@ -1303,13 +1423,87 @@ ggplot(prolif, aes(migDC_category, perc.proliferating)) +
         panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1))+
   ggtitle(&quot;CD4+ T cells (excl. Tregs)&quot;)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-migDC-Ki67-2">
+Past versions of PD1-migDC-Ki67-2.png
+</button>
+</p>
+<div id="fig-PD1-migDC-Ki67-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f24d241f099231680b8456afcc11706cb1cfd55b/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-2.png" target="_blank">f24d241</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>## For CD8+ T cells only
 sce_T &lt;- sce_protein[,which(sce_protein$subtype %in% c(&quot;CD8&quot;, &quot;CD8_PD1&quot;))]
 sce_T$migDC_category &lt;- ifelse(sce_T$cellID %in% PD1_migDC, &quot;PD1_migDC&quot;, ifelse(sce_T$cellID %in% PD1_non_migDC, &quot;PD1_non_migDC&quot;, ifelse(sce_T$cellID %in% nonPD1_migDC, &quot;nonPD1_migDC&quot;, &quot;nonPD1_non_migDC&quot;)))
 
-dittoPlot(sce_T, &quot;Ki-67&quot;, plots = &quot;vlnplot&quot;, group.by = &quot;migDC_category&quot;, assay = &quot;scaled&quot;)</code></pre>
+dittoPlot(sce_T, &quot;Ki-67&quot;, plots = &quot;vlnplot&quot;, group.by = &quot;migDC_category&quot;, assay = &quot;exprs&quot;)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-3.png" width="576" style="display: block; margin: auto;" /></p>
-<pre class="r"><code># Define cells with Ki67 arcsinh-counts &gt; 0.5 as proliferating
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-migDC-Ki67-3">
+Past versions of PD1-migDC-Ki67-3.png
+</button>
+</p>
+<div id="fig-PD1-migDC-Ki67-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f24d241f099231680b8456afcc11706cb1cfd55b/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-3.png" target="_blank">f24d241</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code># Define cells with Ki67 arcsinh-counts &gt; 0.7 as proliferating
 arcsinh_counts &lt;- assay(sce_T, &quot;exprs&quot;)
 sce_T$proliferating &lt;- ifelse(arcsinh_counts[&quot;Ki-67&quot;,] &gt; 0.7, &quot;yes&quot;, &quot;no&quot;)
 table(sce_T$proliferating)</code></pre>
@@ -1327,6 +1521,43 @@ ggplot(prolif, aes(migDC_category, perc.proliferating)) +
         panel.border = element_rect(color = &quot;black&quot;, fill = NA, size = 1))+
   ggtitle(&quot;CD8+ T cells&quot;)</code></pre>
 <p><img src="figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-PD1-migDC-Ki67-4">
+Past versions of PD1-migDC-Ki67-4.png
+</button>
+</p>
+<div id="fig-PD1-migDC-Ki67-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/f24d241f099231680b8456afcc11706cb1cfd55b/docs/figure/13_proteinPanel_neighbourhood_extended.Rmd/PD1-migDC-Ki67-4.png" target="_blank">f24d241</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Only for images with &gt;15 aDCs and &gt;15 PD1+ T cells.</p>
 <pre class="r"><code>cur_sce &lt;- data.frame(colData(sce_protein))
 df &lt;- data.frame(matrix(nrow=0, ncol =3))
