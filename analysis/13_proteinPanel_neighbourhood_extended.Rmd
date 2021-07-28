@@ -285,9 +285,9 @@ sce_protein$cellID <- paste0(sce_protein$HIER_ImageNumber, "_", sce_protein$Cell
 sce_T <- sce_protein[,which(sce_protein$subtype %in% c("CD4", "CD4_PD1"))]
 sce_T$migDC_category <- ifelse(sce_T$cellID %in% PD1_migDC, "PD1_migDC", ifelse(sce_T$cellID %in% PD1_non_migDC, "PD1_non_migDC", ifelse(sce_T$cellID %in% nonPD1_migDC, "nonPD1_migDC", "nonPD1_non_migDC")))
 
-dittoPlot(sce_T, "Ki-67", plots = "vlnplot", group.by = "migDC_category", assay = "scaled")
+dittoPlot(sce_T, "Ki-67", plots = "vlnplot", group.by = "migDC_category", assay = "exprs")
 
-# Define cells with Ki67 arcsinh-counts > 0.5 as proliferating
+# Define cells with Ki67 arcsinh-counts > 0.7 as proliferating
 arcsinh_counts <- assay(sce_T, "exprs")
 sce_T$proliferating <- ifelse(arcsinh_counts["Ki-67",] > 0.7, "yes", "no")
 table(sce_T$proliferating)
@@ -308,9 +308,9 @@ ggplot(prolif, aes(migDC_category, perc.proliferating)) +
 sce_T <- sce_protein[,which(sce_protein$subtype %in% c("CD8", "CD8_PD1"))]
 sce_T$migDC_category <- ifelse(sce_T$cellID %in% PD1_migDC, "PD1_migDC", ifelse(sce_T$cellID %in% PD1_non_migDC, "PD1_non_migDC", ifelse(sce_T$cellID %in% nonPD1_migDC, "nonPD1_migDC", "nonPD1_non_migDC")))
 
-dittoPlot(sce_T, "Ki-67", plots = "vlnplot", group.by = "migDC_category", assay = "scaled")
+dittoPlot(sce_T, "Ki-67", plots = "vlnplot", group.by = "migDC_category", assay = "exprs")
 
-# Define cells with Ki67 arcsinh-counts > 0.5 as proliferating
+# Define cells with Ki67 arcsinh-counts > 0.7 as proliferating
 arcsinh_counts <- assay(sce_T, "exprs")
 sce_T$proliferating <- ifelse(arcsinh_counts["Ki-67",] > 0.7, "yes", "no")
 table(sce_T$proliferating)
