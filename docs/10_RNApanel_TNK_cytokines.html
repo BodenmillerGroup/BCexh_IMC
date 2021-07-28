@@ -21,6 +21,15 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -38,12 +47,16 @@ div.section {
 }
 </style>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -56,32 +69,7 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 
 
@@ -91,10 +79,6 @@ h6 {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -111,40 +95,13 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -172,7 +129,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -184,7 +141,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -195,10 +152,23 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.parent().addClass('active');
+  menuAnchor.tab('show');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -210,7 +180,6 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -336,7 +305,7 @@ div.tocify {
 
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
+<div class="row">
 <div class="col-xs-12 col-sm-4 col-md-3">
 <div id="TOC" class="tocify">
 </div>
@@ -372,7 +341,7 @@ div.tocify {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/SandraTietscher/BCexh_IMC">
-    <span class="fa fa-github"></span>
+    <span class="fas fa-github"></span>
      
     Source code
   </a>
@@ -382,7 +351,7 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -413,7 +382,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-02-19
+<strong>Last updated:</strong> 2021-07-28
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -504,23 +473,27 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree0699e351375fe6d3f8c732a79761621234657f35targetblank0699e35a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/0699e351375fe6d3f8c732a79761621234657f35" target="_blank">0699e35</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree482d306ad7e75402d9c2c227bb5c93b23cb8bea2targetblank482d306a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/482d306ad7e75402d9c2c227bb5c93b23cb8bea2" target="_blank">482d306</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree0699e351375fe6d3f8c732a79761621234657f35targetblank0699e35a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree482d306ad7e75402d9c2c227bb5c93b23cb8bea2targetblank482d306a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/0699e351375fe6d3f8c732a79761621234657f35" target="_blank">0699e35</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/482d306ad7e75402d9c2c227bb5c93b23cb8bea2" target="_blank">482d306</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
+    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  BB184_aDC_PD1.png
@@ -535,9 +508,15 @@ Untracked files:
     Untracked:  RNApanel_nonrandom_clusters.pdf
     Untracked:  TBB129_aDC_PD1.png
     Untracked:  TBB129_aDC_PD1_Bcell.png
+    Untracked:  TNK_perc_proliferating.pdf
+    Untracked:  analysis/15_spatial_TLS.Rmd
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
+    Untracked:  analysis/spicyR.Rmd
     Untracked:  barplot_tumorSubtype_image.pdf
+    Untracked:  code/generate_fullSCEs_for_Zenodo.Rmd
+    Untracked:  correlation_Pericyte1_CD8ex_pearson.pdf
     Untracked:  cytokine_environment.png
+    Untracked:  cytokine_exprs_TLS.pdf
     Untracked:  data/RNAseq_Tcells.rds
     Untracked:  data/RNAseq_epithelial.rds
     Untracked:  data/ROI_info_HIER.csv
@@ -550,7 +529,13 @@ Untracked files:
     Untracked:  neighbourhood_myeloid_all_relative.png
     Untracked:  neighbourhood_myeloid_split_TLS.png
     Untracked:  output/ProteinPanel/
+    Untracked:  output/Protein_panel_SingleCellExperiment_object.rds
+    Untracked:  output/Protein_panel_singlecell_counts.txt
+    Untracked:  output/Protein_panel_singlecell_metadata.csv
     Untracked:  output/RNApanel/
+    Untracked:  output/RNAscope_panel_SingleCellExperiment_object.rds
+    Untracked:  output/RNAscope_panel_singlecell_counts.txt
+    Untracked:  output/RNAscope_panel_singlecell_metadata.csv
     Untracked:  output/TLS_score_25samples.png
     Untracked:  output/sce_ProteinPanel_afterQC.rds
     Untracked:  output/sce_ProteinPanel_initial.rds
@@ -561,6 +546,13 @@ Untracked files:
     Untracked:  proteinPanel_PCA_HLAABC_PD1_CD274.png
     Untracked:  proteinPanel_ROImean_HLAABC_PD1.png
     Untracked:  proteinPanel_ROImean_HLAABC_PDL1.png
+    Untracked:  test.pdf
+
+Unstaged changes:
+    Modified:   BCexh_IMC.Rproj
+    Modified:   analysis/11_RNAscope_cytokine_communities.Rmd
+    Modified:   analysis/12_RNApanel_CXCL13_protein.Rmd
+    Modified:   analysis/13_proteinPanel_neighbourhood_extended.Rmd
 
 </code></pre>
 <p>
@@ -599,6 +591,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/482d306ad7e75402d9c2c227bb5c93b23cb8bea2/analysis/10_RNApanel_TNK_cytokines.Rmd" target="_blank">482d306</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-07-28
+</td>
+<td>
+Test correlation of myeloid cell activation with other cytokines in addition to CSF!
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/bd74c24d1d10b521cc59573abc270467462c91ac/docs/10_RNApanel_TNK_cytokines.html" target="_blank">bd74c24</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-02-19
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -910,6 +936,7 @@ library(ggpubr)
 library(dittoSeq)
 library(Seurat)
 library(RANN)
+library(stringr)
 
 sce_RNA &lt;- readRDS(file = &quot;output/RNApanel/sce_RNApanel_celltypes_cytokines.rds&quot;)
 TIG2 &lt;- c(&quot;TBB111&quot;, &quot;TBB129&quot;, &quot;TBB165&quot;, &quot;TBB171&quot;, &quot;TBB184&quot;, &quot;TBB338&quot;)</code></pre>
@@ -2017,6 +2044,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/bd74c24d1d10b521cc59573abc270467462c91ac/docs/figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-cytokines-CSF1-distance-3.png" target="_blank">bd74c24</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-02-19
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/4a98d6194846c656b63f2707d455b079abfd6774/docs/figure/10_RNApanel_TNK_cytokines.Rmd/myeloid-activation-cytokines-CSF1-distance-3.png" target="_blank">4a98d61</a>
 </td>
 <td>
@@ -2029,6 +2067,141 @@ SandraTietscher
 </tbody>
 </table>
 </div>
+</div>
+<div id="control-same-analysis-for-other-cytokines" class="section level4">
+<h4>Control: Same analysis for other cytokines</h4>
+<pre class="r"><code># Calculate macrophage activation status based on CD68/CD163/CD204/CCL18 (for all cells, will be subset later)
+  # Re-normalize counts
+  norm_counts &lt;- t(apply(assay(sce_RNA, &quot;counts&quot;), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+  norm_counts &lt;- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+  assay(sce_RNA, &quot;normalized&quot;, withDimnames = FALSE) &lt;- norm_counts
+
+  # For each cells, average across the normalized counts for CD68, CD163, CD204 and CCL18
+  count_matrix &lt;- assay(sce_RNA, &quot;normalized&quot;)[c(&quot;CD68&quot;, &quot;CD163&quot;, &quot;CD204&quot;, &quot;CCL18&quot;),]
+  sce_RNA$activation_score &lt;- colMeans(count_matrix)
+
+# Initialize binned table
+myeloid_distances &lt;- data.frame(cellsOI_distance_bin = cut(seq(from = 5, to = 800,  5), breaks = breaks, include.lowest = TRUE, right = TRUE, ordered_result = TRUE))
+
+
+
+# Loop over all cytokines
+cytokine_names &lt;- paste0(c(&quot;CCL4&quot;, &quot;CCL18&quot;, &quot;CSF1&quot;, &quot;CXCL10&quot;, &quot;CXCL13_mRNA&quot;, &quot;CCL2&quot;, &quot;CCL22&quot;, &quot;CXCL9&quot;, &quot;CCL17&quot;, &quot;CCL5&quot;), &quot;_expression&quot;)
+
+for (i in cytokine_names) {
+  cur_sce &lt;- data.frame(colData(sce_RNA))
+  cellsOI &lt;- cur_sce[cur_sce[,i] == TRUE &amp; cur_sce$celltype %in% c(&quot;NK&quot;, &quot;T_CD8&quot;, &quot;T_CD4&quot;),]
+  new_sce &lt;- data.frame(matrix(ncol=length(colnames(cur_sce))+2, nrow = 0))
+
+  # Loop over all images to perform nearest neighbour search
+  for (j in unique(cur_sce$ImageNumber)) {
+    cur_sce_j &lt;- filter(cur_sce, ImageNumber == j)
+    cellsOI_j &lt;- filter(cellsOI, ImageNumber == j)[,c(&quot;Center_X&quot;, &quot;Center_Y&quot;)]
+    
+    #For images in which there is no cell of interest --&gt; set distance parameter to max
+    if (nrow(cellsOI_j) == 0) {
+      cur_sce_j$cellsOI_distance &lt;- max_dist
+    } else {
+      j_coord &lt;- cur_sce_j[,c(&quot;Center_X&quot;, &quot;Center_Y&quot;)]
+      nn &lt;- RANN::nn2(cellsOI_j, j_coord)
+      cur_sce_j$cellsOI_distance &lt;- nn$nn.dists[,1]
+      
+      #Set distance parameter to max for all cells with distance &gt; max
+      cur_sce_j$cellsOI_distance&lt;- ifelse(cur_sce_j$cellsOI_distance &gt; max_dist, max_dist, cur_sce_j$cellsOI_distance)
+      cur_sce_j$ImageNumber &lt;- j
+    }
+    new_sce &lt;- rbind(cur_sce_j, new_sce)
+  }
+  
+  # Add cellsOI_distances to colData of original object
+  sce_RNA$cellsOI_distance &lt;- new_sce[order(match(new_sce$cellID, sce_RNA$cellID)),]$cellsOI_distance
+
+  # Bin the distances
+  breaks &lt;- seq(from = 0, to = 800, by = 5)
+  sce_RNA$cellsOI_distance_bin &lt;- cut(sce_RNA$cellsOI_distance, breaks = breaks, include.lowest = TRUE, right = TRUE, ordered_result = TRUE)
+  
+  # Extract the myeloid activation status (based on cytokine expression) in relation to the cellsOI distance
+  sce_myeloid &lt;- sce_RNA[,which(sce_RNA$celltype == &quot;myeloid&quot;)]
+  cytokine_myeloid &lt;- as.data.frame(prop.table(table(sce_myeloid$cellsOI_distance_bin, sce_myeloid$cytokine), margin = 1)[,2])
+  colnames(cytokine_myeloid)[1] &lt;- paste0(i, &quot;_activationCytokine&quot;)
+  cytokine_myeloid$cellsOI_distance_bin &lt;- rownames(cytokine_myeloid)
+  
+  # Extract the myeloid activation status based on CD68/CD163/CD204/CCL18 expression
+  coldata_myeloid &lt;- data.frame(colData(sce_myeloid))
+  myeloid_summarized &lt;- coldata_myeloid %&gt;% group_by(cellsOI_distance_bin) %&gt;% summarize(mean_activation_score = mean(activation_score))
+  comb &lt;- merge(cytokine_myeloid, myeloid_summarized, by = &quot;cellsOI_distance_bin&quot;)
+  colnames(comb)[3] &lt;- paste0(i, &quot;_activationScore&quot;)
+  
+  myeloid_distances &lt;- merge(myeloid_distances, comb, by = &quot;cellsOI_distance_bin&quot;)
+}
+
+
+
+## Myeloid cell activation measured as cytokine expression status
+myeloid_distances$cellsOI_distance_bin &lt;- sub(&quot;\\(&quot;, &quot;&quot;, myeloid_distances$cellsOI_distance_bin)
+myeloid_distances$cellsOI_distance_bin &lt;- as.numeric(sub(&quot;,.*&quot;, &quot;&quot;, myeloid_distances$cellsOI_distance_bin))
+
+myeloid_distances_scoreA &lt;- pivot_longer(myeloid_distances, cols = colnames(myeloid_distances)[str_detect(colnames(myeloid_distances), &quot;activationCytokine&quot;)], names_to = &quot;cytokines&quot;, values_to = &quot;prop_cytokineExpressing&quot;)[,c(1,12,13)]
+myeloid_distances_scoreA$cytokines &lt;- sub(&quot;_expression_activationCytokine&quot;, &quot;&quot;, myeloid_distances_scoreA$cytokines)
+
+## Plot based
+ggplot(myeloid_distances_scoreA, aes(cellsOI_distance_bin, prop_cytokineExpressing)) +
+  #geom_point()+
+  geom_smooth(method = &quot;loess&quot;, aes(color = cytokines), se=FALSE)+
+  #stat_cor(method=&quot;spearman&quot;)+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab(&quot;Proportion of myeloid cells that express at least one cytokine&quot;)+
+  xlab(&quot;Distance to the next T or NK cell expressing the given cytokine (5um bins)&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/control-other-cytokines-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## Myeloid cell activation measured via activation score
+myeloid_distances_scoreB&lt;- pivot_longer(myeloid_distances, cols = colnames(myeloid_distances)[str_detect(colnames(myeloid_distances), &quot;activationScore&quot;)], names_to = &quot;cytokines&quot;, values_to = &quot;activationScore&quot;)[,c(1,12,13)]
+myeloid_distances_scoreB$cytokines &lt;- sub(&quot;_expression_activationScore&quot;, &quot;&quot;, myeloid_distances_scoreB$cytokines)
+
+ggplot(myeloid_distances_scoreB, aes(cellsOI_distance_bin, activationScore)) +
+  #geom_point()+
+  geom_smooth(method = &quot;lm&quot;, aes(color = cytokines), se=FALSE)+
+  stat_cor(method=&quot;spearman&quot;, aes(color = cytokines))+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab(&quot;Proportion of myeloid cells that express at least one cytokine&quot;)+
+  xlab(&quot;Distance to the next T or NK cell expressing the given cytokine (5um bins)&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/control-other-cytokines-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  # Remove CCL18 (is used to calculate the score --&gt; biased)
+  myeloid_distances_scoreB &lt;- filter(myeloid_distances_scoreB, cytokines != &quot;CCL18&quot;)
+  
+  # Calculate the mean over all cytokines other than CSF1
+  scoreB &lt;- pivot_wider(myeloid_distances_scoreB, values_from = &quot;activationScore&quot;, names_from = &quot;cytokines&quot;)
+  scoreB_sub &lt;- subset(scoreB, select=-c(CSF1, cellsOI_distance_bin))
+  scoreB$meanActivationScore &lt;- apply(scoreB_sub, MARGIN = 1, FUN = mean)
+  
+  ggplot(scoreB, aes(x = cellsOI_distance_bin)) +
+  #geom_point()+
+  geom_smooth(method = &quot;lm&quot;, aes(y = CSF1), se=TRUE, color = &quot;red&quot;)+
+  stat_cor(method=&quot;spearman&quot;, aes(y = CSF1))+
+  geom_smooth(method = &quot;lm&quot;, aes(y = meanActivationScore), se=TRUE)+
+  stat_cor(method=&quot;spearman&quot;, aes(y = meanActivationScore))+
+  theme(axis.line.x = element_line(colour = &quot;black&quot;, size = 0.25),
+        axis.line.y = element_line(colour = &quot;black&quot;, size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = &quot;black&quot;, fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab(&quot;Proportion of myeloid cells that express at least one cytokine&quot;)+
+  xlab(&quot;Distance to the next T or NK cell expressing the given cytokine (5um bins)&quot;)</code></pre>
+<pre><code>`geom_smooth()` using formula &#39;y ~ x&#39;
+`geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="figure/10_RNApanel_TNK_cytokines.Rmd/control-other-cytokines-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="use-the-expression-of-cd68-cd163-cd204-and-ccl18-as-a-proxy-for-cell-activation" class="section level3">
@@ -2043,9 +2216,8 @@ count_matrix &lt;- assay(sce_myeloid, &quot;normalized&quot;)[c(&quot;CD68&quot;
 sce_myeloid$activation_score &lt;- colMeans(count_matrix)
 
 coldata_myeloid &lt;- data.frame(colData(sce_myeloid))
-myeloid_summarized &lt;- coldata_myeloid %&gt;% group_by(NKT_distance_bin) %&gt;% summarize(mean_activation_score = mean(activation_score))</code></pre>
-<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<pre class="r"><code>myeloid_summarized$distance &lt;- seq(from = 7.5, to = 800, by = 5)
+myeloid_summarized &lt;- coldata_myeloid %&gt;% group_by(NKT_distance_bin) %&gt;% summarize(mean_activation_score = mean(activation_score))
+myeloid_summarized$distance &lt;- seq(from = 7.5, to = 800, by = 5)
 
 ggplot(coldata_myeloid, aes(NKT_distance_bin, activation_score)) +
   geom_boxplot()+
@@ -2469,86 +2641,91 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] RANN_2.6.1                  Seurat_3.2.2               
- [3] dittoSeq_1.0.2              ggpubr_0.4.0               
- [5] tidyr_1.1.1                 scater_1.16.2              
- [7] ggplot2_3.3.2               dplyr_1.0.1                
- [9] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
-[11] DelayedArray_0.14.1         matrixStats_0.56.0         
-[13] Biobase_2.48.0              GenomicRanges_1.40.0       
-[15] GenomeInfoDb_1.24.2         IRanges_2.22.2             
-[17] S4Vectors_0.26.1            BiocGenerics_0.34.0        
-[19] workflowr_1.6.2            
+ [1] stringr_1.4.0               RANN_2.6.1                 
+ [3] SeuratObject_4.0.1          Seurat_4.0.1               
+ [5] dittoSeq_1.0.2              ggpubr_0.4.0               
+ [7] tidyr_1.1.3                 scater_1.16.2              
+ [9] ggplot2_3.3.3               dplyr_1.0.6                
+[11] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
+[13] DelayedArray_0.14.1         matrixStats_0.58.0         
+[15] Biobase_2.48.0              GenomicRanges_1.40.0       
+[17] GenomeInfoDb_1.24.2         IRanges_2.22.2             
+[19] S4Vectors_0.26.1            BiocGenerics_0.34.0        
+[21] workflowr_1.6.2            
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1              backports_1.1.8          
-  [3] plyr_1.8.6                igraph_1.2.5             
-  [5] lazyeval_0.2.2            splines_4.0.2            
-  [7] BiocParallel_1.22.0       listenv_0.8.0            
-  [9] digest_0.6.25             htmltools_0.5.0          
- [11] viridis_0.5.1             magrittr_1.5             
- [13] tensor_1.5                cluster_2.1.0            
- [15] ROCR_1.0-11               openxlsx_4.1.5           
- [17] limma_3.44.3              globals_0.13.1           
- [19] colorspace_1.4-1          rappdirs_0.3.1           
- [21] ggrepel_0.8.2             haven_2.3.1              
- [23] xfun_0.16                 crayon_1.3.4             
- [25] RCurl_1.98-1.2            jsonlite_1.7.0           
- [27] spatstat.data_1.4-3       spatstat_1.64-1          
- [29] survival_3.2-3            zoo_1.8-8                
- [31] glue_1.4.1                polyclip_1.10-0          
- [33] gtable_0.3.0              zlibbioc_1.34.0          
- [35] XVector_0.28.0            leiden_0.3.3             
- [37] car_3.0-8                 BiocSingular_1.4.0       
- [39] future.apply_1.6.0        abind_1.4-5              
- [41] scales_1.1.1              pheatmap_1.0.12          
- [43] edgeR_3.30.3              rstatix_0.6.0            
- [45] miniUI_0.1.1.1            Rcpp_1.0.5               
- [47] viridisLite_0.3.0         xtable_1.8-4             
- [49] reticulate_1.17           foreign_0.8-80           
- [51] rsvd_1.0.3                htmlwidgets_1.5.1        
- [53] httr_1.4.2                RColorBrewer_1.1-2       
- [55] ellipsis_0.3.1            ica_1.0-2                
- [57] farver_2.0.3              pkgconfig_2.0.3          
- [59] uwot_0.1.8                deldir_0.1-29            
- [61] locfit_1.5-9.4            labeling_0.3             
- [63] reshape2_1.4.4            tidyselect_1.1.0         
- [65] rlang_0.4.7               later_1.1.0.1            
- [67] munsell_0.5.0             cellranger_1.1.0         
- [69] tools_4.0.2               generics_0.0.2           
- [71] broom_0.7.0               ggridges_0.5.2           
- [73] evaluate_0.14             stringr_1.4.0            
- [75] fastmap_1.0.1             goftest_1.2-2            
- [77] yaml_2.2.1                knitr_1.29               
- [79] fs_1.5.0                  fitdistrplus_1.1-1       
- [81] zip_2.0.4                 purrr_0.3.4              
- [83] nlme_3.1-148              pbapply_1.4-3            
- [85] future_1.19.1             whisker_0.4              
- [87] mime_0.9                  compiler_4.0.2           
- [89] rstudioapi_0.11           png_0.1-7                
- [91] plotly_4.9.2.1            beeswarm_0.2.3           
- [93] curl_4.3                  ggsignif_0.6.0           
- [95] spatstat.utils_1.17-0     tibble_3.0.3             
- [97] stringi_1.4.6             forcats_0.5.0            
- [99] lattice_0.20-41           Matrix_1.2-18            
-[101] vctrs_0.3.2               pillar_1.4.6             
-[103] lifecycle_0.2.0           lmtest_0.9-37            
-[105] RcppAnnoy_0.0.16          BiocNeighbors_1.6.0      
-[107] data.table_1.13.0         cowplot_1.0.0            
-[109] bitops_1.0-6              irlba_2.3.3              
-[111] httpuv_1.5.4              patchwork_1.0.1          
-[113] R6_2.4.1                  promises_1.1.1           
-[115] KernSmooth_2.23-17        gridExtra_2.3            
-[117] rio_0.5.16                vipor_0.4.5              
-[119] codetools_0.2-16          MASS_7.3-51.6            
-[121] rprojroot_1.3-2           withr_2.2.0              
-[123] sctransform_0.3.1         GenomeInfoDbData_1.2.3   
-[125] mgcv_1.8-31               hms_0.5.3                
-[127] rpart_4.1-15              grid_4.0.2               
-[129] rmarkdown_2.3             DelayedMatrixStats_1.10.1
-[131] carData_3.0-4             Rtsne_0.15               
-[133] git2r_0.27.1              shiny_1.5.0              
-[135] ggbeeswarm_0.6.0         </code></pre>
+  [1] utf8_1.2.1                reticulate_1.20          
+  [3] tidyselect_1.1.1          htmlwidgets_1.5.3        
+  [5] grid_4.0.2                BiocParallel_1.22.0      
+  [7] Rtsne_0.15                munsell_0.5.0            
+  [9] codetools_0.2-16          ica_1.0-2                
+ [11] future_1.21.0             miniUI_0.1.1.1           
+ [13] withr_2.4.2               colorspace_2.0-1         
+ [15] highr_0.9                 knitr_1.33               
+ [17] ROCR_1.0-11               ggsignif_0.6.1           
+ [19] tensor_1.5                listenv_0.8.0            
+ [21] labeling_0.4.2            git2r_0.28.0             
+ [23] GenomeInfoDbData_1.2.3    polyclip_1.10-0          
+ [25] farver_2.1.0              pheatmap_1.0.12          
+ [27] rprojroot_2.0.2           parallelly_1.25.0        
+ [29] vctrs_0.3.8               generics_0.1.0           
+ [31] xfun_0.22                 R6_2.5.0                 
+ [33] ggbeeswarm_0.6.0          rsvd_1.0.5               
+ [35] locfit_1.5-9.4            bitops_1.0-7             
+ [37] spatstat.utils_2.1-0      assertthat_0.2.1         
+ [39] promises_1.2.0.1          scales_1.1.1             
+ [41] beeswarm_0.3.1            gtable_0.3.0             
+ [43] globals_0.14.0            goftest_1.2-2            
+ [45] rlang_0.4.11              splines_4.0.2            
+ [47] rstatix_0.7.0             lazyeval_0.2.2           
+ [49] spatstat.geom_2.1-0       broom_0.7.6              
+ [51] yaml_2.2.1                reshape2_1.4.4           
+ [53] abind_1.4-5               backports_1.2.1          
+ [55] httpuv_1.6.1              tools_4.0.2              
+ [57] ellipsis_0.3.2            spatstat.core_2.1-2      
+ [59] jquerylib_0.1.4           RColorBrewer_1.1-2       
+ [61] ggridges_0.5.3            Rcpp_1.0.6               
+ [63] plyr_1.8.6                zlibbioc_1.34.0          
+ [65] purrr_0.3.4               RCurl_1.98-1.3           
+ [67] rpart_4.1-15              deldir_0.2-10            
+ [69] pbapply_1.4-3             viridis_0.6.0            
+ [71] cowplot_1.1.1             zoo_1.8-9                
+ [73] haven_2.4.1               ggrepel_0.9.1            
+ [75] cluster_2.1.0             fs_1.5.0                 
+ [77] magrittr_2.0.1            data.table_1.14.0        
+ [79] scattermore_0.7           openxlsx_4.2.3           
+ [81] lmtest_0.9-38             whisker_0.4              
+ [83] fitdistrplus_1.1-3        hms_1.0.0                
+ [85] patchwork_1.1.1           mime_0.10                
+ [87] evaluate_0.14             xtable_1.8-4             
+ [89] rio_0.5.26                readxl_1.3.1             
+ [91] gridExtra_2.3             compiler_4.0.2           
+ [93] tibble_3.1.1              KernSmooth_2.23-17       
+ [95] crayon_1.4.1              htmltools_0.5.1.1        
+ [97] mgcv_1.8-31               later_1.2.0              
+ [99] DBI_1.1.1                 MASS_7.3-54              
+[101] Matrix_1.3-3              car_3.0-10               
+[103] igraph_1.2.6              forcats_0.5.1            
+[105] pkgconfig_2.0.3           foreign_0.8-81           
+[107] plotly_4.9.3              spatstat.sparse_2.0-0    
+[109] vipor_0.4.5               bslib_0.2.4              
+[111] XVector_0.28.0            digest_0.6.27            
+[113] sctransform_0.3.2         RcppAnnoy_0.0.18         
+[115] spatstat.data_2.1-0       rmarkdown_2.8            
+[117] cellranger_1.1.0          leiden_0.3.7             
+[119] uwot_0.1.10               edgeR_3.30.3             
+[121] DelayedMatrixStats_1.10.1 curl_4.3.1               
+[123] shiny_1.6.0               lifecycle_1.0.0          
+[125] nlme_3.1-152              jsonlite_1.7.2           
+[127] carData_3.0-4             BiocNeighbors_1.6.0      
+[129] viridisLite_0.4.0         limma_3.44.3             
+[131] fansi_0.4.2               pillar_1.6.0             
+[133] lattice_0.20-41           fastmap_1.1.0            
+[135] httr_1.4.2                survival_3.2-11          
+[137] glue_1.4.2                zip_2.1.1                
+[139] png_0.1-7                 stringi_1.6.1            
+[141] sass_0.3.1                BiocSingular_1.4.0       
+[143] irlba_2.3.3               future.apply_1.7.0       </code></pre>
 </div>
 </div>
 
@@ -2575,7 +2752,7 @@ footer is added to webpages before the MathJax javascript. -->
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -2593,7 +2770,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
+    $(this).parent().toggleClass('nav-tabs-open');
   });
 });
 </script>
