@@ -28,6 +28,7 @@ library(ggpubr)
 library(dittoSeq)
 library(Seurat)
 library(RANN)
+library(stringr)
 
 sce_RNA <- readRDS(file = "output/RNApanel/sce_RNApanel_celltypes_cytokines.rds")
 TIG2 <- c("TBB111", "TBB129", "TBB165", "TBB171", "TBB184", "TBB338")
@@ -488,6 +489,142 @@ ggplot(colData_myeloid, aes(NKT_distance, as.numeric(cytokine))) +
   xlab("Distance to the next NKT cell")  
 ```
 
+#### Control: Same analysis for other cytokines
+
+```{r control-other-cytokines}
+# Calculate macrophage activation status based on CD68/CD163/CD204/CCL18 (for all cells, will be subset later)
+  # Re-normalize counts
+  norm_counts <- t(apply(assay(sce_RNA, "counts"), 1, function(x)(x-min(x))/(quantile(x, 0.99)-min(x))))
+  norm_counts <- t(apply(norm_counts, 1, function(x) pmin(x, 1)))
+  assay(sce_RNA, "normalized", withDimnames = FALSE) <- norm_counts
+
+  # For each cells, average across the normalized counts for CD68, CD163, CD204 and CCL18
+  count_matrix <- assay(sce_RNA, "normalized")[c("CD68", "CD163", "CD204", "CCL18"),]
+  sce_RNA$activation_score <- colMeans(count_matrix)
+
+# Initialize binned table
+myeloid_distances <- data.frame(cellsOI_distance_bin = cut(seq(from = 5, to = 800,  5), breaks = breaks, include.lowest = TRUE, right = TRUE, ordered_result = TRUE))
+
+
+
+# Loop over all cytokines
+cytokine_names <- paste0(c("CCL4", "CCL18", "CSF1", "CXCL10", "CXCL13_mRNA", "CCL2", "CCL22", "CXCL9", "CCL17", "CCL5"), "_expression")
+
+for (i in cytokine_names) {
+  cur_sce <- data.frame(colData(sce_RNA))
+  cellsOI <- cur_sce[cur_sce[,i] == TRUE & cur_sce$celltype %in% c("NK", "T_CD8", "T_CD4"),]
+  new_sce <- data.frame(matrix(ncol=length(colnames(cur_sce))+2, nrow = 0))
+
+  # Loop over all images to perform nearest neighbour search
+  for (j in unique(cur_sce$ImageNumber)) {
+    cur_sce_j <- filter(cur_sce, ImageNumber == j)
+    cellsOI_j <- filter(cellsOI, ImageNumber == j)[,c("Center_X", "Center_Y")]
+    
+    #For images in which there is no cell of interest --> set distance parameter to max
+    if (nrow(cellsOI_j) == 0) {
+      cur_sce_j$cellsOI_distance <- max_dist
+    } else {
+      j_coord <- cur_sce_j[,c("Center_X", "Center_Y")]
+      nn <- RANN::nn2(cellsOI_j, j_coord)
+      cur_sce_j$cellsOI_distance <- nn$nn.dists[,1]
+      
+      #Set distance parameter to max for all cells with distance > max
+      cur_sce_j$cellsOI_distance<- ifelse(cur_sce_j$cellsOI_distance > max_dist, max_dist, cur_sce_j$cellsOI_distance)
+      cur_sce_j$ImageNumber <- j
+    }
+    new_sce <- rbind(cur_sce_j, new_sce)
+  }
+  
+  # Add cellsOI_distances to colData of original object
+  sce_RNA$cellsOI_distance <- new_sce[order(match(new_sce$cellID, sce_RNA$cellID)),]$cellsOI_distance
+
+  # Bin the distances
+  breaks <- seq(from = 0, to = 800, by = 5)
+  sce_RNA$cellsOI_distance_bin <- cut(sce_RNA$cellsOI_distance, breaks = breaks, include.lowest = TRUE, right = TRUE, ordered_result = TRUE)
+  
+  # Extract the myeloid activation status (based on cytokine expression) in relation to the cellsOI distance
+  sce_myeloid <- sce_RNA[,which(sce_RNA$celltype == "myeloid")]
+  cytokine_myeloid <- as.data.frame(prop.table(table(sce_myeloid$cellsOI_distance_bin, sce_myeloid$cytokine), margin = 1)[,2])
+  colnames(cytokine_myeloid)[1] <- paste0(i, "_activationCytokine")
+  cytokine_myeloid$cellsOI_distance_bin <- rownames(cytokine_myeloid)
+  
+  # Extract the myeloid activation status based on CD68/CD163/CD204/CCL18 expression
+  coldata_myeloid <- data.frame(colData(sce_myeloid))
+  myeloid_summarized <- coldata_myeloid %>% group_by(cellsOI_distance_bin) %>% summarize(mean_activation_score = mean(activation_score))
+  comb <- merge(cytokine_myeloid, myeloid_summarized, by = "cellsOI_distance_bin")
+  colnames(comb)[3] <- paste0(i, "_activationScore")
+  
+  myeloid_distances <- merge(myeloid_distances, comb, by = "cellsOI_distance_bin")
+}
+
+
+
+## Myeloid cell activation measured as cytokine expression status
+myeloid_distances$cellsOI_distance_bin <- sub("\\(", "", myeloid_distances$cellsOI_distance_bin)
+myeloid_distances$cellsOI_distance_bin <- as.numeric(sub(",.*", "", myeloid_distances$cellsOI_distance_bin))
+
+myeloid_distances_scoreA <- pivot_longer(myeloid_distances, cols = colnames(myeloid_distances)[str_detect(colnames(myeloid_distances), "activationCytokine")], names_to = "cytokines", values_to = "prop_cytokineExpressing")[,c(1,12,13)]
+myeloid_distances_scoreA$cytokines <- sub("_expression_activationCytokine", "", myeloid_distances_scoreA$cytokines)
+
+## Plot based
+ggplot(myeloid_distances_scoreA, aes(cellsOI_distance_bin, prop_cytokineExpressing)) +
+  #geom_point()+
+  geom_smooth(method = "loess", aes(color = cytokines), se=FALSE)+
+  #stat_cor(method="spearman")+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion of myeloid cells that express at least one cytokine")+
+  xlab("Distance to the next T or NK cell expressing the given cytokine (5um bins)")
+
+
+## Myeloid cell activation measured via activation score
+myeloid_distances_scoreB<- pivot_longer(myeloid_distances, cols = colnames(myeloid_distances)[str_detect(colnames(myeloid_distances), "activationScore")], names_to = "cytokines", values_to = "activationScore")[,c(1,12,13)]
+myeloid_distances_scoreB$cytokines <- sub("_expression_activationScore", "", myeloid_distances_scoreB$cytokines)
+
+ggplot(myeloid_distances_scoreB, aes(cellsOI_distance_bin, activationScore)) +
+  #geom_point()+
+  geom_smooth(method = "lm", aes(color = cytokines), se=FALSE)+
+  stat_cor(method="spearman", aes(color = cytokines))+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion of myeloid cells that express at least one cytokine")+
+  xlab("Distance to the next T or NK cell expressing the given cytokine (5um bins)")
+
+  # Remove CCL18 (is used to calculate the score --> biased)
+  myeloid_distances_scoreB <- filter(myeloid_distances_scoreB, cytokines != "CCL18")
+  
+  # Calculate the mean over all cytokines other than CSF1
+  scoreB <- pivot_wider(myeloid_distances_scoreB, values_from = "activationScore", names_from = "cytokines")
+  scoreB_sub <- subset(scoreB, select=-c(CSF1, cellsOI_distance_bin))
+  scoreB$meanActivationScore <- apply(scoreB_sub, MARGIN = 1, FUN = mean)
+  
+  ggplot(scoreB, aes(x = cellsOI_distance_bin)) +
+  #geom_point()+
+  geom_smooth(method = "lm", aes(y = CSF1), se=TRUE, color = "red")+
+  stat_cor(method="spearman", aes(y = CSF1))+
+  geom_smooth(method = "lm", aes(y = meanActivationScore), se=TRUE)+
+  stat_cor(method="spearman", aes(y = meanActivationScore))+
+  theme(axis.line.x = element_line(colour = "black", size = 0.25),
+        axis.line.y = element_line(colour = "black", size = 0.25),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.background = element_blank())+
+  ylab("Proportion of myeloid cells that express at least one cytokine")+
+  xlab("Distance to the next T or NK cell expressing the given cytokine (5um bins)")
+
+
+```
+
+
 ### Use the expression of CD68, CD163, CD204 and CCL18 as a proxy for cell activation
 
 ```{r myeloid-activation-score-CSF1-distance, fig.width=5, fig.height=5}
@@ -542,7 +679,6 @@ ggplot(coldata_myeloid, aes(NKT_distance, activation_score)) +
   ylab("Mean myeloid cell activation score")+
   xlab("Distance to the next NKT cells (5um bins)")
 ```
-
 
 # Save updated SCE object
 
