@@ -114,15 +114,15 @@ ggplot(df, aes(TIG, tumor_prop))+
 
 # Likelihood of PD1-high T cells neighbouring tumor cells
 
-For TIG2 images only (TIG3 images often have so few PD-1 T cells that it distorts the image).
+For TIG2 samples only (TIG3 images often have so few PD-1 T cells that it distorts the image).
 
 ```{r PD1-tumor-neighbourhood, fig.height=4, fig.width=4}
 cur_sce <- data.frame(colData(sce_protein))
 cur_sce <- cur_sce[cur_sce[,"sample"] %in% TIG2,]
 df <- data.frame(matrix(nrow=0, ncol =3))
 
-for (i in unique(cur_sce$HIER_ImageNumber)){
-  cur_sce_i <- cur_sce[cur_sce[,"HIER_ImageNumber"] == i,]
+for (i in unique(cur_sce$sample)){
+  cur_sce_i <- cur_sce[cur_sce[,"sample"] == i,]
   
   # get T cell IDs
   cellIDs_PD1 <- cur_sce_i[cur_sce_i[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
@@ -160,13 +160,13 @@ ggpaired(df, cond1 = "PD1_perc", cond2 = "nonPD1_perc", line.color = "gray", yla
 
 ### CD8 only, TIG2 only
 
-```{r PD1-CD4-tumor-neighbourhood}
+```{r PD1-CD8-tumor-neighbourhood}
 cur_sce <- data.frame(colData(sce_protein))
 cur_sce <- cur_sce[cur_sce[,"sample"] %in% TIG2,]
 df <- data.frame(matrix(nrow=0, ncol =3))
 
-for (i in unique(cur_sce$HIER_ImageNumber)){
-  cur_sce_i <- cur_sce[cur_sce[,"HIER_ImageNumber"] == i,]
+for (i in unique(cur_sce$sample)){
+  cur_sce_i <- cur_sce[cur_sce[,"sample"] == i,]
   
   # get T cell IDs
   cellIDs_PD1 <- cur_sce_i[cur_sce_i[,"subtype"] == "CD8_PD1",]
@@ -249,8 +249,84 @@ df$TIG <- ifelse(df$sample %in% TIG2, "TIG2", "TIG3")
 ggpaired(df, cond1 = "PD1_perc", cond2 = "nonPD1_perc", line.color = "gray", ylab = "Direct aDC neighbour (proportion)", xlab = FALSE)+
   stat_compare_means(paired = TRUE)
 
-
 ```
+
+Are PD1-high T cells that border migDCs particularly high in Ki-67?
+
+```{r PD1-migDC-Ki67, fig.width=6, fig.height=5}
+# Over full dataset:
+
+# Get T cell IDs
+  cellIDs_PD1 <- cur_sce[cur_sce[,"subtype"] %in% c("CD4_PD1", "CD8_PD1"),]
+  PD1_shortID <- paste0(cellIDs_PD1$HIER_ImageNumber, "_", cellIDs_PD1$CellNumber)
+  cellIDs_nonPD1 <- cur_sce[cur_sce[,"subtype"] %in% c("CD4", "CD8", "Treg"),]
+  nonPD1_shortID <- paste0(cellIDs_nonPD1$HIER_ImageNumber, "_", cellIDs_nonPD1$CellNumber)
+  
+# Get aDC IDs
+  cellIDs_aDC <- cur_sce[cur_sce[,"celltype"] == "aDC",]
+  aDC_shortID <- paste0(cellIDs_aDC$HIER_ImageNumber, "_", cellIDs_aDC$CellNumber)
+  
+# Subset neighbourhood list to include only `PD1-high T cell <-> aDC` interactions
+  dat_relation_sub_PD1 <- dat_relation %>% filter((cellA %in% PD1_shortID & cellB %in% aDC_shortID) | (cellB %in% PD1_shortID & cellA %in% aDC_shortID))
+  # extract PD1 IDs that border aDCs
+  PD1_migDC <- setdiff(unique(c(dat_relation_sub_PD1$cellA, dat_relation_sub_PD1$cellB)), aDC_shortID)
+  PD1_non_migDC <- setdiff(PD1_shortID, PD1_migDC)
+  
+  # subset neighbourhood list to include only `PD1-low T cell <-> aDC` interactions
+  dat_relation_sub_nonPD1 <- dat_relation %>% filter((cellA %in% nonPD1_shortID & cellB %in% aDC_shortID) | (cellB %in% nonPD1_shortID & cellA %in% aDC_shortID))
+  # extract PD1 IDs that border aDCs
+  nonPD1_migDC <- setdiff(unique(c(dat_relation_sub_nonPD1$cellA, dat_relation_sub_nonPD1$cellB)), aDC_shortID)
+  nonPD1_non_migDC <- setdiff(nonPD1_shortID, nonPD1_migDC)
+
+  
+sce_protein$cellID <- paste0(sce_protein$HIER_ImageNumber, "_", sce_protein$CellNumber)
+
+## For CD4+ T cells only
+sce_T <- sce_protein[,which(sce_protein$subtype %in% c("CD4", "CD4_PD1"))]
+sce_T$migDC_category <- ifelse(sce_T$cellID %in% PD1_migDC, "PD1_migDC", ifelse(sce_T$cellID %in% PD1_non_migDC, "PD1_non_migDC", ifelse(sce_T$cellID %in% nonPD1_migDC, "nonPD1_migDC", "nonPD1_non_migDC")))
+
+dittoPlot(sce_T, "Ki-67", plots = "vlnplot", group.by = "migDC_category", assay = "scaled")
+
+# Define cells with Ki67 arcsinh-counts > 0.5 as proliferating
+arcsinh_counts <- assay(sce_T, "exprs")
+sce_T$proliferating <- ifelse(arcsinh_counts["Ki-67",] > 0.7, "yes", "no")
+table(sce_T$proliferating)
+
+prolif <- prop.table(table(sce_T$proliferating, sce_T$migDC_category), margin = 2)
+prolif <- as.data.frame(prolif["yes",])
+colnames(prolif) <- "perc.proliferating"
+prolif$migDC_category <- rownames(prolif)
+
+ggplot(prolif, aes(migDC_category, perc.proliferating)) +
+  geom_col(position=position_dodge())+
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1))+
+  ggtitle("CD4+ T cells (excl. Tregs)")
+
+
+## For CD8+ T cells only
+sce_T <- sce_protein[,which(sce_protein$subtype %in% c("CD8", "CD8_PD1"))]
+sce_T$migDC_category <- ifelse(sce_T$cellID %in% PD1_migDC, "PD1_migDC", ifelse(sce_T$cellID %in% PD1_non_migDC, "PD1_non_migDC", ifelse(sce_T$cellID %in% nonPD1_migDC, "nonPD1_migDC", "nonPD1_non_migDC")))
+
+dittoPlot(sce_T, "Ki-67", plots = "vlnplot", group.by = "migDC_category", assay = "scaled")
+
+# Define cells with Ki67 arcsinh-counts > 0.5 as proliferating
+arcsinh_counts <- assay(sce_T, "exprs")
+sce_T$proliferating <- ifelse(arcsinh_counts["Ki-67",] > 0.7, "yes", "no")
+table(sce_T$proliferating)
+
+prolif <- prop.table(table(sce_T$proliferating, sce_T$migDC_category), margin = 2)
+prolif <- as.data.frame(prolif["yes",])
+colnames(prolif) <- "perc.proliferating"
+prolif$migDC_category <- rownames(prolif)
+
+ggplot(prolif, aes(migDC_category, perc.proliferating)) +
+  geom_col(position=position_dodge())+
+  theme(panel.background = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1))+
+  ggtitle("CD8+ T cells")
+```
+
 
 Only for images with >15 aDCs and >15 PD1+ T cells.
 
