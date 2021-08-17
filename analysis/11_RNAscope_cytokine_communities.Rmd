@@ -36,6 +36,8 @@ library(sf)
 library(RANN)
 library(concaveman)
 library(ggpubr)
+library(ComplexHeatmap)
+#library(V8)
 
 sce = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_subtypes.rds")
 
@@ -195,10 +197,6 @@ plotCells(cur_img, object = sce,
 
 # Cell type proportions
 
-## Single vs Cluster: Proportion of cytokine-expressing cells
-
-Exclude TLS and pre-TLS images for TIG comparison.
-
 ```{r single-vs-cluster-all, fig.width=7, fig.height=5}
 sce_cyt <- sce[,which(sce$cytokine == 1)]
 sce_cyt <- sce_cyt[,which(sce_cyt$TLS == "no")]
@@ -339,6 +337,7 @@ ggplot(celltype_comm, aes(cluster, celltype_proportion, fill = celltype))+
 ```
 
 ```{r community-enrichment-all}
+cur_sce$celltype <- factor(cur_sce$celltype, levels = unique(cur_sce$celltype))
 
 #Calculate enrichment individually for each community (to prevent bias from large communities)
 enrichment_comm <- data.frame(matrix(ncol=4, nrow = 0))
@@ -376,7 +375,7 @@ ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
 
 ### For individual single-cytokine communities: ONLY CELLS IN THE COMMUNITY THAT ARE NOT expressing the given cytokine
 
-```{r community-celltypes-nonexpressing}
+```{r community-celltypes-nonexpressing, fig.width=7, fig.height=5.7}
 
 celltype_commonly <- data.frame(celltype = names(prop.table(table(cur_sce[,"celltype"]))))
 celltype_commonly[,"all"] <- as.numeric(prop.table(table(cur_sce[,"celltype"])))
@@ -416,20 +415,134 @@ ggplot(celltype_enrichment_long, aes(cluster, enrichment, fill = cluster))+
   geom_hline(yintercept = 1, linetype = "dashed")
 ```
 
+#### Calculate significance using chi-square
+
 ```{r community-enrichment-nonexpressing}
+
+## Calculate enrichment individually for each image
+
+cur_sce$celltype <- factor(cur_sce$celltype, levels = unique(cur_sce$celltype))
+
+enrich_matrix <- matrix(data = 0, ncol=length(cytokine_channels), nrow = length(unique(cur_sce$celltype)))
+colnames(enrich_matrix) <- cytokine_channels
+rownames(enrich_matrix) <- unique(cur_sce$celltype)
+
+#Initiate vector to count images that have a community of the respective cytokine
+imagenr <- rep(0, length(cytokine_channels))
+names(imagenr) <- cytokine_channels
+
+#Initiate matrix to count images that have a community of the respective cytokine AND contain the respective celltype
+imagenr_celltype <- enrich_matrix
+
+# Loop over cytokine channels
+for (i in cytokine_channels) {
+  comm_name_i <- tolower(paste0(i,"only_comm"))
+  cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0 & cur_sce[,str_detect(colnames(cur_sce), string = regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
+    #cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0),]
+   
+  #Loop over images
+    for(j in unique(cur_sce_i$ImageNumber)) {
+      sce_sub_ji <- cur_sce_i[cur_sce_i[,"ImageNumber"] == j,]
+      
+      # Only proceed if the community i is present in image j
+      if (ncol(sce_sub_ji) > 0) {
+        imagenr[i] <- imagenr[i] + 1
+        
+        #Loop over cell types
+        for(k in unique(cur_sce_i$celltype)) {
+          count_kimg <- table(cur_sce$celltype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
+          
+          # Only proceed if the celltype k is present in image j (otherwise we will have to divide by 0 which leads to NA's)
+          if (count_kimg > 0) {
+            imagenr_celltype[k, i] <- imagenr_celltype[k,i] + 1
+            count_kj <- table(sce_sub_ji$celltype)[k]   # Number of this cell in community k
+            count_j <- nrow(sce_sub_ji)                # Total number of cells in community k
+            count_kimg <- table(cur_sce$celltype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
+            count_img <- table(cur_sce$ImageNumber)[j]  # Number cells in the image
+            
+            chisq.matrix <- matrix(c(count_kj, count_j, count_kimg, count_img), nrow=2, ncol=2)
+            p <- chisq.test(chisq.matrix)[["p.value"]]
+            enrich_depl <- ifelse(count_kj/count_kimg > count_j/count_img, 1, -1)
+            enrich_value <- ifelse(p < 0.01, enrich_depl, 0)
+            
+            enrich_matrix[k, i] <- enrich_matrix[k, i] + enrich_value
+          }
+        }
+      }
+  }
+}
+
+# Divide enrichment matrix through image number with the respective cytokine community
+enrich_corr <- apply(enrich_matrix, MARGIN = 1, function(x) x/imagenr)
+enrich_corr[is.na(enrich_corr)] <- 0
+enrich_corr <- enrich_corr*100
+Heatmap(enrich_corr, column_title = "% of images with significant enrichment/depletion", row_title = "Cytokine milieu", row_title_side = "right", heatmap_legend_param = list(title = ""))
+
+# Divide enrichment matrix through image number (with the respective cytokine community), in which the respective celltype is present --> result is almost identical
+# enrich_corr_celltype <- t(enrich_matrix/imagenr_celltype)
+# Heatmap(enrich_corr_celltype, na_col = "gray")
+
+
+```
+
+
+ONLY FOR TIG2
+
+```{r community-enrichment-nonexpressing-TIG2}
 
 ## Calculate enrichment individually for each community (to prevent bias from large communities)
 
 enrichment_comm <- data.frame(matrix(ncol=4, nrow = 0))
+cur_sce_TIG2 <- cur_sce[which(cur_sce$TIG == "TIG2"),]
 
 for (i in cytokine_channels) {
   comm_name_i <- tolower(paste0(i,"only_comm"))
-  cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0 & cur_sce[,str_detect(colnames(cur_sce), regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
+  cur_sce_i <- cur_sce_TIG2[which(cur_sce_TIG2[,comm_name_i] != 0 & cur_sce_TIG2[,str_detect(colnames(cur_sce_TIG2), regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
    
     for(j in unique(cur_sce_i[,comm_name_i])) {
       sce_sub_j <- cur_sce_i[cur_sce_i[,comm_name_i] == j,]
       prop_j <- prop.table(table(sce_sub_j$celltype))
-      prop_all <- prop.table(table(cur_sce$celltype))[names(prop_j)]
+      prop_all <- prop.table(table(cur_sce_TIG2$celltype))[names(prop_j)]
+      enrichment_j <-  prop_j/prop_all 
+      if(length(prop_j > 0)) {
+            j_df <- data.frame(comm = j,
+                        cytokine = i,
+                        enrichment = enrichment_j)
+      enrichment_comm <- rbind(enrichment_comm, j_df)
+      }
+  }
+}
+
+colnames(enrichment_comm)[3:4] = c("celltype", "enrichment")
+
+ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
+  geom_boxplot(outlier.alpha = 0.2)+
+  facet_wrap(~celltype, scales = "free", ncol = 6)+
+  theme(panel.background = element_blank(),
+        axis.text.x = element_blank(),
+        panel.border = element_rect(color = "black", fill = NA, size = 1),
+        strip.background = element_blank(),
+        legend.background = element_blank())+
+  geom_hline(yintercept = 1, linetype = "dashed")
+```
+
+ONLY FOR TIG3
+
+```{r community-enrichment-nonexpressing-TIG3}
+
+## Calculate enrichment individually for each community (to prevent bias from large communities)
+
+enrichment_comm <- data.frame(matrix(ncol=4, nrow = 0))
+cur_sce_TIG3 <- cur_sce[which(cur_sce$TIG == "TIG3"),]
+
+for (i in cytokine_channels) {
+  comm_name_i <- tolower(paste0(i,"only_comm"))
+  cur_sce_i <- cur_sce_TIG3[which(cur_sce_TIG3[,comm_name_i] != 0 & cur_sce_TIG3[,str_detect(colnames(cur_sce_TIG3), regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
+   
+    for(j in unique(cur_sce_i[,comm_name_i])) {
+      sce_sub_j <- cur_sce_i[cur_sce_i[,comm_name_i] == j,]
+      prop_j <- prop.table(table(sce_sub_j$celltype))
+      prop_all <- prop.table(table(cur_sce_TIG3$celltype))[names(prop_j)]
       enrichment_j <-  prop_j/prop_all 
       if(length(prop_j > 0)) {
             j_df <- data.frame(comm = j,
@@ -491,9 +604,10 @@ sce_myeloid <- sce[,which(sce$celltype == "myeloid")]
 perc_total <- data.frame(total = prop.table(table(sce_myeloid$cytokine))[2])
 coldata_myeloid <- data.frame(colData(sce_myeloid))
 
-# only select cells that are in the community, but NOT in the corresponding cluster
+# only select cells that are in the community, but do not themselves express the cytokine
 for (i in cytokine_channels) {
-  cur_sce_i <- coldata_myeloid[which(coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_comm"), ignore_case = TRUE))] != 0 & coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_clust"), ignore_case = TRUE))] == 0),]
+  comm_name_i <- tolower(paste0(i,"only_comm"))
+  cur_sce_i <- coldata_myeloid[which(coldata_myeloid[,comm_name_i] != 0 & coldata_myeloid[,str_detect(colnames(coldata_myeloid), string = regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
   perc_i <- prop.table(table(cur_sce_i$cytokine))[2]
   perc_total[,i] <- perc_i
 }
@@ -507,7 +621,7 @@ ggplot(perc_total, aes(environment, percent_cytokine_expressing, fill = environm
         panel.border = element_rect(color = "black", fill = NA, size = 1),
         strip.background = element_blank(),
         legend.background = element_blank())+
-  ggtitle("Cytokine-expressing myeloid percentage in the respective communities")
+  ggtitle("Cytokine-expressing myeloid percentage\nin the respective communities")
 
 ```
 
@@ -528,7 +642,8 @@ coldata_myeloid <- data.frame(colData(sce_myeloid))
 
 # only select cells that are in the community, but NOT in the corresponding cluster
 for (i in cytokine_channels) {
-  cur_sce_i <- coldata_myeloid[which(coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_comm"), ignore_case = TRUE))] != 0 & coldata_myeloid[,str_detect(colnames(coldata_myeloid), regex(paste0(i,"only_clust"), ignore_case = TRUE))] == 0),]
+ comm_name_i <- tolower(paste0(i,"only_comm"))
+  cur_sce_i <- coldata_myeloid[which(coldata_myeloid[,comm_name_i] != 0 & coldata_myeloid[,str_detect(colnames(coldata_myeloid), string = regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
   activation_mean[,i] <- mean(cur_sce_i$activation_score)
 }
 
@@ -695,7 +810,7 @@ tab_RNA <- data.frame(matrix(ncol = 8, nrow = 0))
 colnames(tab_RNA) <- levels(factor(sce_RNA_simple$celltype))
 tab_protein <- tab_RNA
   
-for (k in (colnames(coldata_RNA)[57:67])) {
+for (k in (colnames(coldata_RNA)[(ncol(coldata_RNA)-10):ncol(coldata_RNA)])) {
   k_sub_RNA <- coldata_RNA[coldata_RNA[,k] == 1,]
   tab_RNA[k,] <- prop.table(table(k_sub_RNA$celltype))
   k_sub_protein <- coldata_protein[coldata_RNA[,k] == 1,]
