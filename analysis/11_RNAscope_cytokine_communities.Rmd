@@ -37,6 +37,7 @@ library(RANN)
 library(concaveman)
 library(ggpubr)
 library(ComplexHeatmap)
+library(RColorBrewer)
 #library(V8)
 
 sce = readRDS(file = "output/RNApanel/sce_RNApanel_cytokines_subtypes.rds")
@@ -415,12 +416,13 @@ ggplot(celltype_enrichment_long, aes(cluster, enrichment, fill = cluster))+
   geom_hline(yintercept = 1, linetype = "dashed")
 ```
 
-#### Calculate significance using chi-square
+#### Calculate significance using Fisher's exact test
 
-```{r community-enrichment-nonexpressing}
+```{r community-enrichment-nonexpressing-fisher}
+
+cur_sce <- data.frame(colData(sce))
 
 ## Calculate enrichment individually for each image
-
 cur_sce$celltype <- factor(cur_sce$celltype, levels = unique(cur_sce$celltype))
 
 enrich_matrix <- matrix(data = 0, ncol=length(cytokine_channels), nrow = length(unique(cur_sce$celltype)))
@@ -437,6 +439,83 @@ imagenr_celltype <- enrich_matrix
 # Loop over cytokine channels
 for (i in cytokine_channels) {
   comm_name_i <- tolower(paste0(i,"only_comm"))
+  exp_name_i <- colnames(cur_sce)[str_detect(colnames(cur_sce), string = regex(paste0(i,"_expression"), ignore_case = TRUE))]
+  
+  # Define cells that are within the community but do not themselves express the cytokine
+  cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0 & cur_sce[,exp_name_i] == 0),]
+    
+  # Exclude cells that express the given cytokine from full dataset (they would otherwise be counted as "outside" the community)
+  cur_sce_wo_patch <- cur_sce[which(cur_sce[,exp_name_i] == 0),]
+   
+  #Loop over images
+    for(j in unique(cur_sce_i$ImageNumber)) {
+      sce_sub_ji <- cur_sce_i[cur_sce_i[,"ImageNumber"] == j,]
+      
+      # Only proceed if the community i is present in image j
+      if (ncol(sce_sub_ji) > 0) {
+        imagenr[i] <- imagenr[i] + 1
+        
+        #Loop over cell types
+        for(k in unique(cur_sce_i$celltype)) {
+          count_kimg <- table(cur_sce_wo_patch$celltype, cur_sce_wo_patch$ImageNumber)[k, j]  # Number of this cell in the image
+          
+          # Only proceed if the celltype k is present in image j (otherwise we will have to divide by 0 which leads to NA's)
+          if (count_kimg > 0) {
+            imagenr_celltype[k, i] <- imagenr_celltype[k,i] + 1
+            count_kj <- table(sce_sub_ji$celltype)[k]   # Number of this cell in community k
+            count_j <- nrow(sce_sub_ji)                # Total number of cells in community k
+            count_kimg <- table(cur_sce_wo_patch$celltype, cur_sce_wo_patch$ImageNumber)[k, j]  # Number of this cell in the image
+            count_img <- table(cur_sce_wo_patch$ImageNumber)[j]  # Number cells in the image
+            
+            count.matrix <- matrix(c(count_kj, count_j, count_kimg, count_img), nrow=2, ncol=2)
+            p <- fisher.test(count.matrix)[["p.value"]]
+            enrich_depl <- ifelse(count_kj/count_kimg > count_j/count_img, 1, -1)
+            enrich_value <- ifelse(p < 0.01, enrich_depl, 0)
+            
+            enrich_matrix[k, i] <- enrich_matrix[k, i] + enrich_value
+          }
+        }
+      }
+  }
+}
+
+# Divide enrichment matrix through image number with the respective cytokine community
+enrich_corr <- apply(enrich_matrix, MARGIN = 1, function(x) x/imagenr)
+enrich_corr[is.na(enrich_corr)] <- 0
+enrich_corr <- enrich_corr*100
+
+cols = rev(brewer.pal(11,'Spectral'))
+cmap = colorRampPalette(cols)
+Heatmap(enrich_corr, column_title = "% of images with significant enrichment/depletion", row_title = "Cytokine milieu", row_title_side = "right", heatmap_legend_param = list(title = ""), col = cmap(75))
+
+# Divide enrichment matrix through image number (with the respective cytokine community), in which the respective celltype is present --> result is almost identical
+enrich_corr_celltype <- t(enrich_matrix/imagenr_celltype)
+Heatmap(enrich_corr_celltype, column_title = "% of images with significant enrichment/depletion", row_title = "Cytokine milieu", row_title_side = "right", heatmap_legend_param = list(title = ""), col = cmap(75))
+
+```
+
+Use cell subtypes instead of cell types
+
+```{r community-enrichment-chisquare-subtypes}
+
+## Calculate enrichment individually for each image
+
+cur_sce$subtype <- factor(cur_sce$subtype, levels = unique(cur_sce$subtype))
+
+enrich_matrix <- matrix(data = 0, ncol=length(cytokine_channels), nrow = length(unique(cur_sce$subtype)))
+colnames(enrich_matrix) <- cytokine_channels
+rownames(enrich_matrix) <- unique(cur_sce$subtype)
+
+#Initiate vector to count images that have a community of the respective cytokine
+imagenr <- rep(0, length(cytokine_channels))
+names(imagenr) <- cytokine_channels
+
+#Initiate matrix to count images that have a community of the respective cytokine AND contain the respective subtype
+imagenr_subtype <- enrich_matrix
+
+# Loop over cytokine channels
+for (i in cytokine_channels) {
+  comm_name_i <- tolower(paste0(i,"only_comm"))
   cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0 & cur_sce[,str_detect(colnames(cur_sce), string = regex(paste0(i,"_expression"), ignore_case = TRUE))] == 0),]
     #cur_sce_i <- cur_sce[which(cur_sce[,comm_name_i] != 0),]
    
@@ -449,15 +528,15 @@ for (i in cytokine_channels) {
         imagenr[i] <- imagenr[i] + 1
         
         #Loop over cell types
-        for(k in unique(cur_sce_i$celltype)) {
-          count_kimg <- table(cur_sce$celltype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
+        for(k in unique(cur_sce_i$subtype)) {
+          count_kimg <- table(cur_sce$subtype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
           
-          # Only proceed if the celltype k is present in image j (otherwise we will have to divide by 0 which leads to NA's)
+          # Only proceed if the subtype k is present in image j (otherwise we will have to divide by 0 which leads to NA's)
           if (count_kimg > 0) {
-            imagenr_celltype[k, i] <- imagenr_celltype[k,i] + 1
-            count_kj <- table(sce_sub_ji$celltype)[k]   # Number of this cell in community k
+            imagenr_subtype[k, i] <- imagenr_subtype[k,i] + 1
+            count_kj <- table(sce_sub_ji$subtype)[k]   # Number of this cell in community k
             count_j <- nrow(sce_sub_ji)                # Total number of cells in community k
-            count_kimg <- table(cur_sce$celltype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
+            count_kimg <- table(cur_sce$subtype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
             count_img <- table(cur_sce$ImageNumber)[j]  # Number cells in the image
             
             chisq.matrix <- matrix(c(count_kj, count_j, count_kimg, count_img), nrow=2, ncol=2)
@@ -476,15 +555,17 @@ for (i in cytokine_channels) {
 enrich_corr <- apply(enrich_matrix, MARGIN = 1, function(x) x/imagenr)
 enrich_corr[is.na(enrich_corr)] <- 0
 enrich_corr <- enrich_corr*100
-Heatmap(enrich_corr, column_title = "% of images with significant enrichment/depletion", row_title = "Cytokine milieu", row_title_side = "right", heatmap_legend_param = list(title = ""))
 
-# Divide enrichment matrix through image number (with the respective cytokine community), in which the respective celltype is present --> result is almost identical
-# enrich_corr_celltype <- t(enrich_matrix/imagenr_celltype)
-# Heatmap(enrich_corr_celltype, na_col = "gray")
+cols = rev(brewer.pal(11,'Spectral'))
+cmap = colorRampPalette(cols)
+Heatmap(enrich_corr, column_title = "% of images with significant enrichment/depletion", row_title = "Cytokine milieu", row_title_side = "right", heatmap_legend_param = list(title = ""), col = cmap(75))
+
+# Divide enrichment matrix through image number (with the respective cytokine community), in which the respective subtype is present --> result is almost identical
+enrich_corr_subtype <- t(enrich_matrix/imagenr_subtype)
+Heatmap(enrich_corr_subtype, na_col = "gray")
 
 
 ```
-
 
 ONLY FOR TIG2
 
