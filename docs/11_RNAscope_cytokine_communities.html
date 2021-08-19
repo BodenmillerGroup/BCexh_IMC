@@ -382,7 +382,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-08-17
+<strong>Last updated:</strong> 2021-08-19
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -473,16 +473,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreec371706d14350f23dee4cab8f3abebe178ab7ac1targetblankc371706a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/c371706d14350f23dee4cab8f3abebe178ab7ac1" target="_blank">c371706</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree8c2e6d0d214cc22aeddaa9f75154798a7bee05fftargetblank8c2e6d0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/8c2e6d0d214cc22aeddaa9f75154798a7bee05ff" target="_blank">8c2e6d0</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtreec371706d14350f23dee4cab8f3abebe178ab7ac1targetblankc371706a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomSandraTietscherBCexhIMCtree8c2e6d0d214cc22aeddaa9f75154798a7bee05fftargetblank8c2e6d0a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/c371706d14350f23dee4cab8f3abebe178ab7ac1" target="_blank">c371706</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/SandraTietscher/BCexh_IMC/tree/8c2e6d0d214cc22aeddaa9f75154798a7bee05ff" target="_blank">8c2e6d0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -493,7 +493,6 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    analysis/.Rhistory
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  BB184_aDC_PD1.png
@@ -510,6 +509,7 @@ Untracked files:
     Untracked:  TBB129_aDC_PD1_Bcell.png
     Untracked:  TNK_perc_proliferating.pdf
     Untracked:  analysis/15_spatial_TLS.Rmd
+    Untracked:  analysis/16_spatial_exhaustion.Rmd
     Untracked:  analysis/XX_RNApanel_neighbourhood.Rmd
     Untracked:  analysis/spicyR.Rmd
     Untracked:  barplot_tumorSubtype_image.pdf
@@ -590,6 +590,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/8c2e6d0d214cc22aeddaa9f75154798a7bee05ff/analysis/11_RNAscope_cytokine_communities.Rmd" target="_blank">8c2e6d0</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-19
+</td>
+<td>
+Use Fisher’s exact test instead of chi-square
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/SandraTietscher/BCexh_IMC/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/11_RNAscope_cytokine_communities.html" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -828,6 +862,7 @@ library(RANN)
 library(concaveman)
 library(ggpubr)
 library(ComplexHeatmap)
+library(RColorBrewer)
 #library(V8)
 
 sce = readRDS(file = &quot;output/RNApanel/sce_RNApanel_cytokines_subtypes.rds&quot;)
@@ -858,7 +893,7 @@ sce &lt;- findClusters(sce, sce[,colData(sce)$cytokine == TRUE]$cellID ,
                     distance = 20, 
                     min_clust_size = 10,
                     output_colname = &quot;cytokine_cluster&quot;)</code></pre>
-<pre><code>Time difference of 1.612284 mins
+<pre><code>Time difference of 1.638134 mins
 [1] &quot;clusters successfully added to sce object&quot;</code></pre>
 <pre class="r"><code># number of cytokine clusters
 length(unique(sce$cytokine_cluster))</code></pre>
@@ -871,7 +906,7 @@ sce &lt;- findCommunity(sce,
                      &#39;cytokine_cluster&#39;, 
                      distance = 25,
                      output_colname = &quot;cytokine_community&quot;)</code></pre>
-<pre><code>Time difference of 1.008327 mins
+<pre><code>Time difference of 1.035212 mins
 [1] &quot;communities successfully added to sce object&quot;</code></pre>
 <pre class="r"><code># number of cytokine communities
 length(unique(sce$cytokine_community))</code></pre>
@@ -907,49 +942,49 @@ for(i in cytokine_channels) {
                      distance = 30,
                      output_colname = paste(tolower(i), &quot;only_comm&quot;, sep = &quot;&quot;))
 } </code></pre>
-<pre><code>Time difference of 3.15129 secs
+<pre><code>Time difference of 3.197557 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 28.09737 secs
+Time difference of 28.12232 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 3.211678 secs
+Time difference of 3.331464 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 43.93025 secs
+Time difference of 44.83564 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 5.064933 secs
+Time difference of 5.111412 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 37.17402 secs
+Time difference of 37.84222 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 9.65888 secs
+Time difference of 8.291459 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.347376 mins
+Time difference of 1.376156 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 4.02969 secs
+Time difference of 4.066222 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 41.32213 secs
+Time difference of 42.84215 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 7.099741 secs
+Time difference of 7.616896 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.26559 mins
+Time difference of 1.242753 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 1.903252 secs
+Time difference of 1.963485 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 28.7917 secs
+Time difference of 29.99195 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 8.587504 secs
+Time difference of 8.47772 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 1.177362 mins
+Time difference of 1.134173 mins
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 1.206647 secs
+Time difference of 1.276738 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 14.10653 secs
+Time difference of 14.36339 secs
 [1] &quot;communities successfully added to sce object&quot;
-Time difference of 4.907972 secs
+Time difference of 5.068664 secs
 [1] &quot;clusters successfully added to sce object&quot;
-Time difference of 56.60487 secs
+Time difference of 56.50195 secs
 [1] &quot;communities successfully added to sce object&quot;</code></pre>
 <pre class="r"><code>end = Sys.time()
 print(end-start)</code></pre>
-<pre><code>Time difference of 8.777671 mins</code></pre>
+<pre><code>Time difference of 8.808407 mins</code></pre>
 </div>
 <div id="save-sce-object" class="section level1">
 <h1>Save SCE object</h1>
@@ -1703,6 +1738,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-all-1.png" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/126b3e010b30d79930dc5b3ab1ee09593a48bc21/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-all-1.png" target="_blank">126b3e0</a>
 </td>
 <td>
@@ -1761,6 +1807,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-celltypes-nonexpressing-1.png" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/126b3e010b30d79930dc5b3ab1ee09593a48bc21/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-celltypes-nonexpressing-1.png" target="_blank">126b3e0</a>
 </td>
 <td>
@@ -1816,6 +1873,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-celltypes-nonexpressing-2.png" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/126b3e010b30d79930dc5b3ab1ee09593a48bc21/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-celltypes-nonexpressing-2.png" target="_blank">126b3e0</a>
 </td>
 <td>
@@ -1829,10 +1897,11 @@ SandraTietscher
 </table>
 </div>
 </div>
-<div id="calculate-significance-using-chi-square" class="section level4">
-<h4>Calculate significance using chi-square</h4>
-<pre class="r"><code>## Calculate enrichment individually for each image
+<div id="calculate-significance-using-fishers-exact-test" class="section level4">
+<h4>Calculate significance using Fisher’s exact test</h4>
+<pre class="r"><code>cur_sce &lt;- data.frame(colData(sce))
 
+## Calculate enrichment individually for each image
 cur_sce$celltype &lt;- factor(cur_sce$celltype, levels = unique(cur_sce$celltype))
 
 enrich_matrix &lt;- matrix(data = 0, ncol=length(cytokine_channels), nrow = length(unique(cur_sce$celltype)))
@@ -1849,6 +1918,78 @@ imagenr_celltype &lt;- enrich_matrix
 # Loop over cytokine channels
 for (i in cytokine_channels) {
   comm_name_i &lt;- tolower(paste0(i,&quot;only_comm&quot;))
+  exp_name_i &lt;- colnames(cur_sce)[str_detect(colnames(cur_sce), string = regex(paste0(i,&quot;_expression&quot;), ignore_case = TRUE))]
+  
+  # Define cells that are within the community but do not themselves express the cytokine
+  cur_sce_i &lt;- cur_sce[which(cur_sce[,comm_name_i] != 0 &amp; cur_sce[,exp_name_i] == 0),]
+    
+  # Exclude cells that express the given cytokine from full dataset (they would otherwise be counted as &quot;outside&quot; the community)
+  cur_sce_wo_patch &lt;- cur_sce[which(cur_sce[,exp_name_i] == 0),]
+   
+  #Loop over images
+    for(j in unique(cur_sce_i$ImageNumber)) {
+      sce_sub_ji &lt;- cur_sce_i[cur_sce_i[,&quot;ImageNumber&quot;] == j,]
+      
+      # Only proceed if the community i is present in image j
+      if (ncol(sce_sub_ji) &gt; 0) {
+        imagenr[i] &lt;- imagenr[i] + 1
+        
+        #Loop over cell types
+        for(k in unique(cur_sce_i$celltype)) {
+          count_kimg &lt;- table(cur_sce_wo_patch$celltype, cur_sce_wo_patch$ImageNumber)[k, j]  # Number of this cell in the image
+          
+          # Only proceed if the celltype k is present in image j (otherwise we will have to divide by 0 which leads to NA&#39;s)
+          if (count_kimg &gt; 0) {
+            imagenr_celltype[k, i] &lt;- imagenr_celltype[k,i] + 1
+            count_kj &lt;- table(sce_sub_ji$celltype)[k]   # Number of this cell in community k
+            count_j &lt;- nrow(sce_sub_ji)                # Total number of cells in community k
+            count_kimg &lt;- table(cur_sce_wo_patch$celltype, cur_sce_wo_patch$ImageNumber)[k, j]  # Number of this cell in the image
+            count_img &lt;- table(cur_sce_wo_patch$ImageNumber)[j]  # Number cells in the image
+            
+            count.matrix &lt;- matrix(c(count_kj, count_j, count_kimg, count_img), nrow=2, ncol=2)
+            p &lt;- fisher.test(count.matrix)[[&quot;p.value&quot;]]
+            enrich_depl &lt;- ifelse(count_kj/count_kimg &gt; count_j/count_img, 1, -1)
+            enrich_value &lt;- ifelse(p &lt; 0.01, enrich_depl, 0)
+            
+            enrich_matrix[k, i] &lt;- enrich_matrix[k, i] + enrich_value
+          }
+        }
+      }
+  }
+}
+
+# Divide enrichment matrix through image number with the respective cytokine community
+enrich_corr &lt;- apply(enrich_matrix, MARGIN = 1, function(x) x/imagenr)
+enrich_corr[is.na(enrich_corr)] &lt;- 0
+enrich_corr &lt;- enrich_corr*100
+
+cols = rev(brewer.pal(11,&#39;Spectral&#39;))
+cmap = colorRampPalette(cols)
+Heatmap(enrich_corr, column_title = &quot;% of images with significant enrichment/depletion&quot;, row_title = &quot;Cytokine milieu&quot;, row_title_side = &quot;right&quot;, heatmap_legend_param = list(title = &quot;&quot;), col = cmap(75))</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-fisher-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Divide enrichment matrix through image number (with the respective cytokine community), in which the respective celltype is present --&gt; result is almost identical
+enrich_corr_celltype &lt;- t(enrich_matrix/imagenr_celltype)
+Heatmap(enrich_corr_celltype, column_title = &quot;% of images with significant enrichment/depletion&quot;, row_title = &quot;Cytokine milieu&quot;, row_title_side = &quot;right&quot;, heatmap_legend_param = list(title = &quot;&quot;), col = cmap(75))</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-fisher-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Use cell subtypes instead of cell types</p>
+<pre class="r"><code>## Calculate enrichment individually for each image
+
+cur_sce$subtype &lt;- factor(cur_sce$subtype, levels = unique(cur_sce$subtype))
+
+enrich_matrix &lt;- matrix(data = 0, ncol=length(cytokine_channels), nrow = length(unique(cur_sce$subtype)))
+colnames(enrich_matrix) &lt;- cytokine_channels
+rownames(enrich_matrix) &lt;- unique(cur_sce$subtype)
+
+#Initiate vector to count images that have a community of the respective cytokine
+imagenr &lt;- rep(0, length(cytokine_channels))
+names(imagenr) &lt;- cytokine_channels
+
+#Initiate matrix to count images that have a community of the respective cytokine AND contain the respective subtype
+imagenr_subtype &lt;- enrich_matrix
+
+# Loop over cytokine channels
+for (i in cytokine_channels) {
+  comm_name_i &lt;- tolower(paste0(i,&quot;only_comm&quot;))
   cur_sce_i &lt;- cur_sce[which(cur_sce[,comm_name_i] != 0 &amp; cur_sce[,str_detect(colnames(cur_sce), string = regex(paste0(i,&quot;_expression&quot;), ignore_case = TRUE))] == 0),]
     #cur_sce_i &lt;- cur_sce[which(cur_sce[,comm_name_i] != 0),]
    
@@ -1861,15 +2002,15 @@ for (i in cytokine_channels) {
         imagenr[i] &lt;- imagenr[i] + 1
         
         #Loop over cell types
-        for(k in unique(cur_sce_i$celltype)) {
-          count_kimg &lt;- table(cur_sce$celltype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
+        for(k in unique(cur_sce_i$subtype)) {
+          count_kimg &lt;- table(cur_sce$subtype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
           
-          # Only proceed if the celltype k is present in image j (otherwise we will have to divide by 0 which leads to NA&#39;s)
+          # Only proceed if the subtype k is present in image j (otherwise we will have to divide by 0 which leads to NA&#39;s)
           if (count_kimg &gt; 0) {
-            imagenr_celltype[k, i] &lt;- imagenr_celltype[k,i] + 1
-            count_kj &lt;- table(sce_sub_ji$celltype)[k]   # Number of this cell in community k
+            imagenr_subtype[k, i] &lt;- imagenr_subtype[k,i] + 1
+            count_kj &lt;- table(sce_sub_ji$subtype)[k]   # Number of this cell in community k
             count_j &lt;- nrow(sce_sub_ji)                # Total number of cells in community k
-            count_kimg &lt;- table(cur_sce$celltype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
+            count_kimg &lt;- table(cur_sce$subtype, cur_sce$ImageNumber)[k, j]  # Number of this cell in the image
             count_img &lt;- table(cur_sce$ImageNumber)[j]  # Number cells in the image
             
             chisq.matrix &lt;- matrix(c(count_kj, count_j, count_kimg, count_img), nrow=2, ncol=2)
@@ -6287,64 +6428,1556 @@ Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
 
 Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
 
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
+Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect
+
 Warning in chisq.test(chisq.matrix): Chi-squared approximation may be incorrect</code></pre>
 <pre class="r"><code># Divide enrichment matrix through image number with the respective cytokine community
 enrich_corr &lt;- apply(enrich_matrix, MARGIN = 1, function(x) x/imagenr)
 enrich_corr[is.na(enrich_corr)] &lt;- 0
 enrich_corr &lt;- enrich_corr*100
-Heatmap(enrich_corr, column_title = &quot;% of images with significant enrichment/depletion&quot;, row_title = &quot;Cytokine milieu&quot;, row_title_side = &quot;right&quot;, heatmap_legend_param = list(title = &quot;&quot;))</code></pre>
-<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-community-enrichment-nonexpressing-1">
-Past versions of community-enrichment-nonexpressing-1.png
-</button>
-</p>
-<div id="fig-community-enrichment-nonexpressing-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/a0ae2bf3435ebe9fb26e2f80f78cc3f43e5407d9/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-1.png" target="_blank">a0ae2bf</a>
-</td>
-<td>
-SandraTietscher
-</td>
-<td>
-2020-12-02
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/126b3e010b30d79930dc5b3ab1ee09593a48bc21/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-1.png" target="_blank">126b3e0</a>
-</td>
-<td>
-SandraTietscher
-</td>
-<td>
-2020-11-20
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<pre class="r"><code># Divide enrichment matrix through image number (with the respective cytokine community), in which the respective celltype is present --&gt; result is almost identical
-# enrich_corr_celltype &lt;- t(enrich_matrix/imagenr_celltype)
-# Heatmap(enrich_corr_celltype, na_col = &quot;gray&quot;)</code></pre>
+
+cols = rev(brewer.pal(11,&#39;Spectral&#39;))
+cmap = colorRampPalette(cols)
+Heatmap(enrich_corr, column_title = &quot;% of images with significant enrichment/depletion&quot;, row_title = &quot;Cytokine milieu&quot;, row_title_side = &quot;right&quot;, heatmap_legend_param = list(title = &quot;&quot;), col = cmap(75))</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-chisquare-subtypes-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Divide enrichment matrix through image number (with the respective cytokine community), in which the respective subtype is present --&gt; result is almost identical
+enrich_corr_subtype &lt;- t(enrich_matrix/imagenr_subtype)
+Heatmap(enrich_corr_subtype, na_col = &quot;gray&quot;)</code></pre>
+<p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-chisquare-subtypes-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>ONLY FOR TIG2</p>
 <pre class="r"><code>## Calculate enrichment individually for each community (to prevent bias from large communities)
 
@@ -6381,6 +8014,43 @@ ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
         legend.background = element_blank())+
   geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-TIG2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-community-enrichment-nonexpressing-TIG2-1">
+Past versions of community-enrichment-nonexpressing-TIG2-1.png
+</button>
+</p>
+<div id="fig-community-enrichment-nonexpressing-TIG2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-TIG2-1.png" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>ONLY FOR TIG3</p>
 <pre class="r"><code>## Calculate enrichment individually for each community (to prevent bias from large communities)
 
@@ -6417,6 +8087,43 @@ ggplot(enrichment_comm, aes(cytokine, enrichment, fill = cytokine))+
         legend.background = element_blank())+
   geom_hline(yintercept = 1, linetype = &quot;dashed&quot;)</code></pre>
 <p><img src="figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-TIG3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-community-enrichment-nonexpressing-TIG3-1">
+Past versions of community-enrichment-nonexpressing-TIG3-1.png
+</button>
+</p>
+<div id="fig-community-enrichment-nonexpressing-TIG3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/figure/11_RNAscope_cytokine_communities.Rmd/community-enrichment-nonexpressing-TIG3-1.png" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -6548,6 +8255,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-cytokine-1.png" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-cytokine-1.png" target="_blank">3c1361c</a>
 </td>
 <td>
@@ -6615,6 +8333,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/SandraTietscher/BCexh_IMC/blob/c4913511a9fa8c13ea187e1141d0e04f45c3677e/docs/figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-activation-score-1.png" target="_blank">c491351</a>
+</td>
+<td>
+SandraTietscher
+</td>
+<td>
+2021-08-17
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/SandraTietscher/BCexh_IMC/blob/3c1361cf8d1ca9ff5632e7613ea42e89fe96746a/docs/figure/11_RNAscope_cytokine_communities.Rmd/CSF1-myeloid-activation-score-1.png" target="_blank">3c1361c</a>
@@ -7311,23 +9040,23 @@ attached base packages:
 
 other attached packages:
  [1] cytomapper_1.0.0            EBImage_4.30.0             
- [3] ComplexHeatmap_2.4.3        ggpubr_0.4.0               
- [5] concaveman_1.1.0            RANN_2.6.1                 
- [7] sf_1.0-2                    sp_1.4-5                   
- [9] viridis_0.6.0               viridisLite_0.4.0          
-[11] forcats_0.5.1               stringr_1.4.0              
-[13] dplyr_1.0.6                 purrr_0.3.4                
-[15] readr_1.4.0                 tidyr_1.1.3                
-[17] tibble_3.1.1                tidyverse_1.3.1            
-[19] ggridges_0.5.3              cowplot_1.1.1              
-[21] reshape2_1.4.4              igraph_1.2.6               
-[23] scater_1.16.2               ggplot2_3.3.3              
-[25] SingleCellExperiment_1.10.1 SummarizedExperiment_1.18.2
-[27] DelayedArray_0.14.1         matrixStats_0.58.0         
-[29] Biobase_2.48.0              GenomicRanges_1.40.0       
-[31] GenomeInfoDb_1.24.2         IRanges_2.22.2             
-[33] S4Vectors_0.26.1            BiocGenerics_0.34.0        
-[35] workflowr_1.6.2            
+ [3] RColorBrewer_1.1-2          ComplexHeatmap_2.4.3       
+ [5] ggpubr_0.4.0                concaveman_1.1.0           
+ [7] RANN_2.6.1                  sf_1.0-2                   
+ [9] sp_1.4-5                    viridis_0.6.0              
+[11] viridisLite_0.4.0           forcats_0.5.1              
+[13] stringr_1.4.0               dplyr_1.0.6                
+[15] purrr_0.3.4                 readr_1.4.0                
+[17] tidyr_1.1.3                 tibble_3.1.1               
+[19] tidyverse_1.3.1             ggridges_0.5.3             
+[21] cowplot_1.1.1               reshape2_1.4.4             
+[23] igraph_1.2.6                scater_1.16.2              
+[25] ggplot2_3.3.3               SingleCellExperiment_1.10.1
+[27] SummarizedExperiment_1.18.2 DelayedArray_0.14.1        
+[29] matrixStats_0.58.0          Biobase_2.48.0             
+[31] GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
+[33] IRanges_2.22.2              S4Vectors_0.26.1           
+[35] BiocGenerics_0.34.0         workflowr_1.6.2            
 
 loaded via a namespace (and not attached):
   [1] readxl_1.3.1              backports_1.2.1          
@@ -7351,42 +9080,41 @@ loaded via a namespace (and not attached):
  [37] clue_0.3-59               foreign_0.8-81           
  [39] rsvd_1.0.5                proxy_0.4-25             
  [41] htmlwidgets_1.5.3         httr_1.4.2               
- [43] RColorBrewer_1.1-2        ellipsis_0.3.2           
- [45] pkgconfig_2.0.3           farver_2.1.0             
- [47] sass_0.3.1                dbplyr_2.1.1             
- [49] locfit_1.5-9.4            utf8_1.2.1               
- [51] tidyselect_1.1.1          labeling_0.4.2           
- [53] rlang_0.4.11              later_1.2.0              
- [55] munsell_0.5.0             cellranger_1.1.0         
- [57] tools_4.0.2               cli_2.5.0                
- [59] generics_0.1.0            broom_0.7.6              
- [61] fftwtools_0.9-11          evaluate_0.14            
- [63] yaml_2.2.1                knitr_1.33               
- [65] fs_1.5.0                  zip_2.1.1                
- [67] whisker_0.4               xml2_1.3.2               
- [69] compiler_4.0.2            rstudioapi_0.13          
- [71] beeswarm_0.3.1            curl_4.3.1               
- [73] png_0.1-7                 e1071_1.7-6              
- [75] ggsignif_0.6.1            reprex_2.0.0             
- [77] bslib_0.2.4               stringi_1.6.1            
- [79] highr_0.9                 lattice_0.20-41          
- [81] Matrix_1.3-3              classInt_0.4-3           
- [83] vctrs_0.3.8               pillar_1.6.0             
- [85] lifecycle_1.0.0           jquerylib_0.1.4          
- [87] GlobalOptions_0.1.2       BiocNeighbors_1.6.0      
- [89] data.table_1.14.0         bitops_1.0-7             
- [91] irlba_2.3.3               raster_3.4-10            
- [93] httpuv_1.6.1              R6_2.5.0                 
- [95] promises_1.2.0.1          KernSmooth_2.23-17       
- [97] gridExtra_2.3             rio_0.5.26               
- [99] vipor_0.4.5               codetools_0.2-16         
-[101] assertthat_0.2.1          rprojroot_2.0.2          
-[103] rjson_0.2.20              withr_2.4.2              
-[105] GenomeInfoDbData_1.2.3    hms_1.0.0                
-[107] class_7.3-17              rmarkdown_2.8            
-[109] DelayedMatrixStats_1.10.1 carData_3.0-4            
-[111] git2r_0.28.0              lubridate_1.7.10         
-[113] ggbeeswarm_0.6.0         </code></pre>
+ [43] ellipsis_0.3.2            pkgconfig_2.0.3          
+ [45] farver_2.1.0              sass_0.3.1               
+ [47] dbplyr_2.1.1              locfit_1.5-9.4           
+ [49] utf8_1.2.1                tidyselect_1.1.1         
+ [51] labeling_0.4.2            rlang_0.4.11             
+ [53] later_1.2.0               munsell_0.5.0            
+ [55] cellranger_1.1.0          tools_4.0.2              
+ [57] cli_2.5.0                 generics_0.1.0           
+ [59] broom_0.7.6               fftwtools_0.9-11         
+ [61] evaluate_0.14             yaml_2.2.1               
+ [63] knitr_1.33                fs_1.5.0                 
+ [65] zip_2.1.1                 whisker_0.4              
+ [67] xml2_1.3.2                compiler_4.0.2           
+ [69] rstudioapi_0.13           beeswarm_0.3.1           
+ [71] curl_4.3.1                png_0.1-7                
+ [73] e1071_1.7-6               ggsignif_0.6.1           
+ [75] reprex_2.0.0              bslib_0.2.4              
+ [77] stringi_1.6.1             highr_0.9                
+ [79] lattice_0.20-41           Matrix_1.3-3             
+ [81] classInt_0.4-3            vctrs_0.3.8              
+ [83] pillar_1.6.0              lifecycle_1.0.0          
+ [85] jquerylib_0.1.4           GlobalOptions_0.1.2      
+ [87] BiocNeighbors_1.6.0       data.table_1.14.0        
+ [89] bitops_1.0-7              irlba_2.3.3              
+ [91] raster_3.4-10             httpuv_1.6.1             
+ [93] R6_2.5.0                  promises_1.2.0.1         
+ [95] KernSmooth_2.23-17        gridExtra_2.3            
+ [97] rio_0.5.26                vipor_0.4.5              
+ [99] codetools_0.2-16          assertthat_0.2.1         
+[101] rprojroot_2.0.2           rjson_0.2.20             
+[103] withr_2.4.2               GenomeInfoDbData_1.2.3   
+[105] hms_1.0.0                 class_7.3-17             
+[107] rmarkdown_2.8             DelayedMatrixStats_1.10.1
+[109] carData_3.0-4             git2r_0.28.0             
+[111] lubridate_1.7.10          ggbeeswarm_0.6.0         </code></pre>
 </div>
 </div>
 </div>
